@@ -1,5 +1,8 @@
 # Evidencija Studenata
 
+Ako sta ne radi *npm install* \
+U backendu ce mozda trebat *npm install express* 
+
 ## Backend API
 
 U _\evidencija-studenata\backend-api_ nalazi se backend API, koji se pokrece node server.js naredbom \
