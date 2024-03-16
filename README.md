@@ -14,7 +14,7 @@ Za pokretanje frontenda pokrenuti naredbu _npm run dev_ dok se nalazis u folderu
 
 ### Logika fronte je slijedeca:
 
-- [main.tsx](react-app\src\main.tsx) se pokrece prilikom pokretanja app, tu postoji router array koji ima putanju u url-u i element koji se otvara (elementi su iznad importani). \
+- [main.tsx](react-app\src\main.tsx) (ovi linkovi bas ne rade trenutacno) se pokrece prilikom pokretanja app, tu postoji router array koji ima putanju u url-u i element koji se otvara (elementi su iznad importani). \
   Taj router array se koristi ispod u render funkciji
 - U [pages](react-app\src\pages) se nalaze stranice (ovo su cisto neke pocetne koje ce vjj trebat)
 - U [components](react-app\src\components) se nalaze komponente koje stranice koriste \
