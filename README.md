@@ -1,7 +1,8 @@
 # Evidencija Studenata
 
 Ako sta ne radi _npm install_ \
-U backendu ce mozda trebat _npm install express_
+U backendu ce mozda trebat _npm install express_ \
+Instalirati *Prettier - Code formatter* ekstenziju za VS code tako da kod bude konzistentan i promijeniti u extension settings postavku *Print Width* na 600 (cisto da linije budu duze nego sta je defaultno). Takoder ukljuciti format on save postavku VS code-u
 
 ## Backend API
 
