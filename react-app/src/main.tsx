@@ -14,6 +14,7 @@ import IseljenjeStudentaPage from "./pages/IseljenjeStudentaPage";
 import PopisSvihStanaraPage from "./pages/PopisSvihStanaraPage";
 import PopisVremenskogPerioda from "./pages/PopisVremenskogPeriodaPage";
 import UseljenjeStudentaPage from "./pages/UseljenjeStudentaPage";
+import PrijavaPage from "./pages/PrijavaPage";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
   {
     path: "/useljenjeStudenta",
     element: <UseljenjeStudentaPage />,
+  },
+  {
+    path: "/prijava",
+    element: <PrijavaPage />,
   },
 ]);
 
