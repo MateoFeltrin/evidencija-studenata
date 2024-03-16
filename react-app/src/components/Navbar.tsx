@@ -4,6 +4,7 @@ import { FaList } from "react-icons/fa";
 import { TbDoorEnter } from "react-icons/tb";
 import { TbDoorExit } from "react-icons/tb";
 import { IoIosLogIn } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -14,44 +15,44 @@ const Navbar = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0 nav-tabs">
-            <a className="navbar-brand" href="#">
+            <a className="navbar-brand" href="/">
               Evidencija Studenata
             </a>
             <li className="nav-item">
-              <a className="nav-link active icon-link" aria-current="page" href="#">
+              <Link className="nav-link active icon-link" aria-current="page" to="/unosStudenata">
                 <FaPenAlt />
                 Unos studenta
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link icon-link" aria-current="page" href="#">
+              <Link className="nav-link icon-link" aria-current="page" to="/promjenaPodataka">
                 <FaPenAlt />
                 Promjena podataka studenta
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link icon-link" aria-current="page" href="#">
+              <Link className="nav-link icon-link" aria-current="page" to="/useljenjeStudenta">
                 <TbDoorEnter />
                 Useljenje studenta
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link icon-link" aria-current="page" href="#">
+              <Link className="nav-link icon-link" aria-current="page" to="/iseljenjeStudenta">
                 <TbDoorExit />
                 Iseljenje studenta
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link icon-link" aria-current="page" href="#">
+              <Link className="nav-link icon-link" aria-current="page" to="/popisVremenskogPeroida">
                 <FaList />
                 Popis svih trenutačnih stanara
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link icon-link" aria-current="page" href="#">
+              <Link className="nav-link icon-link" aria-current="page" to="/unosStudenata">
                 <FaList />
                 Popis stanara u vremenskom periodu
-              </a>
+              </Link>
             </li>
           </ul>
           <a className="nav-link icon-link" aria-current="page" href="#">

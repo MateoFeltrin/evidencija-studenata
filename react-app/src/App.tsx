@@ -1,9 +1,10 @@
 import Navbar from "./components/Navbar";
+import UnosStudenata from "./pages/UnosStudenataPage";
 
 function App() {
   return (
     <div>
-      <Navbar />
+      <UnosStudenata />
     </div>
   );
 }
