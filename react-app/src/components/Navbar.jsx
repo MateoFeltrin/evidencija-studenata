@@ -56,11 +56,11 @@ const Navbar = () => {
                 Popis stanara u vremenskom periodu
               </Link>
             </li>
-            <Link className={`nav-link icon-link ${location.pathname === "/prijava" ? "active" : ""}`} aria-current="page" to="/prijava">
-              <IoIosLogIn />
-              Prijava
-            </Link>
           </ul>
+          <Link className={`nav-link icon-link ${location.pathname === "/prijava" ? "active" : ""}`} aria-current="page" to="/prijava">
+            <IoIosLogIn />
+            Prijava
+          </Link>
         </div>
       </div>
     </nav>
