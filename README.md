@@ -22,3 +22,4 @@ Za pokretanje frontenda pokrenuti naredbu _npm run dev_ dok se nalazis u folderu
 - U [components](react-app\src\components) se nalaze komponente koje stranice koriste \
   Na primjer [Navbar.jsx](react-app\src\components\Navbar.jsx) koji koristi svaka stranica za navigaciju
 - U [Navbar.jsx](react-app\src\components\Navbar.jsx) se u _link_ elementu linka na path deklariran u [main.tsx](react-app\src\main.tsx) u router array-u
+- Postoje 2 navigacijska bara sada, [CollapsableNavbar.jsx](react-app\src\components\CollapsableNavbar.jsx) collapsa navigaciju u desni sidebar koji je sakriven

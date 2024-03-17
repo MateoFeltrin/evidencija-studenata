@@ -5,6 +5,7 @@ import { TbDoorEnter } from "react-icons/tb";
 import { TbDoorExit } from "react-icons/tb";
 import { IoIosLogIn } from "react-icons/io";
 import { Link, useLocation } from "react-router-dom";
+import { TbDoor } from "react-icons/tb";
 
 const Navbar = () => {
   const location = useLocation();
@@ -20,41 +21,65 @@ const Navbar = () => {
             <a className="navbar-brand center" href="/">
               Evidencija Studenata
             </a>
-            <li className="nav-item">
-              <Link className={`nav-link icon-link ${location.pathname === "/unosStudenata" ? "active" : ""}`} aria-current="page" to="/unosStudenata">
+            <li class="nav-item dropdown-center">
+              <button class={`nav-link dropdown-toggle icon-link ${location.pathname === "/unosStudenata" || location.pathname === "/promjenaPodataka" ? "active" : ""}`} role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <FaPenAlt />
-                Unos studenta
-              </Link>
+                Studenti
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <Link class=" icon-link dropdown-item" aria-current="page" to="/unosStudenata">
+                    <FaPenAlt />
+                    Unos studenta
+                  </Link>
+                </li>
+                <li>
+                  <Link class=" icon-link dropdown-item" aria-current="page" to="/promjenaPodataka">
+                    <FaPenAlt />
+                    Promjena podataka studenta
+                  </Link>
+                </li>
+              </ul>
             </li>
-            <li className="nav-item">
-              <Link className={`nav-link icon-link ${location.pathname === "/promjenaPodataka" ? "active" : ""}`} aria-current="page" to="/promjenaPodataka">
-                <FaPenAlt />
-                Promjena podataka studenta
-              </Link>
+            <li class="nav-item dropdown-center">
+              <button class={`nav-link dropdown-toggle icon-link ${location.pathname === "/useljenjeStudenta" || location.pathname === "/iseljenjeStudenta" ? "active" : ""}`} role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <TbDoor />
+                Useljenje i iseljenje
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <Link class=" icon-link dropdown-item" aria-current="page" to="/useljenjeStudenta">
+                    <TbDoorEnter />
+                    Useljenje studenta
+                  </Link>
+                </li>
+                <li>
+                  <Link class=" icon-link dropdown-item" aria-current="page" to="/iseljenjeStudenta">
+                    <TbDoorExit />
+                    Iseljenje studenta
+                  </Link>
+                </li>
+              </ul>
             </li>
-            <li className="nav-item">
-              <Link className={`nav-link icon-link ${location.pathname === "/useljenjeStudenta" ? "active" : ""}`} aria-current="page" to="/useljenjeStudenta">
-                <TbDoorEnter />
-                Useljenje studenta
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className={`nav-link icon-link ${location.pathname === "/iseljenjeStudenta" ? "active" : ""}`} aria-current="page" to="/iseljenjeStudenta">
-                <TbDoorExit />
-                Iseljenje studenta
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className={`nav-link icon-link ${location.pathname === "/popisSvihStanara" ? "active" : ""}`} aria-current="page" to="/popisSvihStanara">
-                <FaList />
-                Popis svih trenutačnih stanara
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className={`nav-link icon-link ${location.pathname === "/popisVremenskogPeroida" ? "active" : ""}`} aria-current="page" to="/popisVremenskogPeroida">
-                <FaList />
-                Popis stanara u vremenskom periodu
-              </Link>
+            <li class="nav-item dropdown-center">
+              <button class={`nav-link dropdown-toggle icon-link ${location.pathname === "/popisSvihStanara" || location.pathname === "/popisVremenskogPeroida" ? "active" : ""}`} role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <TbDoor />
+                Popisi studenata
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <Link class=" icon-link dropdown-item" aria-current="page" to="/popisSvihStanara">
+                    <FaList />
+                    Popis svih trenutačnih stanara
+                  </Link>
+                </li>
+                <li>
+                  <Link class=" icon-link dropdown-item" aria-current="page" to="/popisVremenskogPeroida">
+                    <FaList />
+                    Popis stanara u vremenskom periodu
+                  </Link>
+                </li>
+              </ul>
             </li>
           </ul>
           <Link className={`nav-link icon-link ${location.pathname === "/prijava" ? "active" : ""}`} aria-current="page" to="/prijava">

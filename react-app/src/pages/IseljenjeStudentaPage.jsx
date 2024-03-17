@@ -5,11 +5,12 @@ import { TbDoorEnter } from "react-icons/tb";
 import { TbDoorExit } from "react-icons/tb";
 import { IoIosLogIn } from "react-icons/io";
 import Navbar from "../components/Navbar";
+import CollapsableNavbar from "../components/CollapsableNavbar";
 
 const IseljenjeStudentaPage = () => {
   return (
     <div>
-      <Navbar />
+      <CollapsableNavbar />
       <div> Iseljenje Studenta</div>
     </div>
   );
