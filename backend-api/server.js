@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const mysql = require("mysql");
 app.use(express.json());
+var cors = require("cors");
+app.use(cors());
 var fs = require("fs"); //require file system object
 
 const connection = mysql.createConnection({
