@@ -1,4 +1,8 @@
-// Za importanje ikona otic ovdje https://react-icons.github.io/react-icons/search/#q=
+/* 
+Za importanje ikona otic ovdje https://react-icons.github.io/react-icons/search/#q= 
+
+Stranica za prijavu 
+*/
 import { FaPenAlt } from "react-icons/fa";
 import { FaList } from "react-icons/fa";
 import { TbDoorEnter } from "react-icons/tb";

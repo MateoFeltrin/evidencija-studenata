@@ -1,4 +1,8 @@
-// Za importanje ikona otic ovdje https://react-icons.github.io/react-icons/search/#q=
+/* 
+Za importanje ikona otic ovdje https://react-icons.github.io/react-icons/search/#q= 
+
+Stranica za popis svih kvarova
+*/
 import { FaPenAlt } from "react-icons/fa";
 import { FaList } from "react-icons/fa";
 import { TbDoorEnter } from "react-icons/tb";
@@ -7,7 +11,7 @@ import { IoIosLogIn } from "react-icons/io";
 import Navbar from "../components/Navbar";
 import CollapsableNavbar from "../components/CollapsableNavbar";
 
-const IseljenjeStudentaPage = () => {
+const PopisSvihKvarovaPage = () => {
   return (
     <div>
       <CollapsableNavbar />
@@ -16,4 +20,4 @@ const IseljenjeStudentaPage = () => {
   );
 };
 
-export default IseljenjeStudentaPage;
+export default PopisSvihKvarovaPage;

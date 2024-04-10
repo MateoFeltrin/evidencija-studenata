@@ -1,7 +1,7 @@
 /* 
 Za importanje ikona otic ovdje https://react-icons.github.io/react-icons/search/#q= 
 
-Stranica za popis stanara u vremenskom periodu
+Stranica za unos soba
 */
 import { FaPenAlt } from "react-icons/fa";
 import { FaList } from "react-icons/fa";
@@ -11,13 +11,13 @@ import { IoIosLogIn } from "react-icons/io";
 import Navbar from "../components/Navbar";
 import CollapsableNavbar from "../components/CollapsableNavbar";
 
-const PopisVremenskogPerioda = () => {
+const UnosSobaPage = () => {
   return (
     <div>
       <CollapsableNavbar />
-      <div> Popis stanara u određenom vremenskom periodu</div>
+      <div> Iseljenje Studenta</div>
     </div>
   );
 };
 
-export default PopisVremenskogPerioda;
+export default UnosSobaPage;

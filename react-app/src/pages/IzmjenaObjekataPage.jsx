@@ -1,4 +1,8 @@
-// Za importanje ikona otic ovdje https://react-icons.github.io/react-icons/search/#q=
+/* 
+Za importanje ikona otic ovdje https://react-icons.github.io/react-icons/search/#q= 
+
+Stranica za izmjenu podataka objekta
+*/
 import { FaPenAlt } from "react-icons/fa";
 import { FaList } from "react-icons/fa";
 import { TbDoorEnter } from "react-icons/tb";
@@ -7,13 +11,13 @@ import { IoIosLogIn } from "react-icons/io";
 import Navbar from "../components/Navbar";
 import CollapsableNavbar from "../components/CollapsableNavbar";
 
-const UnosStudenataPage = () => {
+const IzmjenaObjekataPage = () => {
   return (
     <div>
       <CollapsableNavbar />
-      <div> Unos studenata</div>
+      <div> Iseljenje Studenta</div>
     </div>
   );
 };
 
-export default UnosStudenataPage;
+export default IzmjenaObjekataPage;

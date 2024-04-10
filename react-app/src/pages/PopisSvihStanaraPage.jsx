@@ -1,4 +1,8 @@
-// Za importanje ikona otic ovdje https://react-icons.github.io/react-icons/search/#q=
+/* 
+Za importanje ikona otic ovdje https://react-icons.github.io/react-icons/search/#q= 
+
+Stranica za popis svih trenutacnih stanara
+*/
 import CollapsableNavbar from "../components/CollapsableNavbar";
 import { useEffect, useState } from "react";
 import axios from "axios";
