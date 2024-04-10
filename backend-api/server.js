@@ -14,3 +14,5 @@ app.get("/status", (request, response) => {
    };
    response.send(status);
 });
+
+// ovdje su smješteni svi backend djelovi aplikacije
