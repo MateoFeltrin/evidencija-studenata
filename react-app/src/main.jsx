@@ -36,8 +36,8 @@ const router = createBrowserRouter([
     element: <UnosStanaraPage />,
   },
   {
-    path: "/unosStudenata",
-    element: <UnosStudenataPage />,
+    path: "/unosStanara",
+    element: <UnosStanaraPage />,
   },
   {
     path: "/izmjenaStanara",
