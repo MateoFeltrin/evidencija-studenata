@@ -273,7 +273,7 @@ app.put("/azuriranje-boravka/:id_boravka", function (req, res) {
   });
 });
 
-pp.put("/azuriranje-stanara/:oib", function (req, res) {
+app.put("/azuriranje-stanara/:oib", function (req, res) {
   const { oib } = req.params;
   const {
     jmbag,
@@ -351,7 +351,7 @@ pp.put("/azuriranje-stanara/:oib", function (req, res) {
   });
 });
 
-pp.put("/azuriranje-korisnika/:id_korisnika", function (req, res) {
+app.put("/azuriranje-korisnika/:id_korisnika", function (req, res) {
   const { id_korisnika } = req.params;
   const { email_korisnika, lozinka, uloga } = req.body;
 
@@ -370,7 +370,7 @@ pp.put("/azuriranje-korisnika/:id_korisnika", function (req, res) {
   });
 });
 
-pp.put("/azuriranje-sobe/:id_sobe", function (req, res) {
+app.put("/azuriranje-sobe/:id_sobe", function (req, res) {
   const { id_sobe } = req.params;
   const { broj_objekta, kat_sobe, broj_sobe } = req.body;
 
@@ -424,6 +424,132 @@ app.put("/azuriranje-kvara/:id_kvara", function (req, res) {
       return res.status(500).send({ error: true, message: "Failed to update kvar." });
     }
     res.status(200).send({ error: false, data: results, message: "Kvar updated successfully." });
+  });
+});
+
+app.delete("/brisanje-korisnika/:id_korisnika", function (req, res) {
+  const { id_korisnika } = req.params;
+
+  // Check if id_korisnika is provided
+  if (!id_korisnika) {
+    return res.status(400).send({ error: true, message: "id_korisnika is required." });
+  }
+
+  // Delete the korisnik record
+  connection.query("DELETE FROM `korisnik` WHERE `id_korisnika` = ?", [id_korisnika], function (error, results, fields) {
+    if (error) {
+      console.error("Error deleting korisnik:", error);
+      return res.status(500).send({ error: true, message: "Failed to delete korisnik." });
+    }
+    res.status(200).send({ error: false, data: results, message: "Korisnik deleted successfully." });
+  });
+});
+
+app.delete("/brisanje-stanara/:oib", function (req, res) {
+  const { oib } = req.params;
+
+  // Check if oib is provided
+  if (!oib) {
+    return res.status(400).send({ error: true, message: "OIB is required." });
+  }
+
+  // Delete the record from the stanar table based on the provided oib
+  connection.query("DELETE FROM `stanar` WHERE `oib` = ?", [oib], function (error, results, fields) {
+    if (error) {
+      console.error("Error deleting stanar:", error);
+      return res.status(500).send({ error: true, message: "Failed to delete stanar." });
+    }
+    res.status(200).send({ error: false, data: results, message: "Stanar deleted successfully." });
+  });
+});
+
+app.delete("/brisanje-objekta/:broj_objekta", function (req, res) {
+  const { broj_objekta } = req.params;
+
+  // Check if broj_objekta is provided
+  if (!broj_objekta) {
+    return res.status(400).send({ error: true, message: "broj_objekta is required." });
+  }
+
+  // Delete the record from the objekt table based on the provided broj_objekta
+  connection.query("DELETE FROM `objekt` WHERE `broj_objekta` = ?", [broj_objekta], function (error, results, fields) {
+    if (error) {
+      console.error("Error deleting objekt:", error);
+      return res.status(500).send({ error: true, message: "Failed to delete objekt." });
+    }
+    res.status(200).send({ error: false, data: results, message: "Objekt deleted successfully." });
+  });
+});
+
+app.delete("/brisanje-sobe/:id_sobe", function (req, res) {
+  const { id_sobe } = req.params;
+
+  // Check if id_sobe is provided
+  if (!id_sobe) {
+    return res.status(400).send({ error: true, message: "id_sobe is required." });
+  }
+
+  // Delete the record from the soba table based on the provided id_sobe
+  connection.query("DELETE FROM `soba` WHERE `id_sobe` = ?", [id_sobe], function (error, results, fields) {
+    if (error) {
+      console.error("Error deleting soba:", error);
+      return res.status(500).send({ error: true, message: "Failed to delete soba." });
+    }
+    res.status(200).send({ error: false, data: results, message: "Soba deleted successfully." });
+  });
+});
+
+app.delete("/brisanje-kreveta/:id_kreveta", function (req, res) {
+  const { id_kreveta } = req.params;
+
+  // Check if id_kreveta is provided
+  if (!id_kreveta) {
+    return res.status(400).send({ error: true, message: "id_kreveta is required." });
+  }
+
+  // Delete the record from the krevet table based on the provided id_kreveta
+  connection.query("DELETE FROM `krevet` WHERE `id_kreveta` = ?", [id_kreveta], function (error, results, fields) {
+    if (error) {
+      console.error("Error deleting krevet:", error);
+      return res.status(500).send({ error: true, message: "Failed to delete krevet." });
+    }
+    res.status(200).send({ error: false, data: results, message: "Krevet deleted successfully." });
+  });
+});
+
+app.delete("/brisanje-kvara/:id_kvara", function (req, res) {
+  const { id_kvara } = req.params;
+
+  // Check if id_kvara is provided
+  if (!id_kvara) {
+    return res.status(400).send({ error: true, message: "id_kvara is required." });
+  }
+
+  // Delete the record from the kvar table based on the provided id_kvara
+  connection.query("DELETE FROM `kvar` WHERE `id_kvara` = ?", [id_kvara], function (error, results, fields) {
+    if (error) {
+      console.error("Error deleting kvar:", error);
+      return res.status(500).send({ error: true, message: "Failed to delete kvar." });
+    }
+    res.status(200).send({ error: false, data: results, message: "Kvar deleted successfully." });
+  });
+});
+
+app.delete("/brisanje-boravka/:id_boravka", function (req, res) {
+  const { id_boravka } = req.params;
+
+  // Check if id_boravka is provided
+  if (!id_boravka) {
+    return res.status(400).send({ error: true, message: "id_boravka is required." });
+  }
+
+  // Delete the record from the boravak table based on the provided id_boravka
+  connection.query("DELETE FROM `boravak` WHERE `id_boravka` = ?", [id_boravka], function (error, results, fields) {
+    if (error) {
+      console.error("Error deleting boravak:", error);
+      return res.status(500).send({ error: true, message: "Failed to delete boravak." });
+    }
+    res.status(200).send({ error: false, data: results, message: "Boravak deleted successfully." });
   });
 });
 
