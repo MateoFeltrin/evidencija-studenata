@@ -272,3 +272,161 @@ app.put("/azuriranje-boravka/:id_boravka", function (req, res) {
     res.status(200).send({ error: false, data: results, message: "Boravak updated successfully." });
   });
 });
+
+pp.put("/azuriranje-stanara/:oib", function (req, res) {
+  const { oib } = req.params;
+  const {
+    jmbag,
+    ime,
+    prezime,
+    datum_rodenja,
+    adresa_prebivalista,
+    subvencioniranost,
+    uciliste,
+    uplata_teretane,
+    komentar,
+    id_korisnika
+  } = req.body;
+
+  // Check if oib is provided
+  if (!oib) {
+    return res.status(400).send({ error: true, message: "OIB is required." });
+  }
+
+  // Construct the SQL query dynamically based on provided fields
+  let updateQuery = "UPDATE `stanar` SET";
+  const values = [];
+  if (jmbag !== undefined) {
+    updateQuery += " `jmbag` = ?,";
+    values.push(jmbag);
+  }
+  if (ime !== undefined) {
+    updateQuery += " `ime` = ?,";
+    values.push(ime);
+  }
+  if (prezime !== undefined) {
+    updateQuery += " `prezime` = ?,";
+    values.push(prezime);
+  }
+  if (datum_rodenja !== undefined) {
+    updateQuery += " `datum_rodenja` = ?,";
+    values.push(datum_rodenja);
+  }
+  if (adresa_prebivalista !== undefined) {
+    updateQuery += " `adresa_prebivalista` = ?,";
+    values.push(adresa_prebivalista);
+  }
+  if (subvencioniranost !== undefined) {
+    updateQuery += " `subvencioniranost` = ?,";
+    values.push(subvencioniranost);
+  }
+  if (uciliste !== undefined) {
+    updateQuery += " `uciliste` = ?,";
+    values.push(uciliste);
+  }
+  if (uplata_teretane !== undefined) {
+    updateQuery += " `uplata_teretane` = ?,";
+    values.push(uplata_teretane);
+  }
+  if (komentar !== undefined) {
+    updateQuery += " `komentar` = ?,";
+    values.push(komentar);
+  }
+  if (id_korisnika !== undefined) {
+    updateQuery += " `id_korisnika` = ?,";
+    values.push(id_korisnika);
+  }
+
+  // Remove the trailing comma and add WHERE clause
+  updateQuery = updateQuery.slice(0, -1) + " WHERE `oib` = ?";
+  values.push(oib);
+
+  // Execute the update query
+  connection.query(updateQuery, values, function (error, results, fields) {
+    if (error) {
+      console.error("Error updating stanar:", error);
+      return res.status(500).send({ error: true, message: "Failed to update stanar." });
+    }
+    res.status(200).send({ error: false, data: results, message: "Stanar updated successfully." });
+  });
+});
+
+pp.put("/azuriranje-korisnika/:id_korisnika", function (req, res) {
+  const { id_korisnika } = req.params;
+  const { email_korisnika, lozinka, uloga } = req.body;
+
+  // Check if all parameters are provided
+  if (!id_korisnika || !email_korisnika || !lozinka || !uloga) {
+    return res.status(400).send({ error: true, message: "id_korisnika, email_korisnika, lozinka, and uloga are required." });
+  }
+
+  // Update the korisnik table
+  connection.query("UPDATE `korisnik` SET `email_korisnika` = ?, `lozinka` = ?, `uloga` = ? WHERE `id_korisnika` = ?", [email_korisnika, lozinka, uloga, id_korisnika], function (error, results, fields) {
+    if (error) {
+      console.error("Error updating korisnik:", error);
+      return res.status(500).send({ error: true, message: "Failed to update korisnik." });
+    }
+    res.status(200).send({ error: false, data: results, message: "Korisnik updated successfully." });
+  });
+});
+
+pp.put("/azuriranje-sobe/:id_sobe", function (req, res) {
+  const { id_sobe } = req.params;
+  const { broj_objekta, kat_sobe, broj_sobe } = req.body;
+
+  // Check if all parameters are provided
+  if (!id_sobe || !broj_objekta || !kat_sobe || !broj_sobe) {
+    return res.status(400).send({ error: true, message: "id_sobe, broj_objekta, kat_sobe, and broj_sobe are required." });
+  }
+
+  // Update the soba table
+  connection.query("UPDATE `soba` SET `broj_objekta` = ?, `kat_sobe` = ?, `broj_sobe` = ? WHERE `id_sobe` = ?", [broj_objekta, kat_sobe, broj_sobe, id_sobe], function (error, results, fields) {
+    if (error) {
+      console.error("Error updating soba:", error);
+      return res.status(500).send({ error: true, message: "Failed to update soba." });
+    }
+    res.status(200).send({ error: false, data: results, message: "Soba updated successfully." });
+  });
+});
+
+app.put("/azuriranje-kreveta/:id_kreveta", function (req, res) {
+  const { id_kreveta } = req.params;
+  const { broj_kreveta, id_sobe, zauzetost } = req.body;
+
+  // Check if all parameters are provided
+  if (!id_kreveta || !broj_kreveta || !id_sobe) {
+    return res.status(400).send({ error: true, message: "id_kreveta, broj_kreveta, and id_sobe are required." });
+  }
+
+  // Update the krevet table
+  connection.query("UPDATE `krevet` SET `broj_kreveta` = ?, `id_sobe` = ?, `zauzetost` = ? WHERE `id_kreveta` = ?", [broj_kreveta, id_sobe, zauzetost, id_kreveta], function (error, results, fields) {
+    if (error) {
+      console.error("Error updating krevet:", error);
+      return res.status(500).send({ error: true, message: "Failed to update krevet." });
+    }
+    res.status(200).send({ error: false, data: results, message: "Krevet updated successfully." });
+  });
+});
+
+app.put("/azuriranje-kvara/:id_kvara", function (req, res) {
+  const { id_kvara } = req.params;
+  const { stanje_kvara } = req.body;
+
+  // Check if all parameters are provided
+  if (!id_kvara || stanje_kvara === undefined) {
+    return res.status(400).send({ error: true, message: "Both id_kvara and stanje_kvara are required." });
+  }
+
+  // Update the kvar table
+  connection.query("UPDATE `kvar` SET `stanje_kvara` = ? WHERE `id_kvara` = ?", [stanje_kvara, id_kvara], function (error, results, fields) {
+    if (error) {
+      console.error("Error updating kvar:", error);
+      return res.status(500).send({ error: true, message: "Failed to update kvar." });
+    }
+    res.status(200).send({ error: false, data: results, message: "Kvar updated successfully." });
+  });
+});
+
+
+
+
