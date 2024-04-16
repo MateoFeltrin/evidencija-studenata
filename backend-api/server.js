@@ -117,16 +117,15 @@ app.get("/api/boravci-u-vremenskom-periodu/:datum_useljenja/:datum_iseljenja", (
 app.post("/unos-objekta", function (req, res) {
   const broj_objekta = req.body.broj_objekta;
 
-  // Check if broj_objekta is provided
   if (!broj_objekta) {
-    return res.status(400).send({ error: true, message: "Broj objekta is required." });
+    return res.status(400).send({ error: true, message: "Broj objekta je obavezan." });
   }
 
   // Insert the broj_objekta into the objekt table
   connection.query("INSERT INTO `objekt` (`broj_objekta`) VALUES (?)", [broj_objekta], function (error, results, fields) {
     if (error) {
       console.error("Error inserting objekt:", error);
-      return res.status(500).send({ error: true, message: "Failed to insert objekt." });
+      return res.status(500).send({ error: true, message: "Neuspjesno dodavanje objekta." });
     }
     res.status(201).send({ error: false, data: results, message: "Objekt je dodan." });
   });
@@ -135,16 +134,14 @@ app.post("/unos-objekta", function (req, res) {
 app.post("/unos-sobe", function (req, res) {
   const { broj_objekta, kat_sobe, broj_sobe } = req.body;
 
-  // Check if all parameters are provided
   if (!broj_objekta || !kat_sobe || !broj_sobe) {
-    return res.status(400).send({ error: true, message: "Broj objekta, kat sobe, and broj sobe are required." });
+    return res.status(400).send({ error: true, message: "Broj objekta, kat sobe, i broj sobe su obavezni." });
   }
 
-  // Insert the values into the soba table
   connection.query("INSERT INTO `soba` (`broj_objekta`, `kat_sobe`, `broj_sobe`) VALUES (?, ?, ?)", [broj_objekta, kat_sobe, broj_sobe], function (error, results, fields) {
     if (error) {
       console.error("Error inserting soba:", error);
-      return res.status(500).send({ error: true, message: "Failed to insert soba." });
+      return res.status(500).send({ error: true, message: "Neuspjesno dodavanje sobe." });
     }
     res.status(201).send({ error: false, data: results, message: "Soba je dodana." });
   });
@@ -153,16 +150,14 @@ app.post("/unos-sobe", function (req, res) {
 app.post("/unos-kreveta", function (req, res) {
   const { broj_kreveta, id_sobe } = req.body;
 
-  // Check if all parameters are provided
   if (!broj_kreveta || !id_sobe) {
-    return res.status(400).send({ error: true, message: "Broj kreveta and id sobe are required." });
+    return res.status(400).send({ error: true, message: "Broj kreveta i id sobe su obavezni." });
   }
 
-  // Insert the values into the soba table
   connection.query("INSERT INTO `krevet` (`broj_kreveta`, `id_sobe`, `zauzetost`) VALUES (?, ?, 0)", [broj_kreveta, id_sobe], function (error, results, fields) {
     if (error) {
       console.error("Error inserting krevet:", error);
-      return res.status(500).send({ error: true, message: "Failed to insert krevet." });
+      return res.status(500).send({ error: true, message: "Neuspjesno dodavanje kreveta." });
     }
     res.status(201).send({ error: false, data: results, message: "krevet je dodan." });
   });
@@ -171,16 +166,14 @@ app.post("/unos-kreveta", function (req, res) {
 app.post("/unos-radnika", function (req, res) {
   const { email_korisnika, lozinka, uloga } = req.body;
 
-  // Check if all parameters are provided
   if (!email_korisnika || !lozinka || !uloga) {
-    return res.status(400).send({ error: true, message: "email, lozinka and uloga are required." });
+    return res.status(400).send({ error: true, message: "email, lozinka i uloga su obavezni." });
   }
 
-  // Insert the values into the soba table
   connection.query("INSERT INTO `korisnik` (`email_korisnika`, `lozinka`, `uloga`) VALUES (?, ?, ?)", [email_korisnika, lozinka, uloga], function (error, results, fields) {
     if (error) {
       console.error("Error inserting korisnik:", error);
-      return res.status(500).send({ error: true, message: "Failed to insert korisnik." });
+      return res.status(500).send({ error: true, message: "Neuspjesno dodavanje korisnika." });
     }
     res.status(201).send({ error: false, data: results, message: "Korisnik je dodan." });
   });
@@ -189,33 +182,29 @@ app.post("/unos-radnika", function (req, res) {
 app.post("/unos-stanara", function (req, res) {
   const { email_korisnika, lozinka, uloga, oib, jmbag, ime, prezime, datum_rodenja, adresa_prebivalista, subvencioniranost, uciliste, uplata_teretane, komentar } = req.body;
 
-  // Check if all parameters are provided
   if (!email_korisnika || !lozinka || !uloga || !oib || !jmbag || !ime || !prezime || !datum_rodenja || !adresa_prebivalista || !subvencioniranost || !uciliste || !uplata_teretane || !komentar) {
     return res.status(400).send({ error: true, message: "All fields are required." });
   }
 
-  // Start a transaction
   connection.beginTransaction(function (err) {
     if (err) {
       console.error("Error starting transaction:", err);
       return res.status(500).send({ error: true, message: "Failed to start transaction." });
     }
 
-    // Insert into korisnik table
     connection.query("INSERT INTO `korisnik` (`email_korisnika`, `lozinka`, `uloga`) VALUES (?, ?, ?)", [email_korisnika, lozinka, uloga], function (error, korisnikResults, fields) {
       if (error) {
         console.error("Error inserting korisnik:", error);
         return connection.rollback(function () {
-          res.status(500).send({ error: true, message: "Failed to insert korisnik." });
+          res.status(500).send({ error: true, message: "Neuspjesno dodavanje korisnika." });
         });
       }
 
-      // Insert into stanar table
       connection.query("INSERT INTO `stanar` (`oib`, `jmbag`, `ime`, `prezime`, `datum_rodenja`, `adresa_prebivalista`, `subvencioniranost`, `uciliste`, `uplata_teretane`, `komentar`, `id_korisnika`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [oib, jmbag, ime, prezime, datum_rodenja, adresa_prebivalista, subvencioniranost, uciliste, uplata_teretane, komentar, korisnikResults.insertId], function (error, stanarResults, fields) {
         if (error) {
           console.error("Error inserting stanar:", error);
           return connection.rollback(function () {
-            res.status(500).send({ error: true, message: "Failed to insert stanar." });
+            res.status(500).send({ error: true, message: "Neuspjesno dodavanje stanara." });
           });
         }
 
@@ -239,16 +228,14 @@ app.post("/unos-stanara", function (req, res) {
 app.post("/unos-boravka", function (req, res) {
   const { id_kreveta, oib, id_korisnika, datum_useljenja } = req.body;
 
-  // Check if all parameters are provided
   if (!id_kreveta || !oib || !id_korisnika || !datum_useljenja) {
     return res.status(400).send({ error: true, message: "All fields are required." });
   }
 
-  // Insert the values into the soba table
   connection.query("INSERT INTO `boravak` (`id_kreveta`, `oib`, `id_korisnika`, `datum_useljenja`, `datum_iseljenja`) VALUES (?, ?, ?, ?, NULL)", [id_kreveta, oib, id_korisnika, datum_useljenja], function (error, results, fields) {
     if (error) {
       console.error("Error inserting boravak:", error);
-      return res.status(500).send({ error: true, message: "Failed to insert boravak." });
+      return res.status(500).send({ error: true, message: "Neuspjesno dodavanje boravka." });
     }
     res.status(201).send({ error: false, data: results, message: "Boravak je dodan." });
   });
@@ -260,16 +247,16 @@ app.put("/azuriranje-boravka/:id_boravka", function (req, res) {
 
   // Check if all parameters are provided
   if (!id_boravka || !datum_iseljenja) {
-    return res.status(400).send({ error: true, message: "Both id_boravka and datum_iseljenja are required." });
+    return res.status(400).send({ error: true, message: " id_boravka i datum_iseljenja su obavezni." });
   }
 
   // Update the boravak table
   connection.query("UPDATE `boravak` SET `datum_iseljenja` = ? WHERE `id_boravka` = ?", [datum_iseljenja, id_boravka], function (error, results, fields) {
     if (error) {
       console.error("Error updating boravak:", error);
-      return res.status(500).send({ error: true, message: "Failed to update boravak." });
+      return res.status(500).send({ error: true, message: "Neuspjesno azuriranje boravka." });
     }
-    res.status(200).send({ error: false, data: results, message: "Boravak updated successfully." });
+    res.status(200).send({ error: false, data: results, message: "Uspjesno azuriranje boravka." });
   });
 });
 
@@ -288,12 +275,11 @@ app.put("/azuriranje-stanara/:oib", function (req, res) {
     id_korisnika
   } = req.body;
 
-  // Check if oib is provided
   if (!oib) {
-    return res.status(400).send({ error: true, message: "OIB is required." });
+    return res.status(400).send({ error: true, message: "OIB je obavezan podatak." });
   }
 
-  // Construct the SQL query dynamically based on provided fields
+
   let updateQuery = "UPDATE `stanar` SET";
   const values = [];
   if (jmbag !== undefined) {
@@ -341,13 +327,12 @@ app.put("/azuriranje-stanara/:oib", function (req, res) {
   updateQuery = updateQuery.slice(0, -1) + " WHERE `oib` = ?";
   values.push(oib);
 
-  // Execute the update query
   connection.query(updateQuery, values, function (error, results, fields) {
     if (error) {
       console.error("Error updating stanar:", error);
-      return res.status(500).send({ error: true, message: "Failed to update stanar." });
+      return res.status(500).send({ error: true, message: "Azuriranje stanara neuspjesno." });
     }
-    res.status(200).send({ error: false, data: results, message: "Stanar updated successfully." });
+    res.status(200).send({ error: false, data: results, message: "Azuriranje uspjesno." });
   });
 });
 
@@ -355,18 +340,18 @@ app.put("/azuriranje-korisnika/:id_korisnika", function (req, res) {
   const { id_korisnika } = req.params;
   const { email_korisnika, lozinka, uloga } = req.body;
 
-  // Check if all parameters are provided
+  
   if (!id_korisnika || !email_korisnika || !lozinka || !uloga) {
-    return res.status(400).send({ error: true, message: "id_korisnika, email_korisnika, lozinka, and uloga are required." });
+    return res.status(400).send({ error: true, message: "id_korisnika, email_korisnika, lozinka, i uloga su obavezni." });
   }
 
-  // Update the korisnik table
+  
   connection.query("UPDATE `korisnik` SET `email_korisnika` = ?, `lozinka` = ?, `uloga` = ? WHERE `id_korisnika` = ?", [email_korisnika, lozinka, uloga, id_korisnika], function (error, results, fields) {
     if (error) {
       console.error("Error updating korisnik:", error);
-      return res.status(500).send({ error: true, message: "Failed to update korisnik." });
+      return res.status(500).send({ error: true, message: "Azuriranje neuspjesno." });
     }
-    res.status(200).send({ error: false, data: results, message: "Korisnik updated successfully." });
+    res.status(200).send({ error: false, data: results, message: "Azuriranje uspjesno." });
   });
 });
 
@@ -374,18 +359,16 @@ app.put("/azuriranje-sobe/:id_sobe", function (req, res) {
   const { id_sobe } = req.params;
   const { broj_objekta, kat_sobe, broj_sobe } = req.body;
 
-  // Check if all parameters are provided
   if (!id_sobe || !broj_objekta || !kat_sobe || !broj_sobe) {
-    return res.status(400).send({ error: true, message: "id_sobe, broj_objekta, kat_sobe, and broj_sobe are required." });
+    return res.status(400).send({ error: true, message: "id_sobe, broj_objekta, kat_sobe, i broj_sobe su obavezni." });
   }
 
-  // Update the soba table
   connection.query("UPDATE `soba` SET `broj_objekta` = ?, `kat_sobe` = ?, `broj_sobe` = ? WHERE `id_sobe` = ?", [broj_objekta, kat_sobe, broj_sobe, id_sobe], function (error, results, fields) {
     if (error) {
       console.error("Error updating soba:", error);
-      return res.status(500).send({ error: true, message: "Failed to update soba." });
+      return res.status(500).send({ error: true, message: "Azuriranje neuspjesno." });
     }
-    res.status(200).send({ error: false, data: results, message: "Soba updated successfully." });
+    res.status(200).send({ error: false, data: results, message: "Azuriranje uspjesno." });
   });
 });
 
@@ -393,163 +376,146 @@ app.put("/azuriranje-kreveta/:id_kreveta", function (req, res) {
   const { id_kreveta } = req.params;
   const { broj_kreveta, id_sobe, zauzetost } = req.body;
 
-  // Check if all parameters are provided
   if (!id_kreveta || !broj_kreveta || !id_sobe) {
-    return res.status(400).send({ error: true, message: "id_kreveta, broj_kreveta, and id_sobe are required." });
+    return res.status(400).send({ error: true, message: "id_kreveta, broj_kreveta, i id_sobe su obavezni." });
   }
 
-  // Update the krevet table
-  connection.query("UPDATE `krevet` SET `broj_kreveta` = ?, `id_sobe` = ?, `zauzetost` = ? WHERE `id_kreveta` = ?", [broj_kreveta, id_sobe, zauzetost, id_kreveta], function (error, results, fields) {
+ connection.query("UPDATE `krevet` SET `broj_kreveta` = ?, `id_sobe` = ?, `zauzetost` = ? WHERE `id_kreveta` = ?", [broj_kreveta, id_sobe, zauzetost, id_kreveta], function (error, results, fields) {
     if (error) {
       console.error("Error updating krevet:", error);
-      return res.status(500).send({ error: true, message: "Failed to update krevet." });
+      return res.status(500).send({ error: true, message: "Azuriranje neuspjesno." });
     }
-    res.status(200).send({ error: false, data: results, message: "Krevet updated successfully." });
+    res.status(200).send({ error: false, data: results, message: "Azuriranje uspjesno." });
   });
 });
 
 app.put("/azuriranje-kvara/:id_kvara", function (req, res) {
   const { id_kvara } = req.params;
   const { stanje_kvara } = req.body;
+  
 
-  // Check if all parameters are provided
   if (!id_kvara || stanje_kvara === undefined) {
-    return res.status(400).send({ error: true, message: "Both id_kvara and stanje_kvara are required." });
+    return res.status(400).send({ error: true, message: " id_kvara i stanje_kvara su obavezni." });
   }
 
-  // Update the kvar table
   connection.query("UPDATE `kvar` SET `stanje_kvara` = ? WHERE `id_kvara` = ?", [stanje_kvara, id_kvara], function (error, results, fields) {
     if (error) {
       console.error("Error updating kvar:", error);
-      return res.status(500).send({ error: true, message: "Failed to update kvar." });
+      return res.status(500).send({ error: true, message: "Neuspjesno azuriranje." });
     }
-    res.status(200).send({ error: false, data: results, message: "Kvar updated successfully." });
+    res.status(200).send({ error: false, data: results, message: "Uspjesno azuriranje." });
   });
 });
 
 app.delete("/brisanje-korisnika/:id_korisnika", function (req, res) {
   const { id_korisnika } = req.params;
 
-  // Check if id_korisnika is provided
   if (!id_korisnika) {
-    return res.status(400).send({ error: true, message: "id_korisnika is required." });
+    return res.status(400).send({ error: true, message: "id_korisnika je obavezan." });
   }
 
-  // Delete the korisnik record
   connection.query("DELETE FROM `korisnik` WHERE `id_korisnika` = ?", [id_korisnika], function (error, results, fields) {
     if (error) {
       console.error("Error deleting korisnik:", error);
-      return res.status(500).send({ error: true, message: "Failed to delete korisnik." });
+      return res.status(500).send({ error: true, message: "Neuspjesno brisanje korisnika." });
     }
-    res.status(200).send({ error: false, data: results, message: "Korisnik deleted successfully." });
+    res.status(200).send({ error: false, data: results, message: "Uspjesno brisanje korisnika" });
   });
 });
 
 app.delete("/brisanje-stanara/:oib", function (req, res) {
   const { oib } = req.params;
 
-  // Check if oib is provided
   if (!oib) {
     return res.status(400).send({ error: true, message: "OIB is required." });
   }
 
-  // Delete the record from the stanar table based on the provided oib
   connection.query("DELETE FROM `stanar` WHERE `oib` = ?", [oib], function (error, results, fields) {
     if (error) {
       console.error("Error deleting stanar:", error);
-      return res.status(500).send({ error: true, message: "Failed to delete stanar." });
+      return res.status(500).send({ error: true, message: "Neuspjesno brisanje stanara." });
     }
-    res.status(200).send({ error: false, data: results, message: "Stanar deleted successfully." });
+    res.status(200).send({ error: false, data: results, message: "Uspjesno brisanje stanara." });
   });
 });
 
 app.delete("/brisanje-objekta/:broj_objekta", function (req, res) {
   const { broj_objekta } = req.params;
 
-  // Check if broj_objekta is provided
   if (!broj_objekta) {
-    return res.status(400).send({ error: true, message: "broj_objekta is required." });
+    return res.status(400).send({ error: true, message: "broj_objekta je obavezan." });
   }
 
-  // Delete the record from the objekt table based on the provided broj_objekta
   connection.query("DELETE FROM `objekt` WHERE `broj_objekta` = ?", [broj_objekta], function (error, results, fields) {
     if (error) {
       console.error("Error deleting objekt:", error);
-      return res.status(500).send({ error: true, message: "Failed to delete objekt." });
+      return res.status(500).send({ error: true, message: "Neuspjesno brisanje objekta." });
     }
-    res.status(200).send({ error: false, data: results, message: "Objekt deleted successfully." });
+    res.status(200).send({ error: false, data: results, message: "Uspjesno brisanje objekta." });
   });
 });
 
 app.delete("/brisanje-sobe/:id_sobe", function (req, res) {
   const { id_sobe } = req.params;
 
-  // Check if id_sobe is provided
   if (!id_sobe) {
-    return res.status(400).send({ error: true, message: "id_sobe is required." });
+    return res.status(400).send({ error: true, message: "id_sobe je obavezan." });
   }
 
-  // Delete the record from the soba table based on the provided id_sobe
   connection.query("DELETE FROM `soba` WHERE `id_sobe` = ?", [id_sobe], function (error, results, fields) {
     if (error) {
       console.error("Error deleting soba:", error);
-      return res.status(500).send({ error: true, message: "Failed to delete soba." });
+      return res.status(500).send({ error: true, message: "Neuspjesno brisanje soba." });
     }
-    res.status(200).send({ error: false, data: results, message: "Soba deleted successfully." });
+    res.status(200).send({ error: false, data: results, message: "Soba uspjesno izbrisana." });
   });
 });
 
 app.delete("/brisanje-kreveta/:id_kreveta", function (req, res) {
   const { id_kreveta } = req.params;
 
-  // Check if id_kreveta is provided
   if (!id_kreveta) {
-    return res.status(400).send({ error: true, message: "id_kreveta is required." });
+    return res.status(400).send({ error: true, message: "id_kreveta je obavezan." });
   }
 
-  // Delete the record from the krevet table based on the provided id_kreveta
   connection.query("DELETE FROM `krevet` WHERE `id_kreveta` = ?", [id_kreveta], function (error, results, fields) {
     if (error) {
       console.error("Error deleting krevet:", error);
-      return res.status(500).send({ error: true, message: "Failed to delete krevet." });
+      return res.status(500).send({ error: true, message: "Neuspjesno brisanje kreveta." });
     }
-    res.status(200).send({ error: false, data: results, message: "Krevet deleted successfully." });
+    res.status(200).send({ error: false, data: results, message: "Uspjesno brisanje kreveta." });
   });
 });
 
 app.delete("/brisanje-kvara/:id_kvara", function (req, res) {
   const { id_kvara } = req.params;
 
-  // Check if id_kvara is provided
   if (!id_kvara) {
-    return res.status(400).send({ error: true, message: "id_kvara is required." });
+    return res.status(400).send({ error: true, message: "id_kvara je obavezan." });
   }
 
-  // Delete the record from the kvar table based on the provided id_kvara
   connection.query("DELETE FROM `kvar` WHERE `id_kvara` = ?", [id_kvara], function (error, results, fields) {
     if (error) {
       console.error("Error deleting kvar:", error);
-      return res.status(500).send({ error: true, message: "Failed to delete kvar." });
+      return res.status(500).send({ error: true, message: "Neuspjesno brisanje kvara." });
     }
-    res.status(200).send({ error: false, data: results, message: "Kvar deleted successfully." });
+    res.status(200).send({ error: false, data: results, message: "Uspjesno brisanje kvara." });
   });
 });
 
 app.delete("/brisanje-boravka/:id_boravka", function (req, res) {
   const { id_boravka } = req.params;
 
-  // Check if id_boravka is provided
   if (!id_boravka) {
-    return res.status(400).send({ error: true, message: "id_boravka is required." });
+    return res.status(400).send({ error: true, message: "id_boravka je obavezan." });
   }
 
-  // Delete the record from the boravak table based on the provided id_boravka
   connection.query("DELETE FROM `boravak` WHERE `id_boravka` = ?", [id_boravka], function (error, results, fields) {
     if (error) {
       console.error("Error deleting boravak:", error);
-      return res.status(500).send({ error: true, message: "Failed to delete boravak." });
+      return res.status(500).send({ error: true, message: "Neuspjesno brisanje boravka." });
     }
-    res.status(200).send({ error: false, data: results, message: "Boravak deleted successfully." });
+    res.status(200).send({ error: false, data: results, message: "Uspjesno brisanje boravka" });
   });
 });
 
