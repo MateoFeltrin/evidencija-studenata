@@ -6,7 +6,7 @@ var cors = require("cors");
 app.use(cors());
 var fs = require("fs"); //require file system object
 const bodyParser = require("body-parser");
-
+//probat koristit sequalizer
 // Parser za JSON podatke
 app.use(bodyParser.json());
 
@@ -262,23 +262,11 @@ app.put("/azuriranje-boravka/:id_boravka", function (req, res) {
 
 app.put("/azuriranje-stanara/:oib", function (req, res) {
   const { oib } = req.params;
-  const {
-    jmbag,
-    ime,
-    prezime,
-    datum_rodenja,
-    adresa_prebivalista,
-    subvencioniranost,
-    uciliste,
-    uplata_teretane,
-    komentar,
-    id_korisnika
-  } = req.body;
+  const { jmbag, ime, prezime, datum_rodenja, adresa_prebivalista, subvencioniranost, uciliste, uplata_teretane, komentar, id_korisnika } = req.body;
 
   if (!oib) {
     return res.status(400).send({ error: true, message: "OIB je obavezan podatak." });
   }
-
 
   let updateQuery = "UPDATE `stanar` SET";
   const values = [];
@@ -340,12 +328,10 @@ app.put("/azuriranje-korisnika/:id_korisnika", function (req, res) {
   const { id_korisnika } = req.params;
   const { email_korisnika, lozinka, uloga } = req.body;
 
-  
   if (!id_korisnika || !email_korisnika || !lozinka || !uloga) {
     return res.status(400).send({ error: true, message: "id_korisnika, email_korisnika, lozinka, i uloga su obavezni." });
   }
 
-  
   connection.query("UPDATE `korisnik` SET `email_korisnika` = ?, `lozinka` = ?, `uloga` = ? WHERE `id_korisnika` = ?", [email_korisnika, lozinka, uloga, id_korisnika], function (error, results, fields) {
     if (error) {
       console.error("Error updating korisnik:", error);
@@ -380,7 +366,7 @@ app.put("/azuriranje-kreveta/:id_kreveta", function (req, res) {
     return res.status(400).send({ error: true, message: "id_kreveta, broj_kreveta, i id_sobe su obavezni." });
   }
 
- connection.query("UPDATE `krevet` SET `broj_kreveta` = ?, `id_sobe` = ?, `zauzetost` = ? WHERE `id_kreveta` = ?", [broj_kreveta, id_sobe, zauzetost, id_kreveta], function (error, results, fields) {
+  connection.query("UPDATE `krevet` SET `broj_kreveta` = ?, `id_sobe` = ?, `zauzetost` = ? WHERE `id_kreveta` = ?", [broj_kreveta, id_sobe, zauzetost, id_kreveta], function (error, results, fields) {
     if (error) {
       console.error("Error updating krevet:", error);
       return res.status(500).send({ error: true, message: "Azuriranje neuspjesno." });
@@ -392,7 +378,6 @@ app.put("/azuriranje-kreveta/:id_kreveta", function (req, res) {
 app.put("/azuriranje-kvara/:id_kvara", function (req, res) {
   const { id_kvara } = req.params;
   const { stanje_kvara } = req.body;
-  
 
   if (!id_kvara || stanje_kvara === undefined) {
     return res.status(400).send({ error: true, message: " id_kvara i stanje_kvara su obavezni." });
@@ -518,7 +503,3 @@ app.delete("/brisanje-boravka/:id_boravka", function (req, res) {
     res.status(200).send({ error: false, data: results, message: "Uspjesno brisanje boravka" });
   });
 });
-
-
-
-

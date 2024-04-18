@@ -29,19 +29,19 @@ const CollapsableNavbar = () => {
           <div className="offcanvas-body">
             <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
               <li className="nav-item dropdown-center">
-                <button className={`nav-link dropdown-toggle icon-link ${location.pathname === "/unosStudenata" || location.pathname === "/promjenaPodataka" ? "active" : ""}`} role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button className={`nav-link dropdown-toggle icon-link ${location.pathname === "/unosStudenata" || location.pathname === "/izmjenaStanara" ? "active" : ""}`} role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   <FaPenAlt />
                   Studenti
                 </button>
                 <ul className="dropdown-menu">
                   <li>
-                    <Link className=" icon-link dropdown-item" aria-current="page" to="/unosStudenata">
+                    <Link className=" icon-link dropdown-item" aria-current="page" to="/unosStanara">
                       <FaPenAlt />
                       Unos studenta
                     </Link>
                   </li>
                   <li>
-                    <Link className=" icon-link dropdown-item" aria-current="page" to="/promjenaPodataka">
+                    <Link className=" icon-link dropdown-item" aria-current="page" to="/izmjenaStanara">
                       <FaPenAlt />
                       Promjena podataka studenta
                     </Link>
@@ -49,19 +49,19 @@ const CollapsableNavbar = () => {
                 </ul>
               </li>
               <li className="nav-item dropdown-center">
-                <button className={`nav-link dropdown-toggle icon-link ${location.pathname === "/useljenjeStudenta" || location.pathname === "/iseljenjeStudenta" ? "active" : ""}`} role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button className={`nav-link dropdown-toggle icon-link ${location.pathname === "/useljenjeStanara" || location.pathname === "/iseljenjeStanara" ? "active" : ""}`} role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   <TbDoor />
                   Useljenje i iseljenje
                 </button>
                 <ul className="dropdown-menu">
                   <li>
-                    <Link className=" icon-link dropdown-item" aria-current="page" to="/useljenjeStudenta">
+                    <Link className=" icon-link dropdown-item" aria-current="page" to="/useljenjeStanara">
                       <TbDoorEnter />
                       Useljenje studenta
                     </Link>
                   </li>
                   <li>
-                    <Link className=" icon-link dropdown-item" aria-current="page" to="/iseljenjeStudenta">
+                    <Link className=" icon-link dropdown-item" aria-current="page" to="/iseljenjeStanara">
                       <TbDoorExit />
                       Iseljenje studenta
                     </Link>

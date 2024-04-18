@@ -12,7 +12,7 @@ const PopisSvihStanaraPage = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/all-stanar")
+      .get("http://localhost:3000/api/trenutni-stanari")
       .then((res) => setData(res.data))
       .catch((err) => console.log(err));
   }, []);
