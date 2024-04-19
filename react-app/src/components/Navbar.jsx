@@ -22,10 +22,10 @@ const Navbar = () => {
               Evidencija Studenata
             </a>
             <li class="nav-item dropdown-center">
-              <button class={`nav-link dropdown-toggle icon-link ${location.pathname === "/unosStudenata" || location.pathname === "/promjenaPodataka" ? "active" : ""}`} role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <Link class=" icon-link dropdown-item" aria-current="page" to="/popisSvihStanara">
                 <FaPenAlt />
                 Studenti
-              </button>
+              </Link>
               <ul class="dropdown-menu">
                 <li>
                   <Link class=" icon-link dropdown-item" aria-current="page" to="/unosStudenata">

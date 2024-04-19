@@ -1,21 +1,83 @@
-/* 
-Za importanje ikona otic ovdje https://react-icons.github.io/react-icons/search/#q= 
-
-Stranica za unos kvarova
-*/
-import { FaPenAlt } from "react-icons/fa";
-import { FaList } from "react-icons/fa";
-import { TbDoorEnter } from "react-icons/tb";
-import { TbDoorExit } from "react-icons/tb";
-import { IoIosLogIn } from "react-icons/io";
-import Navbar from "../components/Navbar";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import CollapsableNavbar from "../components/CollapsableNavbar";
 
 const UnosKvarovaPage = () => {
+  const [formData, setFormData] = useState({
+    opis_kvara: '',
+    id_sobe: '',
+  });
+
+  const [sobeOptions, setSobeOptions] = useState([]);
+
+  useEffect(() => {
+    // Fetch data for dropdown options
+    axios.get("http://localhost:3000/api/broj-sobe")
+      .then(response => {
+        setSobeOptions(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching sobe:', error);
+      });
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Add code here to submit formData to backend API
+    console.log(formData);
+    // Reset form fields
+    setFormData({
+      opis_kvara: '',
+      id_sobe: '',
+    });
+  };
+
   return (
     <div>
-      <CollapsableNavbar />
-      <div> Iseljenje Studenta</div>
+    <CollapsableNavbar />
+    <h1>Dodaj kvar</h1>
+    <form onSubmit={handleSubmit}>
+      <div className="form-group">
+        <label htmlFor="opis_kvara">Opis kvara:</label>
+        <textarea
+          className="form-control"
+          id="opis_kvara"
+          name="opis_kvara"
+          value={formData.opis_kvara}
+          onChange={handleChange}
+          required
+        />
+      </div>
+     
+      <div className="form-group">
+        <label htmlFor="broj_sobe">Broj sobe:</label>
+        <select
+          className="form-control"
+          id="broj_sobe"
+          name="broj_sobe"
+          value={formData.id_sobe}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Odaberi</option>
+          {sobeOptions && sobeOptions.map(option => (
+            <option key={option.id} value={option.id}>
+              {option.broj_sobe}
+            </option>
+          ))}
+        </select>
+      </div>
+      
+      <button type="submit" className="btn btn-primary">Prijavi kvar</button>
+    </form>
     </div>
   );
 };
