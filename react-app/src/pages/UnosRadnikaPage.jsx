@@ -1,21 +1,90 @@
-/* 
-Za importanje ikona otic ovdje https://react-icons.github.io/react-icons/search/#q= 
-
-Stranica za unos radnika
-*/
-import { FaPenAlt } from "react-icons/fa";
-import { FaList } from "react-icons/fa";
-import { TbDoorEnter } from "react-icons/tb";
-import { TbDoorExit } from "react-icons/tb";
-import { IoIosLogIn } from "react-icons/io";
-import Navbar from "../components/Navbar";
+import { useState } from 'react';
+import axios from 'axios';
 import CollapsableNavbar from "../components/CollapsableNavbar";
 
 const UnosRadnikaPage = () => {
+  const [formData, setFormData] = useState({
+    email_korisnika: '',
+    lozinka: '',
+    uloga: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Add code here to submit formData to backend API
+      const response = await axios.post("http://localhost:3000/api/unos-korisnika", formData);
+      console.log(response.data);
+      // Reset form fields
+      setFormData({
+        email_korisnika: '',
+        lozinka: '',
+        uloga: ''
+      });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+  };
+
   return (
     <div>
       <CollapsableNavbar />
-      <div> Iseljenje Studenta</div>
+      <h1>Unos radnika</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="email_korisnika">Email korisnika:</label>
+          <input
+            type="email"
+            className="form-control"
+            id="email_korisnika"
+            name="email_korisnika"
+            value={formData.email_korisnika}
+            onChange={handleChange}
+            required
+          />
+        </div>
+      
+        <div className="form-group">
+          <label htmlFor="lozinka">Lozinka:</label>
+          <input
+            type="password"
+            className="form-control"
+            id="lozinka"
+            name="lozinka"
+            value={formData.lozinka}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        
+        <div className="form-group">
+          <label htmlFor="uloga">Uloga:</label>
+          <select
+            className="form-control"
+            id="uloga"
+            name="uloga"
+            value={formData.uloga}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Odaberi</option>
+            <option value="Recepcionar">Recepcionar</option>
+            <option value="Domar">Domar</option>
+            <option value="Admin">Admin</option>
+            <option value="Stanar">Stanar</option>
+          </select>
+        </div>
+        
+        <button type="submit" className="btn btn-primary">Unesi korisnika</button>
+      </form>
     </div>
   );
 };

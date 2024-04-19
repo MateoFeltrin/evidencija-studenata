@@ -7,8 +7,14 @@ import CollapsableNavbar from "../components/CollapsableNavbar";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+
+
 const PopisSvihStanaraPage = () => {
   const [data, setData] = useState([]);
+   
+    const handleClick = () => {
+      Router.push('/unosStanaraPage');
+    };
 
   useEffect(() => {
     axios
@@ -21,7 +27,7 @@ const PopisSvihStanaraPage = () => {
     <div>
       <CollapsableNavbar />
       <h1>Tablica trenutačnih stanara</h1>
-      <button className="btn btn-sm btn-primary" onClick={() => handleChange(index)}>Dodaj novog stanara</button>
+      <button className="btn btn-sm btn-primary" onClick={handleClick}>Dodaj novog stanara</button>
       <table className="table table-striped table-hover">
   <thead>
     <tr>

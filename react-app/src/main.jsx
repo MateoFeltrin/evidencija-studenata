@@ -28,6 +28,8 @@ import IzmjenaKrevetaPage from "./pages/IzmjenaKrevetaPage";
 import IzmjenaObjekataPage from "./pages/IzmjenaObjekataPage";
 import IzmjenaSobaPage from "./pages/IzmjenaSobaPage";
 import UnosRadnikaPage from "./pages/UnosRadnikaPage";
+import UnosBoravkaPage from "./pages/UnosBoravkaPage";
+
 
 const router = createBrowserRouter([
   {
@@ -89,6 +91,10 @@ const router = createBrowserRouter([
   {
     path: "/unosObjekata",
     element: <UnosObjekataPage />,
+  },
+  {
+    path: "/unosBoravka",
+    element: <UnosBoravkaPage />,
   },
   {
     path: "/unosSoba",

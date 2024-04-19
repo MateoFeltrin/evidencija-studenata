@@ -123,6 +123,24 @@ app.get("/api/svi-kvarovi", (req, res) => {
   });
 });
 
+app.get("/api/slobodni-stanari", (req, res) => {
+  connection.query(`
+  SELECT s.ime, s.prezime 
+FROM stanar s
+LEFT JOIN boravak b ON s.id_korisnika = b.id_korisnika
+WHERE b.datum_useljenja IS NULL OR b.datum_iseljenja <= CURDATE()
+
+  
+  `, (error, results) => {
+    if (error) {
+      console.error("Error fetching kvarovi:", error);
+      return res.status(500).send({ error: true, message: "Failed to fetch kvarovi." });
+    }
+
+    res.send(results);
+  });
+});
+
 
 app.get("/api/svi-kreveti", (req, res) => {
   connection.query("SELECT krevet.id_kreveta, krevet.broj_kreveta, krevet.zauzetost, soba.broj_sobe, objekt.broj_objekta FROM krevet JOIN soba ON krevet.id_sobe = soba.id_sobe JOIN objekt ON soba.broj_objekta = objekt.broj_objekta", (error, results) => {
@@ -158,6 +176,8 @@ app.get("/api/sve-sobe", (req, res) => {
   });
 });
 
+
+
 app.get('/api/broj-sobe', (req, res) => { 
   connection.query('SELECT broj_sobe FROM soba', (error, results) => {
     if (error) {
@@ -168,6 +188,18 @@ app.get('/api/broj-sobe', (req, res) => {
     res.json(results);
   });
 });
+
+app.get('/api/broj-kreveta', (req, res) => { 
+  connection.query('SELECT broj_kreveta FROM krevet WHERE zauzetost = 0', (error, results) => {
+    if (error) {
+      console.error('Error fetching sobe:', error);
+      res.status(500).json({ error: 'Error fetching sobe' });
+      return;
+    }
+    res.json(results);
+  });
+});
+
 
 app.get("/api/boravci-u-vremenskom-periodu/:datum_useljenja/:datum_iseljenja", (req, res) => {
   const { datum_useljenja, datum_iseljenja } = req.params;
