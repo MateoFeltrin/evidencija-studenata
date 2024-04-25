@@ -9,11 +9,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 // Bootstrap Bundle JS
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import UnosStanaraPage from "./pages/UnosStanaraPage";
-import IzmjenaStanaraPage from "./pages/IzmjenaStanaraPage";
-import IseljenjeStanaraPage from "./pages/IseljenjeStanaraPage";
+import PopisKorisnikaPage from "./pages/PopisKorisnikaPage";
 import PopisSvihStanaraPage from "./pages/PopisSvihStanaraPage";
 import PopisVremenskogPerioda from "./pages/PopisVremenskogPeriodaPage";
-import UseljenjeStanaraPage from "./pages/UseljenjeStanaraPage";
+import PopisBoravakaPage from "./pages/PopisBoravakaPage";
 import PrijavaPage from "./pages/PrijavaPage";
 import PopisObjekataPage from "./pages/PopisObjekataPage";
 import PopisSobaPage from "./pages/PopisSobaPage";
@@ -27,8 +26,13 @@ import UnosKrevetaPage from "./pages/UnosKrevetaPage";
 import UnosSobaPage from "./pages/UnosSobaPage";
 import IzmjenaKrevetaPage from "./pages/IzmjenaKrevetaPage";
 import IzmjenaObjekataPage from "./pages/IzmjenaObjekataPage";
+import IzmjenaStanaraPage from "./pages/IzmjenaStanaraPage";
+import IzmjenaBoravkaPage from "./pages/IzmjenaBoravkaPage";
 import IzmjenaSobaPage from "./pages/IzmjenaSobaPage";
+import IzmjenaRadnikaPage from "./pages/IzmjenaRadnikaPage";
 import UnosRadnikaPage from "./pages/UnosRadnikaPage";
+import UnosBoravkaPage from "./pages/UnosBoravkaPage";
+
 
 const router = createBrowserRouter([
   {
@@ -40,12 +44,8 @@ const router = createBrowserRouter([
     element: <UnosStanaraPage />,
   },
   {
-    path: "/izmjenaStanara",
-    element: <IzmjenaStanaraPage />,
-  },
-  {
-    path: "/iseljenjeStanara",
-    element: <IseljenjeStanaraPage />,
+    path: "/popisKorisnika",
+    element: <PopisKorisnikaPage />,
   },
   {
     path: "/popisSvihStanara",
@@ -56,8 +56,8 @@ const router = createBrowserRouter([
     element: <PopisVremenskogPerioda />,
   },
   {
-    path: "/useljenjeStanara",
-    element: <UseljenjeStanaraPage />,
+    path: "/PopisBoravaka",
+    element: <PopisBoravakaPage />,
   },
   {
     path: "/prijava",
@@ -96,6 +96,10 @@ const router = createBrowserRouter([
     element: <UnosObjekataPage />,
   },
   {
+    path: "/unosBoravka",
+    element: <UnosBoravkaPage />,
+  },
+  {
     path: "/unosSoba",
     element: <UnosSobaPage />,
   },
@@ -114,6 +118,18 @@ const router = createBrowserRouter([
   {
     path: "/izmjenaSoba",
     element: <IzmjenaSobaPage />,
+  },
+  {
+    path: "/izmjenaRadnika",
+    element: <IzmjenaRadnikaPage />,
+  },
+  {
+    path: "/izmjenaStanara",
+    element: <IzmjenaStanaraPage />,
+  },
+  {
+    path: "/izmjenaBoravka",
+    element: <IzmjenaBoravkaPage />,
   },
   {
     path: "/unosRadnika",

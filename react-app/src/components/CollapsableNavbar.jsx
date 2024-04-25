@@ -1,11 +1,15 @@
 // Za importanje ikona otic ovdje https://react-icons.github.io/react-icons/search/#q=
-import { FaPenAlt } from "react-icons/fa";
+import { PiStudent } from "react-icons/pi";
+import { FaRegUser } from "react-icons/fa";
+import { MdHandyman } from "react-icons/md";
+import { FaRegBuilding } from "react-icons/fa";
+import { FaBed } from "react-icons/fa";
 import { FaList } from "react-icons/fa";
-import { TbDoorEnter } from "react-icons/tb";
-import { TbDoorExit } from "react-icons/tb";
+import { FaBookReader } from "react-icons/fa";
 import { IoIosLogIn } from "react-icons/io";
 import { Link, useLocation } from "react-router-dom";
 import { TbDoor } from "react-icons/tb";
+
 
 const CollapsableNavbar = () => {
   const location = useLocation();
@@ -29,48 +33,9 @@ const CollapsableNavbar = () => {
           <div className="offcanvas-body">
             <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
               <li className="nav-item dropdown-center">
-                <button className={`nav-link dropdown-toggle icon-link ${location.pathname === "/unosStudenata" || location.pathname === "/izmjenaStanara" ? "active" : ""}`} role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <FaPenAlt />
-                  Studenti
-                </button>
-                <ul className="dropdown-menu">
-                  <li>
-                    <Link className=" icon-link dropdown-item" aria-current="page" to="/unosStanara">
-                      <FaPenAlt />
-                      Unos studenta
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className=" icon-link dropdown-item" aria-current="page" to="/izmjenaStanara">
-                      <FaPenAlt />
-                      Promjena podataka studenta
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              <li className="nav-item dropdown-center">
-                <button className={`nav-link dropdown-toggle icon-link ${location.pathname === "/useljenjeStanara" || location.pathname === "/iseljenjeStanara" ? "active" : ""}`} role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <TbDoor />
-                  Useljenje i iseljenje
-                </button>
-                <ul className="dropdown-menu">
-                  <li>
-                    <Link className=" icon-link dropdown-item" aria-current="page" to="/useljenjeStanara">
-                      <TbDoorEnter />
-                      Useljenje studenta
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className=" icon-link dropdown-item" aria-current="page" to="/iseljenjeStanara">
-                      <TbDoorExit />
-                      Iseljenje studenta
-                    </Link>
-                  </li>
-                </ul>
-              </li>
               <li className="nav-item dropdown-center">
                 <button className={`nav-link dropdown-toggle icon-link ${location.pathname === "/popisSvihStanara" || location.pathname === "/popisVremenskogPeroida" ? "active" : ""}`} role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <TbDoor />
+                  <PiStudent />
                   Popisi studenata
                 </button>
                 <ul className="dropdown-menu">
@@ -88,6 +53,61 @@ const CollapsableNavbar = () => {
                   </li>
                 </ul>
               </li>
+              <Link className={`nav-link icon-link ${location.pathname === "/PopisKorisnika" ? "active" : ""}`} aria-current="page" to="/PopisKorisnika">
+              <FaRegUser />
+              Popis korisnika
+            </Link>
+            <li>
+            <Link className={`nav-link icon-link ${location.pathname === "/PopisBoravaka" ? "active" : ""}`} aria-current="page" to="/PopisBoravaka">
+              <FaBookReader />
+              Popis Boravaka
+            </Link>
+            </li>
+            <li className="nav-item dropdown-center">
+                <button className={`nav-link dropdown-toggle icon-link ${location.pathname === "/popisSvihKvarova" || location.pathname === "/popisAktivnihKvarova" ? "active" : ""}`} role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <MdHandyman />
+                  Popis kvarova
+                </button>
+                <ul className="dropdown-menu">
+                  <li>
+                    <Link className=" icon-link dropdown-item" aria-current="page" to="/popisSvihKvarova">
+                      <FaList />
+                      Popis svih kvarova
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className=" icon-link dropdown-item" aria-current="page" to="/popisAktivnihKvarova">
+                      <FaList />
+                      Aktivni kvarovi
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+              <li>
+            <Link className={`nav-link icon-link ${location.pathname === "/popisObjekata" ? "active" : ""}`} aria-current="page" to="/popisObjekata">
+              <FaRegBuilding />
+              Popis objekata
+            </Link>
+            </li>
+            <li>
+            <Link className={`nav-link icon-link ${location.pathname === "/popisSoba" ? "active" : ""}`} aria-current="page" to="/popisSoba">
+              <TbDoor />
+              Popis soba
+            </Link>
+            </li>
+            <li>
+            <Link className={`nav-link icon-link ${location.pathname === "/popisKreveta" ? "active" : ""}`} aria-current="page" to="/popisKreveta">
+              <FaBed />
+              Popis kreveta
+            </Link>
+            </li>
+            <li>
+            <Link className={`nav-link icon-link ${location.pathname === "/unosKvarova" ? "active" : ""}`} aria-current="page" to="/unosKvarova">
+              <MdHandyman />
+              Prijava kvara
+            </Link>
+            </li>
+                </li>
             </ul>
             <Link className={`nav-link icon-link ${location.pathname === "/prijava" ? "active" : ""}`} aria-current="page" to="/prijava">
               <IoIosLogIn />
