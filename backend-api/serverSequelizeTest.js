@@ -1,6 +1,5 @@
 const express = require("express");
 const app = express();
-const mysql = require("mysql");
 const { Sequelize } = require("sequelize");
 const sequelize = require("./sequelizeInstance");
 const { Op } = require("sequelize");
@@ -10,10 +9,8 @@ const jwt = require("jsonwebtoken");
 app.use(express.json());
 var cors = require("cors");
 app.use(cors());
-var fs = require("fs"); //require file system object
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
-//probat koristit sequalizer
 // Parser za JSON podatke
 app.use(bodyParser.json());
 
@@ -142,6 +139,54 @@ app.get("/api/aktivni-kvarovi", async (req, res) => {
   }
 });
 
+app.get("/api/svi-radnici", async (req, res) => {
+  try {
+    const sviKorisnici = await Korisnik.findAll({
+      where: {
+        uloga: {
+          [Sequelize.Op.in]: ["admin", "recepcionar", "domar"],
+        },
+      },
+    });
+    res.json(sviKorisnici);
+  } catch (error) {
+    console.log("Error fetching Korisnici: ", error);
+    res.status(500).send({ error: true, message: "Failed to fetch svi korisnici." });
+  }
+});
+
+app.get("/api/svi-boravci", async (req, res) => {
+  try {
+    const sviBoravci = await Boravak.findAll({
+      include: [
+        {
+          model: Stanar,
+          attributes: ["ime", "prezime"],
+        },
+        {
+          model: Krevet,
+          attributes: ["broj_kreveta"],
+          include: [
+            {
+              model: Soba,
+              attributes: ["broj_objekta", "broj_sobe"],
+            },
+          ],
+        },
+        {
+          model: Korisnik,
+          attributes: ["email_korisnika"],
+        },
+      ],
+    });
+
+    res.json(sviBoravci);
+  } catch (error) {
+    console.log("Error fetching boravci: ", error);
+    res.status(500).send({ error: true, message: "Failed to fetch svi boravci." });
+  }
+});
+
 app.get("/api/svi-kvarovi", async (req, res) => {
   try {
     const aktivniKvarovi = await Kvar.findAll({});
@@ -172,7 +217,7 @@ app.get("/api/svi-objekti", async (req, res) => {
   }
 });
 
-app.get("/api/sve-sobe:", async (req, res) => {
+app.get("/api/sve-sobe", async (req, res) => {
   try {
     const sveSobe = await Soba.findAll({});
     res.json(sveSobe);
