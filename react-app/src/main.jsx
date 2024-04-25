@@ -26,7 +26,10 @@ import UnosKrevetaPage from "./pages/UnosKrevetaPage";
 import UnosSobaPage from "./pages/UnosSobaPage";
 import IzmjenaKrevetaPage from "./pages/IzmjenaKrevetaPage";
 import IzmjenaObjekataPage from "./pages/IzmjenaObjekataPage";
+import IzmjenaStanaraPage from "./pages/IzmjenaStanaraPage";
+import IzmjenaBoravkaPage from "./pages/IzmjenaBoravkaPage";
 import IzmjenaSobaPage from "./pages/IzmjenaSobaPage";
+import IzmjenaRadnikaPage from "./pages/IzmjenaRadnikaPage";
 import UnosRadnikaPage from "./pages/UnosRadnikaPage";
 import UnosBoravkaPage from "./pages/UnosBoravkaPage";
 
@@ -115,6 +118,18 @@ const router = createBrowserRouter([
   {
     path: "/izmjenaSoba",
     element: <IzmjenaSobaPage />,
+  },
+  {
+    path: "/izmjenaRadnika",
+    element: <IzmjenaRadnikaPage />,
+  },
+  {
+    path: "/izmjenaStanara",
+    element: <IzmjenaStanaraPage />,
+  },
+  {
+    path: "/izmjenaBoravka",
+    element: <IzmjenaBoravkaPage />,
   },
   {
     path: "/unosRadnika",

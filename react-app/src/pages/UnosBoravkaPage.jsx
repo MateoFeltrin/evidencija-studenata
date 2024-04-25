@@ -52,9 +52,9 @@ const UnosKrevetaPage = () => {
   };
 
   return (
-    <div>
+    <div className="container">
       <CollapsableNavbar />
-      <h1>Dodaj boravak</h1>
+      <h1 className="mt-4">Dodaj boravak</h1>
       <form onSubmit={handleSubmit}>
         
         <div className="form-group">
