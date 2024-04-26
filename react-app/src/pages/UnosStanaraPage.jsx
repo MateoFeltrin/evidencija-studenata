@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import CollapsableNavbar from "../components/CollapsableNavbar";
+import { IoArrowBackSharp } from "react-icons/io5";
+import { Link } from 'react-router-dom';
 
 const UnosStanaraPage = () => {
   const [formData, setFormData] = useState({
@@ -36,8 +38,12 @@ const UnosStanaraPage = () => {
   return (
     <div>
       <CollapsableNavbar />
-      <div className="container">
-        <h1 className="mt-4">Unos novog stanara</h1>
+      <div className="container mt-4">
+      <Link to="/popisSvihStanara" className="btn btn-sm btn-danger mb-5">
+      <IoArrowBackSharp />    
+            </Link>
+        <h1 className="mt-1">Unos novog stanara</h1>
+       
         <div className="row justify-content-center">
           <div className="col-md-6">
             <form onSubmit={handleSubmit}>
@@ -99,8 +105,10 @@ const UnosStanaraPage = () => {
                   <option value="Domar">Domar</option>
                 </select>
               </div>
-              <button type="submit" className="btn btn-primary">Unesi</button>
+              <button type="submit" className="btn btn-primary mb-3 mr-2">Unesi</button>
+              
             </form>
+            
           </div>
         </div>
       </div>

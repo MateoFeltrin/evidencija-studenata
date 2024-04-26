@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { FaPenAlt, FaList } from "react-icons/fa";
-import { TbDoorEnter, TbDoorExit } from "react-icons/tb";
-import { IoIosLogIn } from "react-icons/io";
-import Navbar from "../components/Navbar";
+import { Link } from 'react-router-dom';
 import CollapsableNavbar from "../components/CollapsableNavbar";
+import { IoArrowBackSharp } from "react-icons/io5";
+
 
 const IzmjenaRadnikaPage = () => {
   const [idKorisnika, setIdKorisnika] = useState("");
@@ -31,6 +30,9 @@ const IzmjenaRadnikaPage = () => {
     <div className="container-fluid">
       <CollapsableNavbar />
       <div className="container mt-4">
+      <Link to="/popisKorisnika" className="btn btn-sm btn-danger mb-5">
+      <IoArrowBackSharp />    
+            </Link>
         <h2>Izmjena korisnika</h2>
         <form onSubmit={handleSubmit}>
           <div className="row">

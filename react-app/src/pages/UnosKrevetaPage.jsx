@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CollapsableNavbar from "../components/CollapsableNavbar";
+import { IoArrowBackSharp } from "react-icons/io5";
+
+import { Link } from 'react-router-dom';
 
 const UnosKrevetaPage = () => {
   const [formData, setFormData] = useState({
@@ -43,6 +46,11 @@ const UnosKrevetaPage = () => {
   return (
     <div className="container">
       <CollapsableNavbar />
+      <div className="container mt-3">
+      <Link to="/popisKreveta" className="btn btn-sm btn-danger mb-5">
+      <IoArrowBackSharp />    
+            </Link>
+            </div>
       <h1 className="mt-4">Dodaj krevet</h1>
       <div className="row justify-content-center">
         <div className="col-md-6">

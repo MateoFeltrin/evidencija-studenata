@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import CollapsableNavbar from "../components/CollapsableNavbar";
+import { IoArrowBackSharp } from "react-icons/io5";
+
+import { Link } from 'react-router-dom';
 
 const UnosObjekataPage = () => {
   const [formData, setFormData] = useState({
@@ -26,8 +29,14 @@ const UnosObjekataPage = () => {
 
   return (
     <div>
-      <CollapsableNavbar />
+      
       <div className="container">
+      <CollapsableNavbar />
+      <div className="container mt-4">
+      <Link to="/popisObjekata" className="btn btn-sm btn-danger mb-5">
+      <IoArrowBackSharp />    
+            </Link>
+            </div>
         <h1 className="mt-4">Unos objekata</h1>
         <div className="row justify-content-center">
           <div className="col-md-6">
