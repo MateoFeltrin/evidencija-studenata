@@ -292,7 +292,7 @@ app.post("/unos-radnika", function (req, res) {
 app.post("/unos-stanara", function (req, res) {
   const { email_korisnika, lozinka, uloga, oib, jmbag, ime, prezime, datum_rodenja, adresa_prebivalista, subvencioniranost, uciliste, uplata_teretane, komentar } = req.body;
 
-  if (!email_korisnika || !lozinka || !uloga || !oib || !jmbag || !ime || !prezime || !datum_rodenja || !adresa_prebivalista || !subvencioniranost || !uciliste || !uplata_teretane || !komentar) {
+  if (!email_korisnika || !lozinka || !uloga || !oib || !jmbag || !ime || !prezime || !datum_rodenja || !adresa_prebivalista  || !uciliste  || !komentar) {
     return res.status(400).send({ error: true, message: "All fields are required." });
   }
 

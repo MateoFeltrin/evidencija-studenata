@@ -39,14 +39,14 @@ const PopisBoravakaPage = () => {
           <tbody>
             {data.map((boravak, id_boravka) => (
               <tr key={id_boravka}>
-                <td className="table-data">{boravak.stanar.ime}</td>
-                <td className="table-data">{boravak.stanar.prezime}</td>
+                <td className="table-data">{boravak.ime}</td>
+                <td className="table-data">{boravak.prezime}</td>
                 <td className="table-data">{boravak.datum_useljenja}</td>
                 <td className="table-data">{boravak.datum_iseljenja}</td>
-                <td className="table-data">{boravak.krevet.soba.broj_objekta}</td>
-                <td className="table-data">{boravak.krevet.soba.broj_sobe}</td>
-                <td className="table-data">{boravak.krevet.broj_kreveta}</td>
-                <td className="table-data">{boravak.korisnik.email_korisnika}</td>
+                <td className="table-data">{boravak.broj_objekta}</td>
+                <td className="table-data">{boravak.broj_sobe}</td>
+                <td className="table-data">{boravak.broj_kreveta}</td>
+                <td className="table-data">{boravak.email_korisnika}</td>
                 <td className="table-data">
                   <button className="btn btn-sm btn-primary" onClick={() => handleChange(index)}>
                     Izmijeni

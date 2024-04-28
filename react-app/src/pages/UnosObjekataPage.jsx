@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CollapsableNavbar from "../components/CollapsableNavbar";
 import { IoArrowBackSharp } from "react-icons/io5";
-
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const UnosObjekataPage = () => {
@@ -17,14 +17,23 @@ const UnosObjekataPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Here you can send the form data to your backend or perform any other actions
     console.log(formData);
-    // Reset form after submission
-    setFormData({
-      broj_objekta: ''
-    });
+    try {
+      // Send POST request to backend API endpoint
+      await axios.post("http://localhost:3000/unos-objekta", formData);
+      alert('Form data submitted successfully!');
+      // Clear form after successful submission
+      setFormData({
+        broj_objekta: ''
+        // Clear other form fields here
+      });
+    } catch (error) {
+      console.error('Error submitting form data:', error);
+      alert('An error occurred while submitting form data.');
+    }
   };
 
   return (
