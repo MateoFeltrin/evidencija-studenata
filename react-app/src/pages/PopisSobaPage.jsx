@@ -1,8 +1,4 @@
-import { FaPenAlt } from "react-icons/fa";
-import { FaList } from "react-icons/fa";
-import { TbDoorEnter } from "react-icons/tb";
-import { TbDoorExit } from "react-icons/tb";
-import { IoIosLogIn } from "react-icons/io";
+import { Link } from 'react-router-dom';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
@@ -23,7 +19,9 @@ const PopisSobaPage = () => {
       <CollapsableNavbar />
       <div className="container mt-4">
         <h1>Popis soba</h1>
-        <button className="btn btn-sm btn-primary mb-3" onClick={() => handleChange(index)}>Dodaj sobu</button>
+        <Link to="/unosSoba" className="btn btn-sm btn-primary mb-3">
+      Dodaj sobu
+    </Link>
         <div className="table-responsive">
           <table className="table table-striped table-hover">
             <thead>

@@ -98,6 +98,17 @@ app.get("/api/aktivni-kvarovi", (req, res) => {
   });
 });
 
+app.get("/api/aktivni-kvarovi/:id", (req, res) => {
+  connection.query("SELECT `id_kvara`,`datum_prijave_kvara`,`opis_kvara`,`soba`.`broj_objekta`,`soba`.`broj_sobe`, `stanar`.`ime`, `stanar`.`prezime` FROM `kvar` RIGHT JOIN `soba` ON `soba`.`id_sobe`= `kvar`.`id_sobe` RIGHT JOIN `stanar` ON `stanar`.`oib`= `kvar`.`oib` WHERE `stanje_kvara`=0;", (error, results) => {
+    if (error) {
+      console.error("Error fetching kvarovi:", error);
+      return res.status(500).send({ error: true, message: "Failed to fetch kvarovi." });
+    }
+
+    res.send(results);
+  });
+});
+
 app.get("/api/svi-kvarovi", (req, res) => {
   connection.query(`
     SELECT 
@@ -281,7 +292,7 @@ app.post("/unos-radnika", function (req, res) {
 app.post("/unos-stanara", function (req, res) {
   const { email_korisnika, lozinka, uloga, oib, jmbag, ime, prezime, datum_rodenja, adresa_prebivalista, subvencioniranost, uciliste, uplata_teretane, komentar } = req.body;
 
-  if (!email_korisnika || !lozinka || !uloga || !oib || !jmbag || !ime || !prezime || !datum_rodenja || !adresa_prebivalista || !subvencioniranost || !uciliste || !uplata_teretane || !komentar) {
+  if (!email_korisnika || !lozinka || !uloga || !oib || !jmbag || !ime || !prezime || !datum_rodenja || !adresa_prebivalista  || !uciliste  || !komentar) {
     return res.status(400).send({ error: true, message: "All fields are required." });
   }
 

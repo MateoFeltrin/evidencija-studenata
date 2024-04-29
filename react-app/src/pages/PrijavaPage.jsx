@@ -3,6 +3,7 @@ import axios from "axios"; // Import axios for API requests
 import CollapsableNavbar from "../components/CollapsableNavbar";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { Link } from "react-router-dom";
 
 const PrijavaPage = () => {
   const navigate = useNavigate();

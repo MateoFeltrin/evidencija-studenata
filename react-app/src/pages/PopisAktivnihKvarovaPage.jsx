@@ -1,11 +1,6 @@
-import { FaPenAlt } from "react-icons/fa";
-import { FaList } from "react-icons/fa";
-import { TbDoorEnter } from "react-icons/tb";
-import { TbDoorExit } from "react-icons/tb";
-import { IoIosLogIn } from "react-icons/io";
+import { Link } from 'react-router-dom';
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
 import CollapsableNavbar from "../components/CollapsableNavbar";
 
 const PopisAktivnihKvarovaPage = () => {
@@ -22,7 +17,9 @@ const PopisAktivnihKvarovaPage = () => {
     <div className="container-fluid">
       <CollapsableNavbar />
       <h1 className="mt-4">Popis aktivnih kvarova</h1>
-      <button className="btn btn-sm btn-primary mb-4" onClick={() => handleChange(index)}>Dodaj kvar</button>
+      <Link to="/unosKvarova" className="btn btn-sm btn-primary mb-3">
+      Dodaj kvar
+    </Link>
       <div className="table-responsive">
         <table className="table table-striped table-hover">
           <thead>

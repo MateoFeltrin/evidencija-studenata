@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import CollapsableNavbar from "../components/CollapsableNavbar";
+import { IoArrowBackSharp } from "react-icons/io5";
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const UnosStanaraPage = () => {
   const [formData, setFormData] = useState({
@@ -27,17 +30,47 @@ const UnosStanaraPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Here you can send the form data to your backend or perform any other actions
     console.log(formData);
+    try {
+      // Send POST request to backend API endpoint
+      await axios.post("http://localhost:3000/unos-stanara", formData);
+      alert('Form data submitted successfully!');
+      // Clear form after successful submission
+      setFormData({
+        oib: '',
+        jmbag: '',
+        ime: '',
+        prezime: '',
+        datum_rodenja: '',
+        adresa_prebivalista: '',
+        subvencioniranost: false,
+        uciliste: '',
+       uplata_teretane: false,
+        komentar: '',
+      id_korisnika: '',
+      email_korisnika: '', 
+      lozinka: '', 
+      uloga: '' 
+        // Clear other form fields here
+      });
+    } catch (error) {
+      console.error('Error submitting form data:', error);
+      alert('An error occurred while submitting form data.');
+    }
   };
 
   return (
     <div>
       <CollapsableNavbar />
-      <div className="container">
-        <h1 className="mt-4">Unos novog stanara</h1>
+      <div className="container mt-4">
+      <Link to="/popisSvihStanara" className="btn btn-sm btn-danger mb-5">
+      <IoArrowBackSharp />    
+            </Link>
+        <h1 className="mt-1">Unos novog stanara</h1>
+       
         <div className="row justify-content-center">
           <div className="col-md-6">
             <form onSubmit={handleSubmit}>
@@ -92,15 +125,13 @@ const UnosStanaraPage = () => {
               <div className="mb-3">
                 <label htmlFor="uloga" className="form-label">Uloga</label>
                 <select className="form-control" id="uloga" name="uloga" value={formData.uloga} onChange={handleChange} required>
-                  <option value="">Odaberi ulogu</option>
                   <option value="Stanar">Stanar</option>
-                  <option value="Recepcionar">Recepcionar</option>
-                  <option value="Admin">Admin</option>
-                  <option value="Domar">Domar</option>
                 </select>
               </div>
-              <button type="submit" className="btn btn-primary">Unesi</button>
+              <button type="submit" className="btn btn-primary mb-3 mr-2">Unesi</button>
+              
             </form>
+            
           </div>
         </div>
       </div>

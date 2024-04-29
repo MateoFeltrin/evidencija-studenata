@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { FaPenAlt, FaList } from "react-icons/fa";
-import { TbDoorEnter, TbDoorExit } from "react-icons/tb";
-import { IoIosLogIn } from "react-icons/io";
-import Navbar from "../components/Navbar";
+import { Link } from 'react-router-dom';
+import { IoArrowBackSharp } from "react-icons/io5";
+
 import CollapsableNavbar from "../components/CollapsableNavbar";
 
 const IzmjenaBoravkaPage = () => {
@@ -35,6 +34,9 @@ const IzmjenaBoravkaPage = () => {
     <div className="container-fluid">
       <CollapsableNavbar />
       <div className="container mt-4">
+      <Link to="/popisBoravaka" className="btn btn-sm btn-danger mb-5">
+      <IoArrowBackSharp />    
+            </Link>
         <h2>Izmjena boravka</h2>
         <form onSubmit={handleSubmit}>
           <div className="row mb-3">

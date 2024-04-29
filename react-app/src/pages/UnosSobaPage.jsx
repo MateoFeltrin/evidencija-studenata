@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CollapsableNavbar from "../components/CollapsableNavbar";
+import { IoArrowBackSharp } from "react-icons/io5";
+
+import { Link } from 'react-router-dom';
 
 const UnosSobaPage = () => {
   const [formData, setFormData] = useState({
@@ -30,22 +33,35 @@ const UnosSobaPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add code here to submit formData to backend API
+    // Here you can send the form data to your backend or perform any other actions
     console.log(formData);
-    // Reset form fields
-    setFormData({
-      broj_objekta: '',
-      kat_sobe: '',
-      broj_sobe: ''
-    });
+    try {
+      // Send POST request to backend API endpoint
+      await axios.post("http://localhost:3000/unos-sobe", formData);
+      alert('Form data submitted successfully!');
+      // Clear form after successful submission
+      setFormData({
+        broj_objekta: '',
+        kat_sobe: '',
+        broj_sobe: ''
+        // Clear other form fields here
+      });
+    } catch (error) {
+      console.error('Error submitting form data:', error);
+      alert('An error occurred while submitting form data.');
+    }
   };
-
   return (
     <div>
+     <div className="container">
       <CollapsableNavbar />
-      <div className="container">
+      <div className="container mt-4">
+      <Link to="/popisSoba" className="btn btn-sm btn-danger mb-5">
+      <IoArrowBackSharp />    
+            </Link>
+            </div>
         <h1 className="mt-4">Dodaj sobu</h1>
         <div className="row justify-content-center">
           <div className="col-md-6">
