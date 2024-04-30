@@ -15,7 +15,6 @@ const UnosSobaPage = () => {
   const [objektOptions, setObjektOptions] = useState([]);
 
   useEffect(() => {
-    // Fetch data for dropdown options
     axios.get("http://localhost:3000/api/svi-objekti")
       .then(response => {
         setObjektOptions(response.data);
@@ -35,18 +34,14 @@ const UnosSobaPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you can send the form data to your backend or perform any other actions
     console.log(formData);
     try {
-      // Send POST request to backend API endpoint
       await axios.post("http://localhost:3000/unos-sobe", formData);
       alert('Form data submitted successfully!');
-      // Clear form after successful submission
       setFormData({
         broj_objekta: '',
         kat_sobe: '',
         broj_sobe: ''
-        // Clear other form fields here
       });
     } catch (error) {
       console.error('Error submitting form data:', error);

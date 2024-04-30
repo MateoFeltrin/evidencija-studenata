@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CollapsableNavbar from "../components/CollapsableNavbar";
 import { IoArrowBackSharp } from "react-icons/io5";
-
 import { Link } from 'react-router-dom';
 
-const UnosKrevetaPage = () => {
+const UnosBoravkaPage = () => {
   const [formData, setFormData] = useState({
-    broj_kreveta: '',
-    id_kreveta: '', 
+    id_kreveta: '',
     id_korisnika: ''
   });
 
@@ -16,7 +14,6 @@ const UnosKrevetaPage = () => {
   const [korisnikOptions, setKorisnikOptions] = useState([]);
 
   useEffect(() => {
-    // Fetch data for dropdown options
     axios.get("http://localhost:3000/api/broj-kreveta")
       .then(response => {
         setKrevetOptions(response.data);
@@ -42,26 +39,30 @@ const UnosKrevetaPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add code here to submit formData to backend API
     console.log(formData);
-    // Reset form fields
-    setFormData({
-      broj_kreveta: '',
-      id_kreveta: '',
-      id_korisnika: ''
-    });
+    try {
+      await axios.post("http://localhost:3000/unos-boravka", formData);
+      alert('Form data submitted successfully!');
+      setFormData({
+        id_kreveta: '',
+        id_korisnika: ''
+      });
+    } catch (error) {
+      console.error('Error submitting form data:', error);
+      alert('An error occurred while submitting form data.');
+    }
   };
 
   return (
     <div className="container">
       <CollapsableNavbar />
       <div className="container mt-4">
-      <Link to="/popisBoravaka" className="btn btn-sm btn-danger mb-5">
-      <IoArrowBackSharp />    
-            </Link>
-            </div>
+        <Link to="/popisBoravaka" className="btn btn-sm btn-danger mb-5">
+          <IoArrowBackSharp />
+        </Link>
+      </div>
       <h1 className="mt-4">Dodaj boravak</h1>
       
       <form onSubmit={handleSubmit}>
@@ -79,7 +80,7 @@ const UnosKrevetaPage = () => {
             <option value="">Odaberi</option>
             {krevetOptions && krevetOptions.map(option => (
               <option key={option.id_kreveta} value={option.id_kreveta}>
-                {option.broj_kreveta} {/* Display broj kreveta */}
+                {option.broj_kreveta} 
               </option>
             ))}
           </select>
@@ -98,7 +99,7 @@ const UnosKrevetaPage = () => {
             <option value="">Odaberi</option>
             {korisnikOptions && korisnikOptions.map(option => (
               <option key={option.id_korisnika} value={option.id_korisnika}>
-                {option.ime} {option.prezime} {/* Display ime and prezime */}
+                {option.ime} {option.prezime} 
               </option>
             ))}
           </select>
@@ -110,4 +111,4 @@ const UnosKrevetaPage = () => {
   );
 };
 
-export default UnosKrevetaPage;
+export default UnosBoravkaPage;

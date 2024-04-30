@@ -19,7 +19,7 @@ const UnosStanaraPage = () => {
     id_korisnika: '',
     email_korisnika: '', 
     lozinka: '', 
-    uloga: '' 
+   // uloga: '' 
   });
 
   const handleChange = (e) => {
@@ -32,13 +32,10 @@ const UnosStanaraPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you can send the form data to your backend or perform any other actions
     console.log(formData);
     try {
-      // Send POST request to backend API endpoint
       await axios.post("http://localhost:3000/unos-stanara", formData);
       alert('Form data submitted successfully!');
-      // Clear form after successful submission
       setFormData({
         oib: '',
         jmbag: '',
@@ -53,8 +50,7 @@ const UnosStanaraPage = () => {
       id_korisnika: '',
       email_korisnika: '', 
       lozinka: '', 
-      uloga: '' 
-        // Clear other form fields here
+     // uloga: '' 
       });
     } catch (error) {
       console.error('Error submitting form data:', error);
@@ -122,12 +118,12 @@ const UnosStanaraPage = () => {
                 <label htmlFor="lozinka" className="form-label">Lozinka</label>
                 <input type="password" className="form-control" id="lozinka" name="lozinka" value={formData.lozinka} onChange={handleChange} required />
               </div>
-              <div className="mb-3">
+              {/*<div className="mb-3">
                 <label htmlFor="uloga" className="form-label">Uloga</label>
                 <select className="form-control" id="uloga" name="uloga" value={formData.uloga} onChange={handleChange} required>
                   <option value="Stanar">Stanar</option>
                 </select>
-              </div>
+  </div>*/}
               <button type="submit" className="btn btn-primary mb-3 mr-2">Unesi</button>
               
             </form>

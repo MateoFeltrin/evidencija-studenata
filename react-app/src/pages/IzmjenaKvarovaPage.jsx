@@ -9,20 +9,19 @@ const IzmjenaKvarovaPage = () => {
   const [idKvara, setIdKvara] = useState("");
   const [datumPrijave, setDatumPrijave] = useState("");
   const [opisKvara, setOpisKvara] = useState("");
-  const [stanjeKvara, setStanjeKvara] = useState(false); // Default state for checkbox
+  const [stanjeKvara, setStanjeKvara] = useState(false); 
   const [idSobe, setIdSobe] = useState("");
   const [idKorisnika, setIdKorisnika] = useState("");
   const [oib, setOib] = useState("");
 
-  // Function to handle form submission
+  
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Code to handle form submission (e.g., send data to server)
-    // You can access form values via state variables
+    
   };
 
   useEffect(() => {
-    // Fetch existing values from the server/database
+    
     fetch("your/api/endpoint")
       .then((response) => response.json())
       .then((data) => {

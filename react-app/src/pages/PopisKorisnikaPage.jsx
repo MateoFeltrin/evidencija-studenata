@@ -14,11 +14,9 @@ const PopisKorisnikaPage = () => {
   }, []);
 
   const handleChange = (index) => {
-    // Handle change logic
   };
 
   const handleDelete = (index) => {
-    // Handle delete logic
   };
 
   return (
@@ -32,7 +30,7 @@ const PopisKorisnikaPage = () => {
         <table className="table table-striped table-hover">
           <thead>
             <tr>
-              <th scope="col">ID Korisnika</th>
+            <th scope="col">ID Korisnika</th>
               <th scope="col">Email</th>
               <th scope="col">Lozinka</th>
               <th scope="col">Uloga</th>
@@ -40,14 +38,14 @@ const PopisKorisnikaPage = () => {
             </tr>
           </thead>
           <tbody>
-            {data.map((radnik, index) => (
-              <tr key={index}>
-                <td className="table-data">{radnik.email_korisnika}</td>
+            {data.map((radnik, id_korisnika) => (
+              <tr key={id_korisnika}>
+                <td className="table-data">{radnik.id_korisnika}</td>
                 <td className="table-data">{radnik.email_korisnika}</td>
                 <td className="table-data">{radnik.lozinka}</td>
                 <td className="table-data">{radnik.uloga}</td>
                 <td className="table-data">
-                  <button className="btn btn-sm btn-primary me-2" onClick={() => handleChange(index)}>Izmijeni</button>
+                <Link to={`/izmjenaRadnika/${radnik.id_korisnika}`} className="btn btn-sm btn-primary">Izmijeni</Link>
                   <button className="btn btn-sm btn-danger" onClick={() => handleDelete(index)}>Izbriši</button>
                 </td>
               </tr>

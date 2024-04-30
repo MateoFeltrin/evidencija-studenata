@@ -14,7 +14,6 @@ const UnosKvarovaPage = () => {
   const [sobeOptions, setSobeOptions] = useState([]);
 
   useEffect(() => {
-    // Fetch data for dropdown options
     axios.get("http://localhost:3000/api/broj-sobe")
       .then(response => {
         setSobeOptions(response.data);
@@ -34,7 +33,6 @@ const UnosKvarovaPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add code here to submit formData to backend API
     console.log(formData);
     // Reset form fields
     setFormData({

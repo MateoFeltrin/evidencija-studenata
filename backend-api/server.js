@@ -47,6 +47,26 @@ app.get("/api/trenutni-stanari", (req, res) => {
   });
 });
 
+app.get("/api/trenutni-stanari1/:id", (req, res) => {
+  const id = req.params.id;
+
+  connection.query("SELECT * FROM `stanar` WHERE `oib` = ?", [id], (error, results) => {
+    if (error) {
+      console.error("Error fetching stanar:", error);
+      return res.status(500).send({ error: true, message: "Failed to fetch stanar." });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).send({ error: true, message: "Stanar not found." });
+    }
+
+    res.send(results[0]); 
+  });
+});
+
+
+
+
 app.get("/api/svi-boravci", (req, res) => {
   connection.query(`
     SELECT 
@@ -83,6 +103,16 @@ app.get("/api/svi-radnici", (req, res) => {
     }
 
     res.send(results);
+  });
+});
+app.get("/api/svi-radnici1/:id_korisnika", (req, res) => {
+  const id_korisnika = req.params.id_korisnika;
+  connection.query("SELECT * FROM `korisnik` WHERE id_korisnika = ?", [id_korisnika], (error, results) => {
+    if (error) {
+      console.error("Error fetching korisnici:", error);
+      return res.status(500).send({ error: true, message: "Failed to fetch korisnici." });
+    }
+    res.json(results[0]);
   });
 });
 
@@ -159,10 +189,26 @@ app.get("/api/svi-kreveti", (req, res) => {
       console.error("Error fetching kreveti:", error);
       return res.status(500).send({ error: true, message: "Failed to fetch kreveti." });
     }
-
     res.send(results);
   });
 });
+
+
+app.get("/api/svi-kreveti1/:id_kreveta", (req, res) => {
+  const id_kreveta = req.params.id_kreveta;
+  connection.query("SELECT * FROM krevet WHERE id_kreveta = ?", [id_kreveta], (error, results) => {
+    if (error) {
+      console.error("Error fetching krevet:", error);
+      return res.status(500).json({ error: true, message: "Failed to fetch krevet." });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ error: true, message: "Krevet not found." });
+    }
+    
+    res.json(results[0]);
+  });
+});
+
 
 
 app.get("/api/svi-objekti", (req, res) => {
@@ -176,6 +222,23 @@ app.get("/api/svi-objekti", (req, res) => {
   });
 });
 
+
+app.get("/api/objekt/:broj_objekta", (req, res) => {
+  const broj_objekta = req.params.broj_objekta;
+  connection.query("SELECT * FROM objekt WHERE broj_objekta = ?", [broj_objekta], (error, results) => {
+    if (error) {
+      console.error("Error fetching objekt:", error);
+      return res.status(500).json({ error: true, message: "Failed to fetch objekt." });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ error: true, message: "Objekt not found." });
+    }
+    
+    res.json(results[0]);
+  });
+});
+
+
 app.get("/api/sve-sobe", (req, res) => {
   connection.query("SELECT * FROM `soba`", (error, results) => {
     if (error) {
@@ -187,6 +250,20 @@ app.get("/api/sve-sobe", (req, res) => {
   });
 });
 
+app.get("/api/sve-sobe1/:id_sobe", (req, res) => {
+  const id_sobe = req.params.id_sobe;
+  connection.query("SELECT * FROM soba WHERE id_sobe = ?", [id_sobe], (error, results) => {
+    if (error) {
+      console.error("Error fetching sobe:", error);
+      return res.status(500).json({ error: true, message: "Failed to fetch sobe." });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ error: true, message: "Soba not found." });
+    }
+    
+    res.json(results[0]);
+  });
+});
 
 
 app.get('/api/broj-sobe', (req, res) => { 
@@ -292,7 +369,7 @@ app.post("/unos-radnika", function (req, res) {
 app.post("/unos-stanara", function (req, res) {
   const { email_korisnika, lozinka, uloga, oib, jmbag, ime, prezime, datum_rodenja, adresa_prebivalista, subvencioniranost, uciliste, uplata_teretane, komentar } = req.body;
 
-  if (!email_korisnika || !lozinka || !uloga || !oib || !jmbag || !ime || !prezime || !datum_rodenja || !adresa_prebivalista  || !uciliste  || !komentar) {
+  if (!email_korisnika || !lozinka || !oib || !jmbag || !ime || !prezime || !datum_rodenja || !adresa_prebivalista  || !uciliste  || !komentar) {
     return res.status(400).send({ error: true, message: "All fields are required." });
   }
 
@@ -302,7 +379,7 @@ app.post("/unos-stanara", function (req, res) {
       return res.status(500).send({ error: true, message: "Failed to start transaction." });
     }
 
-    connection.query("INSERT INTO `korisnik` (`email_korisnika`, `lozinka`, `uloga`) VALUES (?, ?, ?)", [email_korisnika, lozinka, uloga], function (error, korisnikResults, fields) {
+    connection.query("INSERT INTO `korisnik` (`email_korisnika`, `lozinka`, `uloga`) VALUES (?, ?, 'Stanar')", [email_korisnika, lozinka, uloga], function (error, korisnikResults, fields) {
       if (error) {
         console.error("Error inserting korisnik:", error);
         return connection.rollback(function () {
@@ -338,7 +415,7 @@ app.post("/unos-stanara", function (req, res) {
 app.post("/unos-boravka", function (req, res) {
   const { id_kreveta, oib, id_korisnika, datum_useljenja } = req.body;
 
-  if (!id_kreveta || !oib || !id_korisnika || !datum_useljenja) {
+  if (!id_kreveta || !oib || !datum_useljenja) {
     return res.status(400).send({ error: true, message: "All fields are required." });
   }
 
@@ -370,11 +447,11 @@ app.put("/azuriranje-boravka/:id_boravka", function (req, res) {
   });
 });
 
-app.put("/azuriranje-stanara/:oib", function (req, res) {
-  const { oib } = req.params;
+app.put("/azuriranje-stanara/:id", function (req, res) {
+  const { id } = req.params;
   const { jmbag, ime, prezime, datum_rodenja, adresa_prebivalista, subvencioniranost, uciliste, uplata_teretane, komentar, id_korisnika } = req.body;
 
-  if (!oib) {
+  if (!id) {
     return res.status(400).send({ error: true, message: "OIB je obavezan podatak." });
   }
 
@@ -393,8 +470,10 @@ app.put("/azuriranje-stanara/:oib", function (req, res) {
     values.push(prezime);
   }
   if (datum_rodenja !== undefined) {
+    // Convert datum_rodenja to the desired format
+    const formattedDatumRodjenja = new Date(datum_rodenja).toISOString().split('T')[0];
     updateQuery += " `datum_rodenja` = ?,";
-    values.push(datum_rodenja);
+    values.push(formattedDatumRodjenja);
   }
   if (adresa_prebivalista !== undefined) {
     updateQuery += " `adresa_prebivalista` = ?,";
@@ -423,7 +502,7 @@ app.put("/azuriranje-stanara/:oib", function (req, res) {
 
   // Remove the trailing comma and add WHERE clause
   updateQuery = updateQuery.slice(0, -1) + " WHERE `oib` = ?";
-  values.push(oib);
+  values.push(id);
 
   connection.query(updateQuery, values, function (error, results, fields) {
     if (error) {
@@ -433,6 +512,7 @@ app.put("/azuriranje-stanara/:oib", function (req, res) {
     res.status(200).send({ error: false, data: results, message: "Azuriranje uspjesno." });
   });
 });
+
 
 app.put("/azuriranje-korisnika/:id_korisnika", function (req, res) {
   const { id_korisnika } = req.params;
@@ -450,6 +530,22 @@ app.put("/azuriranje-korisnika/:id_korisnika", function (req, res) {
     res.status(200).send({ error: false, data: results, message: "Azuriranje uspjesno." });
   });
 });
+
+app.put("/azuriranje-objekta/:id", (req, res) => {
+  const { id } = req.params;
+  const updatedObjekt = req.body; // Assuming you're sending the updated object data in the request body
+  
+  connection.query("UPDATE `objekt` SET ? WHERE broj_objekta = ?", [updatedObjekt, id], (error, results) => {
+    if (error) {
+      console.error("Error updating objekt:", error);
+      return res.status(500).send({ error: true, message: "Failed to update objekt." });
+    }
+
+    res.send({ error: false, data: results, message: "Objekt uspješno ažuriran." });
+  });
+});
+
+
 
 app.put("/azuriranje-sobe/:id_sobe", function (req, res) {
   const { id_sobe } = req.params;

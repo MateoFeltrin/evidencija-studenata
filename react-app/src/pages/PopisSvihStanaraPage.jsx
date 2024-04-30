@@ -58,7 +58,7 @@ const PopisSvihStanaraPage = () => {
                   <td className="table-data">{student.komentar}</td>
                   <td className="table-data">{student.datum_useljenja}</td>
                   <td className="table-data">
-                    <button className="btn btn-sm btn-primary" onClick={() => handleChange(index)}>Izmijeni</button>
+                  <Link to={`/izmjenaStanara/${student.oib}`} className="btn btn-sm btn-primary">Izmijeni</Link>
                     <button className="btn btn-sm btn-danger" onClick={() => handleDelete(index)}>Izbriši</button>
                     <button className="btn btn-sm btn-secondary">Iseljenje </button>
                   </td>

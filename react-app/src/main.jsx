@@ -92,6 +92,10 @@ const router = createBrowserRouter([
     element: <IzmjenaKvarovaPage />,
   },
   {
+    path: "/izmjenaRadnika/:id_korisnika",
+    element: <IzmjenaRadnikaPage />,
+  },
+  {
     path: "/unosObjekata",
     element: <UnosObjekataPage />,
   },
@@ -108,23 +112,23 @@ const router = createBrowserRouter([
     element: <UnosKrevetaPage />,
   },
   {
-    path: "/izmjenaKreveta",
+    path: "/izmjenaKreveta/:id_kreveta",
     element: <IzmjenaKrevetaPage />,
   },
   {
-    path: "/izmjenaObjekata",
+    path: "/izmjenaObjekata/:broj_objekta",
     element: <IzmjenaObjekataPage />,
   },
   {
-    path: "/izmjenaSoba",
+    path: "/izmjenaSoba/:id_sobe",
     element: <IzmjenaSobaPage />,
   },
   {
-    path: "/izmjenaRadnika",
+    path: "/izmjenaRadnika/:id_korisnika",
     element: <IzmjenaRadnikaPage />,
   },
   {
-    path: "/izmjenaStanara",
+    path: "/izmjenaStanara/:id",
     element: <IzmjenaStanaraPage />,
   },
   {

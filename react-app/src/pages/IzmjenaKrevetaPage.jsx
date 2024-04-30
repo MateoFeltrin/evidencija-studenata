@@ -1,78 +1,116 @@
 import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
-import CollapsableNavbar from "../components/CollapsableNavbar";
+import { Link, useParams } from 'react-router-dom';
 import { IoArrowBackSharp } from "react-icons/io5";
+import axios from "axios";
+
+import CollapsableNavbar from "../components/CollapsableNavbar";
 
 const IzmjenaKrevetaPage = () => {
-  const [idKreveta, setIdKreveta] = useState("");
-  const [brojKreveta, setBrojKreveta] = useState("");
-  const [idSobe, setIdSobe] = useState("");
-  const [zauzetost, setZauzetost] = useState(false); // Default zauzetost as false
+  const { id_kreveta } = useParams();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-  };
+  const [krevetData, setKrevetData] = useState({
+    id_kreveta: "",
+    broj_kreveta: "",
+    id_sobe: "",
+    zauzetost: false
+  });
+
+  const [brojSobeOptions, setBrojSobeOptions] = useState([]); 
 
   useEffect(() => {
-    // Fetch existing values from the server/database
-    fetch("your/api/endpoint")
-      .then((response) => response.json())
-      .then((data) => {
-        setIdKreveta(data.id_kreveta);
-        setBrojKreveta(data.broj_kreveta);
-        setIdSobe(data.id_sobe);
-        setZauzetost(data.zauzetost);
+    axios.get(`http://localhost:3000/api/svi-kreveti1/${id_kreveta}`)
+      .then((res) => {
+        const data = res.data;
+        setKrevetData(data);
       })
-      .catch((error) => console.error("Error fetching data:", error));
-  }, []);
+      .catch((error) => console.error("Error fetching krevet data:", error));
 
+    axios.get("http://localhost:3000/api/sve-sobe")
+      .then((res) => {
+        const options = res.data.map(soba => ({
+          value: soba.id_sobe,
+          label: soba.broj_sobe 
+        }));
+        setBrojSobeOptions(options);
+        console.log("Broj sobe options:", options);
+      })
+      .catch((error) => console.error("Error fetching broj sobe options:", error));
+  }, [id_kreveta]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      await axios.put(`http://localhost:3000/azuriranje-kreveta/${id_kreveta}`, krevetData);
+      alert('Podaci uspješno izmjenjeni!');
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    const newValue = type === 'checkbox' ? checked : value;
+    
+    setKrevetData(prevState => ({
+      ...prevState,
+      [name]: type === 'checkbox' ? checked : newValue
+    }));
+  };
+  
   return (
     <div className="container-fluid">
       <CollapsableNavbar />
       <div className="container mt-4">
-      <Link to="/popisKreveta" className="btn btn-sm btn-danger mb-5">
-      <IoArrowBackSharp />    
-            </Link>
+        <Link to="/popisKreveta" className="btn btn-sm btn-danger mb-5">
+          <IoArrowBackSharp />
+        </Link>
         <h2>Izmjena kreveta</h2>
         <form onSubmit={handleSubmit}>
           <div className="row mb-3">
             <div className="col-md-6">
-              <label htmlFor="idKreveta" className="form-label">
+              <label htmlFor="id_kreveta" className="form-label">
                 ID Kreveta:
               </label>
               <input
                 type="text"
                 className="form-control"
-                id="idKreveta"
-                value={idKreveta}
-                onChange={(e) => setIdKreveta(e.target.value)}
+                id="id_kreveta"
+                name="id_kreveta"
+                value={krevetData.id_kreveta}
+                onChange={handleChange}
               />
             </div>
             <div className="col-md-6">
-              <label htmlFor="brojKreveta" className="form-label">
+              <label htmlFor="broj_kreveta" className="form-label">
                 Broj Kreveta:
               </label>
               <input
                 type="number"
                 className="form-control"
-                id="brojKreveta"
-                value={brojKreveta}
-                onChange={(e) => setBrojKreveta(e.target.value)}
+                id="broj_kreveta"
+                name="broj_kreveta"
+                value={krevetData.broj_kreveta}
+                onChange={handleChange}
               />
             </div>
           </div>
           <div className="row mb-3">
             <div className="col-md-6">
-              <label htmlFor="idSobe" className="form-label">
+              <label htmlFor="id_sobe" className="form-label">
                 Broj Sobe:
               </label>
-              <input
-                type="number"
-                className="form-control"
-                id="idSobe"
-                value={idSobe}
-                onChange={(e) => setIdSobe(e.target.value)}
-              />
+              <select
+                className="form-select"
+                id="id_sobe"
+                name="id_sobe"
+                value={krevetData.id_sobe}
+                onChange={handleChange}
+              >
+                <option value="">Odaberi broj sobe</option>
+                {brojSobeOptions.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+              </select>
             </div>
             <div className="col-md-6">
               <div className="mb-3 form-check">
@@ -80,8 +118,9 @@ const IzmjenaKrevetaPage = () => {
                   type="checkbox"
                   className="form-check-input"
                   id="zauzetost"
-                  checked={zauzetost}
-                  onChange={(e) => setZauzetost(e.target.checked)}
+                  name="zauzetost"
+                  checked={krevetData.zauzetost}
+                  onChange={handleChange}
                 />
                 <label className="form-check-label" htmlFor="zauzetost">
                   Zauzet

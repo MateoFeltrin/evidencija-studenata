@@ -43,7 +43,7 @@ const PopisKrevetaPage = () => {
                   <td className="table-data">{krevet.broj_kreveta}</td>
                   <td className="table-data">{krevet.zauzetost}</td>
                   <td className="table-data">
-                    <button className="btn btn-sm btn-primary" onClick={() => handleChange(index)}>Izmijeni</button>
+                  <Link to={`/izmjenaKreveta/${krevet.id_kreveta}`} className="btn btn-sm btn-primary">Izmijeni</Link>
                     <button className="btn btn-sm btn-danger" onClick={() => handleDelete(index)}>Izbriši</button>
                   </td>
                 </tr>

@@ -22,18 +22,14 @@ const UnosRadnikaPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you can send the form data to your backend or perform any other actions
     console.log(formData);
     try {
-      // Send POST request to backend API endpoint
       await axios.post("http://localhost:3000/unos-radnika", formData);
       alert('Form data submitted successfully!');
-      // Clear form after successful submission
       setFormData({
         email_korisnika: '',
         lozinka: '',
         uloga: ''
-        // Clear other form fields here
       });
     } catch (error) {
       console.error('Error submitting form data:', error);

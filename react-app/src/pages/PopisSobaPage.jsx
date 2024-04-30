@@ -41,7 +41,7 @@ const PopisSobaPage = () => {
                   <td className="table-data">{soba.kat_sobe}</td>
                   <td className="table-data">{soba.broj_sobe}</td>
                   <td className="table-data">
-                    <button className="btn btn-sm btn-primary" onClick={() => handleChange(index)}>Izmijeni</button>
+                  <Link to={`/izmjenaSoba/${soba.id_sobe}`} className="btn btn-sm btn-primary">Izmijeni</Link>
                     <button className="btn btn-sm btn-danger" onClick={() => handleDelete(index)}>Izbriši</button>
                   </td>
                 </tr>
