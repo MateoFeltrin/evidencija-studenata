@@ -14,6 +14,25 @@ const PopisBoravakaPage = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  const handleDelete = (id_boravka) => {
+    const isConfirmed = window.confirm("Želite li zaista obrisati objekt?");
+    if (isConfirmed) {
+      console.log("Broj objekta to delete:", id_boravka);
+      axios
+        .delete(`http://localhost:3000/brisanje-boravka/${id_boravka}`)
+        .then(() => {
+          axios
+            .get("http://localhost:3000/api/svi-boravci")
+            .then((res) => setData(res.data))
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Došlo je do pogreške prilikom brisanja!', err.message);
+        });
+    }
+  };
+
   return (
     <div className="container-fluid">
       <CollapsableNavbar />
@@ -37,8 +56,8 @@ const PopisBoravakaPage = () => {
             </tr>
           </thead>
           <tbody>
-            {data.map((boravak, id_boravka) => (
-              <tr key={id_boravka}>
+            {data.map((boravak) => (
+              <tr key={boravak.id_boravka}>
                 <td className="table-data">{boravak.ime}</td>
                 <td className="table-data">{boravak.prezime}</td>
                 <td className="table-data">{boravak.datum_useljenja}</td>
@@ -48,12 +67,8 @@ const PopisBoravakaPage = () => {
                 <td className="table-data">{boravak.broj_kreveta}</td>
                 <td className="table-data">{boravak.email_korisnika}</td>
                 <td className="table-data">
-                  <button className="btn btn-sm btn-primary" onClick={() => handleChange(index)}>
-                    Izmijeni
-                  </button>
-                  <button className="btn btn-sm btn-danger" onClick={() => handleDelete(index)}>
-                    Izbriši
-                  </button>
+                  <button className="btn btn-sm btn-primary" onClick={() => handleChange(index)}>Izmijeni</button>
+                  <button className="btn btn-sm btn-danger" onClick={() => handleDelete(boravak.id_boravka)}>Izbriši</button>
                   <button className="btn btn-sm btn-secondary">Iseljenje </button>
                 </td>
               </tr>

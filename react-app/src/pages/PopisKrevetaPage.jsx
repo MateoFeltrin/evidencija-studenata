@@ -14,6 +14,25 @@ const PopisKrevetaPage = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  const handleDelete = (id_kreveta) => {
+    const isConfirmed = window.confirm("Želite li zaista obrisati objekt?");
+    if (isConfirmed) {
+      console.log("Broj objekta to delete:", id_kreveta);
+      axios
+        .delete(`http://localhost:3000/brisanje-kreveta/${id_kreveta}`)
+        .then(() => {
+          axios
+            .get("http://localhost:3000/api/svi-kreveti")
+            .then((res) => setData(res.data))
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Došlo je do pogreške prilikom brisanja!', err.message);
+        });
+    }
+  };
+
   return (
     <div className="container-fluid">
       <CollapsableNavbar />
@@ -35,8 +54,8 @@ const PopisKrevetaPage = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((krevet, id_kreveta) => (
-                <tr key={id_kreveta}>
+              {data.map((krevet) => (
+                <tr key={krevet.id_kreveta}>
                   <td className="table-data">{krevet.id_kreveta}</td>
                   <td className="table-data">{krevet.broj_objekta}</td>
                   <td className="table-data">{krevet.broj_sobe}</td>
@@ -44,7 +63,7 @@ const PopisKrevetaPage = () => {
                   <td className="table-data">{krevet.zauzetost}</td>
                   <td className="table-data">
                   <Link to={`/izmjenaKreveta/${krevet.id_kreveta}`} className="btn btn-sm btn-primary">Izmijeni</Link>
-                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(index)}>Izbriši</button>
+                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(krevet.id_kreveta)}>Izbriši</button>
                   </td>
                 </tr>
               ))}

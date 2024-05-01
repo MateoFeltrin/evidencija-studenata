@@ -14,6 +14,25 @@ const PopisObjekataPage = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  const handleDelete = (broj_objekta) => {
+    const isConfirmed = window.confirm("Želite li zaista obrisati objekt?");
+    if (isConfirmed) {
+      console.log("Broj objekta to delete:", broj_objekta);
+      axios
+        .delete(`http://localhost:3000/brisanje-objekta/${broj_objekta}`)
+        .then(() => {
+          axios
+            .get("http://localhost:3000/api/svi-objekti")
+            .then((res) => setData(res.data))
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Došlo je do pogreške prilikom brisanja!', err.message);
+        });
+    }
+  };
+
   return (
     <div className="container-fluid">
       <CollapsableNavbar />
@@ -31,12 +50,12 @@ const PopisObjekataPage = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((objekt, broj_objekta) => (
-                <tr key={broj_objekta}>
+              {data.map((objekt) => (
+                <tr key={objekt.broj_objekta}>
                   <td className="table-data">{objekt.broj_objekta}</td>
                   <td className="table-data">
                   <Link to={`/izmjenaObjekata/${objekt.broj_objekta}`} className="btn btn-sm btn-primary">Izmijeni</Link>
-                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(index)}>Izbriši</button>
+                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(objekt.broj_objekta)}>Izbriši</button>
                   </td>
                 </tr>
               ))}

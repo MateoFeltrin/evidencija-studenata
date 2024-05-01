@@ -14,6 +14,25 @@ const PopisSobaPage = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  const handleDelete = (id_sobe) => {
+    const isConfirmed = window.confirm("Želite li zaista obrisati objekt?");
+    if (isConfirmed) {
+      console.log("Broj objekta to delete:", id_sobe);
+      axios
+        .delete(`http://localhost:3000/brisanje-sobe/${id_sobe}`)
+        .then(() => {
+          axios
+            .get("http://localhost:3000/api/sve-sobe")
+            .then((res) => setData(res.data))
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Došlo je do pogreške prilikom brisanja!', err.message);
+        });
+    }
+  };
+
   return (
     <div className="container-fluid">
       <CollapsableNavbar />
@@ -34,15 +53,15 @@ const PopisSobaPage = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((soba, id_sobe) => (
-                <tr key={id_sobe}>
+              {data.map((soba) => (
+                <tr key={soba.id_sobe}>
                   <td className="table-data">{soba.id_sobe}</td>
                   <td className="table-data">{soba.broj_objekta}</td>
                   <td className="table-data">{soba.kat_sobe}</td>
                   <td className="table-data">{soba.broj_sobe}</td>
                   <td className="table-data">
                   <Link to={`/izmjenaSoba/${soba.id_sobe}`} className="btn btn-sm btn-primary">Izmijeni</Link>
-                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(index)}>Izbriši</button>
+                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(soba.id_sobe)}>Izbriši</button>
                   </td>
                 </tr>
               ))}

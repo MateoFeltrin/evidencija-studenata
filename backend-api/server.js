@@ -73,7 +73,8 @@ app.get("/api/svi-boravci", (req, res) => {
       s.ime, 
       s.prezime, 
       k.email_korisnika, 
-      kr.broj_kreveta, 
+      kr.broj_kreveta,
+      b.id_boravka, 
       b.datum_useljenja, 
       b.datum_iseljenja, 
       soba.broj_sobe, 
@@ -166,7 +167,7 @@ app.get("/api/svi-kvarovi", (req, res) => {
 
 app.get("/api/slobodni-stanari", (req, res) => {
   connection.query(`
-  SELECT s.ime, s.prezime 
+  SELECT s.ime, s.prezime, s.oib
 FROM stanar s
 LEFT JOIN boravak b ON s.id_korisnika = b.id_korisnika
 WHERE b.datum_useljenja IS NULL OR b.datum_iseljenja <= CURDATE()
@@ -413,13 +414,41 @@ app.post("/unos-stanara", function (req, res) {
 });
 
 app.post("/unos-boravka", function (req, res) {
-  const { id_kreveta, oib, id_korisnika, datum_useljenja } = req.body;
+  const { id_kreveta, oib, id_korisnika, datum_useljenja, datum_iseljenja } = req.body;
 
+  // Check if required fields are provided
   if (!id_kreveta || !oib || !datum_useljenja) {
     return res.status(400).send({ error: true, message: "All fields are required." });
   }
 
-  connection.query("INSERT INTO `boravak` (`id_kreveta`, `oib`, `id_korisnika`, `datum_useljenja`, `datum_iseljenja`) VALUES (?, ?, ?, ?, NULL)", [id_kreveta, oib, id_korisnika, datum_useljenja], function (error, results, fields) {
+  // You may want to validate other fields here if needed
+
+  // Insert data into the database
+  const query = "INSERT INTO `boravak` (`id_kreveta`, `oib`, `id_korisnika`, `datum_useljenja`, `datum_iseljenja`) VALUES (?, ?, ?, ?, ?)";
+  const values = [id_kreveta, oib, id_korisnika, datum_useljenja, datum_iseljenja];
+
+  connection.query(query, values, function (error, results, fields) {
+    if (error) {
+      console.error("Error inserting boravak:", error);
+      return res.status(500).send({ error: true, message: "Neuspjesno dodavanje boravka." });
+    }
+    res.status(201).send({ error: false, data: results, message: "Boravak je dodan." });
+  });
+});
+
+
+app.post("/unos-boravka1", (req, res) => {
+  const { id_kreveta, id_korisnika } = req.body;
+
+  // Get current date
+  const currentDate = new Date().toISOString().slice(0, 10);
+
+  if (!id_kreveta || !id_korisnika) {
+    return res.status(400).send({ error: true, message: "All fields are required." });
+  }
+
+  const insertQuery = "INSERT INTO `boravak` (`id_kreveta`, `oib`, `datum_useljenja`, `datum_iseljenja`) VALUES (?, ?, ?, NULL)";
+  connection.query(insertQuery, [id_kreveta, id_korisnika, currentDate], (error, results, fields) => {
     if (error) {
       console.error("Error inserting boravak:", error);
       return res.status(500).send({ error: true, message: "Neuspjesno dodavanje boravka." });

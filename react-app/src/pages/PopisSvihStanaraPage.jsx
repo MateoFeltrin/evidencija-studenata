@@ -16,6 +16,23 @@ const PopisSvihStanaraPage = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  const handleDelete = (oib) => {
+    const isConfirmed = window.confirm("Želite li zaista obrisati stanara?");
+    if (isConfirmed) {
+      axios
+        .delete(`http://localhost:3000/brisanje-stanara/${oib}`)
+        .then(() => {
+          axios
+            .get("http://localhost:3000/api/trenutni-stanari")
+            .then((res) => setData(res.data))
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Došlo je do pogreške prilikom brisanja!', err.message);
+        });
+    }
+  };
   return (
     <div className="container-fluid">
       <CollapsableNavbar />
@@ -44,8 +61,8 @@ const PopisSvihStanaraPage = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((student, oib) => (
-                <tr key={oib}>
+              {data.map((student) => (
+                <tr key={student.oib}>
                   <td className="table-data">{student.oib}</td>
                   <td className="table-data">{student.jmbag}</td>
                   <td className="table-data">{student.ime}</td>
@@ -59,7 +76,7 @@ const PopisSvihStanaraPage = () => {
                   <td className="table-data">{student.datum_useljenja}</td>
                   <td className="table-data">
                   <Link to={`/izmjenaStanara/${student.oib}`} className="btn btn-sm btn-primary">Izmijeni</Link>
-                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(index)}>Izbriši</button>
+                  <button className="btn btn-sm btn-danger" onClick={() => handleDelete(student.oib)}>Izbriši</button>
                     <button className="btn btn-sm btn-secondary">Iseljenje </button>
                   </td>
                 </tr>

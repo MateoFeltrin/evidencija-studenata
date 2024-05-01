@@ -1,114 +1,122 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import CollapsableNavbar from "../components/CollapsableNavbar";
 import { IoArrowBackSharp } from "react-icons/io5";
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-const UnosBoravkaPage = () => {
+const UnosBoravakaPage = () => {
   const [formData, setFormData] = useState({
     id_kreveta: '',
-    id_korisnika: ''
+    oib: '',
+    id_korisnika: '',
+    datum_useljenja: '',
+    datum_iseljenja: ''
   });
 
-  const [krevetOptions, setKrevetOptions] = useState([]);
-  const [korisnikOptions, setKorisnikOptions] = useState([]);
+  const [krevetaOptions, setKrevetaOptions] = useState([]);
+  const [oibOptions, setOibOptions] = useState([]);
+  const [korisnikaOptions, setKorisnikaOptions] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/broj-kreveta")
-      .then(response => {
-        setKrevetOptions(response.data);
+    // Fetch data for dropdowns
+    axios.get("http://localhost:3000/api/svi-kreveti")
+      .then(res => {
+        console.log('Kreveta Data:', res.data); // Log the data received from the API
+        setKrevetaOptions(res.data);
       })
-      .catch(error => {
-        console.error('Error fetching kreveta:', error);
-      });
+      .catch(err => console.error('Error fetching kreveta data:', err));
 
-    axios.get("http://localhost:3000/api/slobodni-stanari")
-      .then(response => {
-        setKorisnikOptions(response.data);
+    axios.get('http://localhost:3000/api/slobodni-stanari')
+      .then(res => {
+        console.log('stanari Data:', res.data); // Log the data received from the API
+        setOibOptions(res.data);
       })
-      .catch(error => {
-        console.error('Error fetching korisnici:', error);
-      });
+      .catch(err => console.error('Error fetching oib data:', err));
+
+    axios.get('http://localhost:3000/api/svi-radnici')
+      .then(res => {
+        console.log('korisnik Data:', res.data); // Log the data received from the API
+        setKorisnikaOptions(res.data);
+      })
+      .catch(err => console.error('Error fetching korisnika data:', err));
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
-    try {
-      await axios.post("http://localhost:3000/unos-boravka", formData);
-      alert('Form data submitted successfully!');
-      setFormData({
-        id_kreveta: '',
-        id_korisnika: ''
+    axios.post('http://localhost:3000/unos-boravka', formData)
+      .then((res) => {
+        console.log('Boravak added successfully:', res.data);
+        // Show window alert
+        window.alert('Boravak je uspješno dodan!');
+        // Clear form data
+        setFormData({
+          id_kreveta: '',
+          oib: '',
+          id_korisnika: '',
+          datum_useljenja: '',
+          datum_iseljenja: ''
+        });
+      })
+      .catch((err) => {
+        console.error('Error adding boravak:', err);
+        // Handle error
       });
-    } catch (error) {
-      console.error('Error submitting form data:', error);
-      alert('An error occurred while submitting form data.');
-    }
   };
 
   return (
     <div className="container">
       <CollapsableNavbar />
-      <div className="container mt-4">
+      <div className="container mt-3">
         <Link to="/popisBoravaka" className="btn btn-sm btn-danger mb-5">
           <IoArrowBackSharp />
         </Link>
       </div>
-      <h1 className="mt-4">Dodaj boravak</h1>
-      
+      <h1>Unos Boravaka</h1>
       <form onSubmit={handleSubmit}>
-        
         <div className="form-group">
-          <label htmlFor="id_kreveta">Krevet:</label>
-          <select
-            className="form-control"
-            id="id_kreveta"
-            name="id_kreveta"
-            value={formData.id_kreveta}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Odaberi</option>
-            {krevetOptions && krevetOptions.map(option => (
-              <option key={option.id_kreveta} value={option.id_kreveta}>
-                {option.broj_kreveta} 
-              </option>
+          <label>ID Kreveta:</label>
+          <select className="form-control" name="id_kreveta" value={formData.id_kreveta} onChange={handleChange}>
+            <option value="">Odaberi ID Kreveta</option>
+            {krevetaOptions.map(option => (
+              <option key={option.id_kreveta} value={option.id_kreveta}>{option.broj_kreveta}</option>
             ))}
           </select>
         </div>
-
         <div className="form-group">
-          <label htmlFor="id_korisnika">Korisnik:</label>
-          <select
-            className="form-control"
-            id="id_korisnika"
-            name="id_korisnika"
-            value={formData.id_korisnika}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Odaberi</option>
-            {korisnikOptions && korisnikOptions.map(option => (
-              <option key={option.id_korisnika} value={option.id_korisnika}>
-                {option.ime} {option.prezime} 
-              </option>
+          <label>OIB:</label>
+          <select className="form-control" name="oib" value={formData.oib} onChange={handleChange}>
+            <option value="">Odaberi OIB</option>
+            {oibOptions.map(option => (
+              <option key={option.oib} value={option.oib}>{option.ime}</option>
             ))}
           </select>
         </div>
-
-        <button type="submit" className="btn btn-primary">Unesi</button>
+        <div className="form-group">
+          <label>ID Korisnika:</label>
+          <select className="form-control" name="id_korisnika" value={formData.id_korisnika} onChange={handleChange}>
+            <option value="">Odaberi ID Korisnika</option>
+            {korisnikaOptions.map(option => (
+              <option key={option.id_korisnika} value={option.id_korisnika}> {option.email_korisnika}</option>
+            ))}
+          </select>
+        </div>
+        <div className="form-group">
+          <label>Datum Useljenja:</label>
+          <input type="date" className="form-control" name="datum_useljenja" value={formData.datum_useljenja} onChange={handleChange} />
+        </div>
+        <div className="form-group">
+          <label>Datum Iseljenja:</label>
+          <input type="date" className="form-control" name="datum_iseljenja" value={formData.datum_iseljenja} onChange={handleChange} />
+        </div>
+        <button type="submit" className="btn btn-primary">Dodaj Boravak</button>
       </form>
     </div>
   );
 };
 
-export default UnosBoravkaPage;
+export default UnosBoravakaPage;
