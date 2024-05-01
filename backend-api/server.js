@@ -95,6 +95,37 @@ app.get("/api/svi-boravci", (req, res) => {
   });
 });
 
+app.get("/api/svi-boravci1/:id_boravka", (req, res) => {
+  const id_boravka = req.params.id_boravka;
+  connection.query(`
+    SELECT 
+      s.ime, 
+      s.prezime, 
+      k.email_korisnika, 
+      kr.broj_kreveta,
+      b.id_boravka, 
+      b.datum_useljenja, 
+      b.datum_iseljenja, 
+      soba.broj_sobe, 
+      objekt.broj_objekta
+    FROM boravak b
+    INNER JOIN krevet kr ON b.id_kreveta = kr.id_kreveta
+    INNER JOIN soba ON kr.id_sobe = soba.id_sobe
+    INNER JOIN objekt ON soba.broj_objekta = objekt.broj_objekta
+    INNER JOIN stanar s ON b.oib = s.oib
+    INNER JOIN korisnik k ON s.id_korisnika = k.id_korisnika
+    WHERE b.id_boravka = ?
+  `, [id_boravka], (error, results) => {
+    if (error) {
+      console.error("Error fetching boravci:", error);
+      return res.status(500).send({ error: true, message: "Failed to fetch boravci." });
+    }
+
+    res.send(results[0]); 
+  });
+});
+
+
 
 app.get("/api/svi-radnici", (req, res) => {
   connection.query("SELECT * FROM `korisnik` WHERE uloga IN ('recepcionar', 'domar', 'admin')", (error, results) => {

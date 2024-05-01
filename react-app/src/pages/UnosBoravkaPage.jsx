@@ -79,27 +79,27 @@ const UnosBoravakaPage = () => {
       <h1>Unos Boravaka</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>ID Kreveta:</label>
+          <label>Broj Kreveta:</label>
           <select className="form-control" name="id_kreveta" value={formData.id_kreveta} onChange={handleChange}>
-            <option value="">Odaberi ID Kreveta</option>
+            <option value="">Odaberi broj Kreveta</option>
             {krevetaOptions.map(option => (
               <option key={option.id_kreveta} value={option.id_kreveta}>{option.broj_kreveta}</option>
             ))}
           </select>
         </div>
         <div className="form-group">
-          <label>OIB:</label>
+          <label>Stanar:</label>
           <select className="form-control" name="oib" value={formData.oib} onChange={handleChange}>
-            <option value="">Odaberi OIB</option>
+            <option value="">Odaberi stanara</option>
             {oibOptions.map(option => (
-              <option key={option.oib} value={option.oib}>{option.ime}</option>
+              <option key={option.oib} value={option.oib}>{option.ime} {option.prezime}</option>
             ))}
           </select>
         </div>
         <div className="form-group">
-          <label>ID Korisnika:</label>
+          <label>Korisnik:</label>
           <select className="form-control" name="id_korisnika" value={formData.id_korisnika} onChange={handleChange}>
-            <option value="">Odaberi ID Korisnika</option>
+            <option value="">Odaberi Korisnika</option>
             {korisnikaOptions.map(option => (
               <option key={option.id_korisnika} value={option.id_korisnika}> {option.email_korisnika}</option>
             ))}

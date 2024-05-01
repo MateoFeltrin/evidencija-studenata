@@ -67,7 +67,7 @@ const PopisBoravakaPage = () => {
                 <td className="table-data">{boravak.broj_kreveta}</td>
                 <td className="table-data">{boravak.email_korisnika}</td>
                 <td className="table-data">
-                  <button className="btn btn-sm btn-primary" onClick={() => handleChange(index)}>Izmijeni</button>
+                <Link to={`/izmjenaBoravka/${boravak.id_boravka}`} className="btn btn-sm btn-primary">Izmijeni</Link>
                   <button className="btn btn-sm btn-danger" onClick={() => handleDelete(boravak.id_boravka)}>Izbriši</button>
                   <button className="btn btn-sm btn-secondary">Iseljenje </button>
                 </td>

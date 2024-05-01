@@ -132,7 +132,7 @@ const router = createBrowserRouter([
     element: <IzmjenaStanaraPage />,
   },
   {
-    path: "/izmjenaBoravka",
+    path: "/izmjenaBoravka/:id_boravka",
     element: <IzmjenaBoravkaPage />,
   },
   {
