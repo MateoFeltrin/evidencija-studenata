@@ -16,13 +16,7 @@ app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const Stanar = require("./model/stanarModel");
-const Boravak = require("./model/boravakModel");
-const Kvar = require("./model/kvarModel");
-const Korisnik = require("./model/korisnikModel");
-const Soba = require("./model/sobaModel");
-const Objekt = require("./model/objektMode");
-const Krevet = require("./model/krevetMode");
+const { Boravak, Stanar, Korisnik, Krevet, Kvar, Objekt, Soba } = require("./model/associations.js");
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
@@ -121,6 +115,50 @@ app.get("/verify-token", async (req, res) => {
   });
 });
 
+app.get("/api/svi-radnici1/:id_korisnika", async (req, res) => {
+  try {
+    const id_korisnika = req.params.id_korisnika;
+
+    // Fetch the korisnik record using Sequelize findOne method
+    const korisnik = await Korisnik.findOne({
+      where: { id_korisnika },
+    });
+
+    // Check if the korisnik record is found
+    if (!korisnik) {
+      return res.status(404).json({ error: true, message: "Korisnik not found." });
+    }
+
+    // Respond with the korisnik data
+    res.json(korisnik);
+  } catch (error) {
+    console.error("Error fetching korisnici:", error);
+    res.status(500).json({ error: true, message: "Failed to fetch korisnici." });
+  }
+});
+
+app.get("/api/trenutni-stanari1/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    // Fetch the stanar record using Sequelize findOne method
+    const stanar = await Stanar.findOne({
+      where: { oib: id },
+    });
+
+    // Check if the stanar record is found
+    if (!stanar) {
+      return res.status(404).json({ error: true, message: "Stanar not found." });
+    }
+
+    // Respond with the stanar data
+    res.json(stanar);
+  } catch (error) {
+    console.error("Error fetching stanar:", error);
+    res.status(500).json({ error: true, message: "Failed to fetch stanar." });
+  }
+});
+
 app.get("/api/trenutni-stanari", async (req, res) => {
   try {
     // Fetching the residents and their current stay details
@@ -150,11 +188,48 @@ app.get("/api/aktivni-kvarovi", async (req, res) => {
       where: {
         stanje_kvara: 0,
       },
+      include: [
+        {
+          model: Stanar,
+          attributes: ["ime", "prezime"],
+        },
+        {
+          model: Soba,
+          attributes: ["broj_sobe", "broj_objekta"],
+        },
+      ],
     });
     res.json(aktivniKvarovi);
   } catch (error) {
     console.log("Error fetching Kvarovi: ", error);
     res.status(500).send({ error: true, message: "Failed to fetch trenutni kvarovi." });
+  }
+});
+
+app.get("/api/aktivni-kvarovi/:id", async (req, res) => {
+  try {
+    // Fetch the active faults (kvarovi) with related Soba and Stanar models
+    const kvarovi = await Kvar.findAll({
+      where: {
+        stanje_kvara: false, // stanje_kvara = 0 in the original query
+      },
+      include: [
+        {
+          model: Soba,
+          attributes: ["broj_objekta", "broj_sobe"],
+        },
+        {
+          model: Stanar,
+          attributes: ["ime", "prezime"],
+        },
+      ],
+    });
+
+    // Respond with the fetched kvarovi data
+    res.json(kvarovi);
+  } catch (error) {
+    console.error("Error fetching kvarovi:", error);
+    res.status(500).json({ error: true, message: "Failed to fetch kvarovi." });
   }
 });
 
@@ -208,7 +283,22 @@ app.get("/api/svi-boravci", async (req, res) => {
 
 app.get("/api/svi-kvarovi", async (req, res) => {
   try {
-    const aktivniKvarovi = await Kvar.findAll({});
+    const aktivniKvarovi = await Kvar.findAll({
+      include: [
+        {
+          model: Stanar,
+          attributes: ["ime", "prezime"],
+        },
+        {
+          model: Soba,
+          attributes: ["broj_sobe", "broj_objekta"],
+        },
+        {
+          model: Korisnik,
+          attributes: ["email_korisnika"],
+        },
+      ],
+    });
     res.json(aktivniKvarovi);
   } catch (error) {
     console.log("Error fetching Kvarovi: ", error);
@@ -218,7 +308,14 @@ app.get("/api/svi-kvarovi", async (req, res) => {
 
 app.get("/api/svi-kreveti", async (req, res) => {
   try {
-    const sviKreveti = await Krevet.findAll({});
+    const sviKreveti = await Krevet.findAll({
+      include: [
+        {
+          model: Soba,
+          attributes: ["broj_sobe", "broj_objekta"],
+        },
+      ],
+    });
     res.json(sviKreveti);
   } catch (error) {
     console.log("Error fetching Kreveti: ", error);
@@ -233,6 +330,31 @@ app.get("/api/svi-objekti", async (req, res) => {
   } catch (error) {
     console.log("Error fetching Objekti: ", error);
     res.status(500).send({ error: true, message: "Failed to fetch svi objekti." });
+  }
+});
+
+app.get("/api/objekt/:broj_objekta", async (req, res) => {
+  const { broj_objekta } = req.params;
+
+  try {
+    // Fetch the objekt with the given broj_objekta using Sequelize's findOne method
+    const objekt = await Objekt.findOne({
+      where: {
+        broj_objekta, // Condition to find the objekt with the specified broj_objekta
+      },
+    });
+
+    if (!objekt) {
+      // If no objekt is found, return a 404 status with an error message
+      return res.status(404).json({ error: true, message: "Objekt not found." });
+    }
+
+    // If the objekt is found, return it as a JSON response
+    res.json(objekt);
+  } catch (error) {
+    // Log any errors and return a 500 status with an error message
+    console.error("Error fetching objekt:", error);
+    res.status(500).json({ error: true, message: "Failed to fetch objekt." });
   }
 });
 
@@ -321,17 +443,20 @@ app.post("/unos-kreveta", authJwt.verifyToken("admin"), async (req, res) => {
   }
 });
 
-app.post("/unos-korisnika", authJwt.verifyToken("admin"), async (req, res) => {
+app.post("/unos-radnika", authJwt.verifyToken("admin"), async (req, res) => {
+  const saltRounds = 10;
   const { email_korisnika, lozinka, uloga } = req.body;
 
   if (!email_korisnika || !lozinka || !uloga) {
     return res.status(400).send({ error: true, message: "email, lozinka i uloga su obavezni." });
   }
+  // Hash the password
+  const hashedPassword = await bcrypt.hash(lozinka, saltRounds);
 
   try {
     const newKorisnik = await Korisnik.create({
       email_korisnika: email_korisnika,
-      lozinka: lozinka,
+      lozinka: hashedPassword,
       uloga: uloga,
     });
     res.status(201).send({ error: false, data: newKorisnik, message: "Korisnik je dodan." });
@@ -341,10 +466,175 @@ app.post("/unos-korisnika", authJwt.verifyToken("admin"), async (req, res) => {
   }
 });
 
-app.post("/unos-stanara", authJwt.verifyToken("recepcionar"), async (req, res) => {
-  const saltRounds = 10;
-  const { email_korisnika, lozinka, uloga, oib, jmbag, ime, prezime, datum_rodenja, adresa_prebivalista, subvencioniranost, uciliste, uplata_teretane, komentar } = req.body;
+app.get("/api/slobodni-stanari", async (req, res) => {
+  try {
+    // Fetch Stanar records that meet the specified conditions
+    const slobodniStanari = await Stanar.findAll({
+      attributes: ["ime", "prezime", "oib"], // Specify the fields to return from Stanar
+      include: [
+        {
+          model: Boravak,
+          attributes: [], // Don't return attributes from Boravak
+          required: false, // Include Stanar records even if there is no related Boravak
+          where: {
+            [Op.or]: [
+              { datum_useljenja: { [Op.is]: null } }, // Check if datum_useljenja is null
+              { datum_iseljenja: { [Op.lte]: new Date() } }, // Check if datum_iseljenja is earlier than or equal to the current date
+            ],
+          },
+        },
+      ],
+    });
 
+    // Send the results as the response
+    res.json(slobodniStanari);
+  } catch (error) {
+    // Log the error and send an error response
+    console.error("Error fetching slobodni stanari:", error);
+    res.status(500).json({ error: true, message: "Failed to fetch slobodni stanari." });
+  }
+});
+
+app.get("/api/sve-sobe1/:id_sobe", async (req, res) => {
+  try {
+    const id_sobe = req.params.id_sobe;
+
+    // Fetch the soba record using Sequelize's findOne method
+    const soba = await Soba.findOne({
+      where: { id_sobe },
+    });
+
+    // Check if the soba record is found
+    if (!soba) {
+      return res.status(404).json({ error: true, message: "Soba not found." });
+    }
+
+    // Respond with the soba data
+    res.json(soba);
+  } catch (error) {
+    console.error("Error fetching soba:", error);
+    res.status(500).json({ error: true, message: "Failed to fetch soba." });
+  }
+});
+
+app.get("/api/broj-sobe", async (req, res) => {
+  try {
+    // Fetch all room numbers (broj_sobe) from the Soba table
+    const sobe = await Soba.findAll({
+      attributes: ["broj_sobe"], // Specify the attributes to return
+    });
+
+    // Send the list of room numbers as a JSON response
+    res.json(sobe);
+  } catch (error) {
+    // Log any errors and return a 500 status with an error message
+    console.error("Error fetching sobe:", error);
+    res.status(500).json({ error: "Error fetching sobe" });
+  }
+});
+
+app.get("/api/broj-kreveta", async (req, res) => {
+  try {
+    // Fetch all bed numbers (broj_kreveta) from the Krevet table where zauzetost is false (available beds)
+    const availableBeds = await Krevet.findAll({
+      attributes: ["broj_kreveta"], // Specify the attributes to return
+      where: {
+        zauzetost: false, // Filter to include only available beds
+      },
+    });
+
+    // Send the list of available bed numbers as a JSON response
+    res.json(availableBeds);
+  } catch (error) {
+    // Log any errors and return a 500 status with an error message
+    console.error("Error fetching available beds:", error);
+    res.status(500).json({ error: "Error fetching available beds" });
+  }
+});
+
+app.get("/api/svi-kreveti1/:id_kreveta", async (req, res) => {
+  try {
+    const id_kreveta = req.params.id_kreveta;
+
+    // Fetch the krevet record using Sequelize's findOne method
+    const krevet = await Krevet.findOne({
+      where: { id_kreveta },
+    });
+
+    // Check if the krevet record is found
+    if (!krevet) {
+      return res.status(404).json({ error: true, message: "Krevet not found." });
+    }
+
+    // Respond with the krevet data
+    res.json(krevet);
+  } catch (error) {
+    console.error("Error fetching krevet:", error);
+    res.status(500).json({ error: true, message: "Failed to fetch krevet." });
+  }
+});
+
+app.get("/api/svi-boravci1/:id_boravka", async (req, res) => {
+  try {
+    const id_boravka = req.params.id_boravka;
+
+    // Fetch the Boravak entry and its related entities using Sequelize's `findOne` method.
+    const boravak = await Boravak.findOne({
+      where: {
+        id_boravka: id_boravka,
+      },
+      include: [
+        {
+          model: Stanar,
+          attributes: ["ime", "prezime"],
+          include: {
+            model: Korisnik,
+            attributes: ["email_korisnika"],
+          },
+        },
+        {
+          model: Krevet,
+          attributes: ["broj_kreveta"],
+          include: {
+            model: Soba,
+            attributes: ["broj_sobe"],
+            include: {
+              model: Objekt,
+              attributes: ["broj_objekta"],
+            },
+          },
+        },
+      ],
+    });
+
+    if (!boravak) {
+      return res.status(404).json({ error: true, message: "Boravak not found." });
+    }
+
+    // Extract the desired data from the result
+    const result = {
+      ime: boravak.stanar.ime,
+      prezime: boravak.stanar.prezime,
+      email_korisnika: boravak.stanar.korisnik.email_korisnika,
+      broj_kreveta: boravak.krevet.broj_kreveta,
+      id_boravka: boravak.id_boravka,
+      datum_useljenja: boravak.datum_useljenja,
+      datum_iseljenja: boravak.datum_iseljenja,
+      broj_sobe: boravak.krevet.soba.broj_sobe,
+      broj_objekta: boravak.krevet.soba.objekt.broj_objekta,
+    };
+
+    res.json(result);
+  } catch (error) {
+    console.error("Error fetching boravci:", error);
+    res.status(500).json({ error: true, message: "Failed to fetch boravci." });
+  }
+});
+
+app.post("/unos-stanara", async (req, res) => {
+  const saltRounds = 10;
+  const { email_korisnika, lozinka, oib, jmbag, ime, prezime, datum_rodenja, adresa_prebivalista, subvencioniranost, uciliste, uplata_teretane, komentar } = req.body;
+  const uloga = "stanar";
   // Validate input
   const requiredFields = [email_korisnika, lozinka, uloga, oib, jmbag, ime, prezime, datum_rodenja, adresa_prebivalista, subvencioniranost, uciliste, uplata_teretane];
   if (requiredFields.includes(undefined)) {
@@ -408,7 +698,7 @@ app.post("/unos-stanara", authJwt.verifyToken("recepcionar"), async (req, res) =
   }
 });
 
-app.post("/unos-boravka", authJwt.verifyToken("recepcionar"), async (req, res) => {
+app.post("/unos-boravka", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   const { id_kreveta, oib, id_korisnika, datum_useljenja } = req.body;
 
   if (!id_kreveta || !oib || !id_korisnika || !datum_useljenja) {
@@ -429,7 +719,7 @@ app.post("/unos-boravka", authJwt.verifyToken("recepcionar"), async (req, res) =
   }
 });
 
-app.put("/azuriranje-boravka/:id_boravka", authJwt.verifyToken("recepcionar"), async (req, res) => {
+app.put("/azuriranje-boravka/:id_boravka", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   const { id_boravka } = req.params;
   const { datum_iseljenja } = req.body;
 
@@ -466,7 +756,7 @@ app.put("/azuriranje-boravka/:id_boravka", authJwt.verifyToken("recepcionar"), a
   }
 });
 
-app.put("/azuriranje-stanara/:oib", authJwt.verifyToken("recepcionar"), async (req, res) => {
+app.put("/azuriranje-stanara/:oib", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   const { oib } = req.params;
   const { jmbag, ime, prezime, datum_rodenja, adresa_prebivalista, subvencioniranost, uciliste, uplata_teretane, komentar, id_korisnika } = req.body;
 
@@ -555,6 +845,32 @@ app.put("/azuriranje-korisnika/:id_korisnika", authJwt.verifyToken("admin"), asy
   }
 });
 
+app.put("/azuriranje-objekta/:id", async (req, res) => {
+  const { id } = req.params; // The `id` parameter from the URL
+  const updatedObjekt = req.body; // The updated object data from the request body
+
+  try {
+    // Use Sequelize's update method to update the objekt where `broj_objekta` matches the given id
+    const [affectedRows] = await Objekt.update(updatedObjekt, {
+      where: {
+        broj_objekta: id, // Filter the objekt by `broj_objekta`
+      },
+    });
+
+    // Check if any rows were updated
+    if (affectedRows === 0) {
+      return res.status(404).send({ error: true, message: "Objekt not found." });
+    }
+
+    // Send a success message
+    res.send({ error: false, message: "Objekt successfully updated." });
+  } catch (error) {
+    // Log any errors and return a 500 status with an error message
+    console.error("Error updating objekt:", error);
+    res.status(500).send({ error: true, message: "Failed to update objekt." });
+  }
+});
+
 app.put("/azuriranje-sobe/:id_sobe", authJwt.verifyToken("admin"), async (req, res) => {
   const { id_sobe } = req.params;
   const { broj_objekta, kat_sobe, broj_sobe } = req.body;
@@ -583,7 +899,7 @@ app.put("/azuriranje-sobe/:id_sobe", authJwt.verifyToken("admin"), async (req, r
   }
 });
 
-app.put("/azuriranje-kreveta/:id_kreveta", authJwt.verifyToken("recepcionar"), async (req, res) => {
+app.put("/azuriranje-kreveta/:id_kreveta", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   const { id_kreveta } = req.params;
   const { broj_kreveta, id_sobe, zauzetost } = req.body;
 
@@ -674,7 +990,7 @@ app.delete("/brisanje-korisnika/:id_korisnika", authJwt.verifyToken("admin"), as
   }
 });
 
-app.delete("/brisanje-stanara/:oib", authJwt.verifyToken("recepcionar"), async (req, res) => {
+app.delete("/brisanje-stanara/:oib", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   const { oib } = req.params;
 
   // Validate input
@@ -828,7 +1144,7 @@ app.delete("/brisanje-kvara/:id_kvara", authJwt.verifyToken("admin"), async (req
   }
 });
 
-app.delete("/brisanje-boravka/:id_boravka", authJwt.verifyToken("recepcionar"), async (req, res) => {
+app.delete("/brisanje-boravka/:id_boravka", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   const { id_boravka } = req.params;
 
   if (!id_boravka) {

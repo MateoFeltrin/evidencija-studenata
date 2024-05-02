@@ -30,13 +30,13 @@ const PopisKrevetaPage = () => {
               .catch((err) => console.log(err));
           } else {
             // If the user is not authorized, redirect to "/not-authorized" page
-            navigate("/not-authorized");
+            navigate("/forbidden");
           }
         })
         .catch((error) => {
           // If there's an error (e.g., invalid token), redirect the user to the login page
           console.error("Error verifying token:", error);
-          navigate("/prijava");
+          navigate("/forbidden");
         });
     } else {
       // If there's no token, redirect the user to the login page
@@ -87,10 +87,10 @@ const PopisKrevetaPage = () => {
               {data.map((krevet) => (
                 <tr key={krevet.id_kreveta}>
                   <td className="table-data">{krevet.id_kreveta}</td>
-                  <td className="table-data">{krevet.broj_objekta}</td>
-                  <td className="table-data">{krevet.broj_sobe}</td>
+                  <td className="table-data">{krevet.soba.broj_objekta}</td>
+                  <td className="table-data">{krevet.soba.broj_sobe}</td>
                   <td className="table-data">{krevet.broj_kreveta}</td>
-                  <td className="table-data">{krevet.zauzetost}</td>
+                  <td className="table-data">{krevet.zauzetost ? "Da" : "Ne"}</td>
                   <td className="table-data">
                     <Link to={`/izmjenaKreveta/${krevet.id_kreveta}`} className="btn btn-sm btn-primary">
                       Izmijeni

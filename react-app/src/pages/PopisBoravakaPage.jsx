@@ -31,13 +31,13 @@ const PopisBoravakaPage = () => {
               .catch((err) => console.log(err));
           } else {
             // If the user is not authorized, redirect to "/not-authorized" page
-            navigate("/not-authorized");
+            navigate("/forbidden");
           }
         })
         .catch((error) => {
           // If there's an error (e.g., invalid token), redirect the user to the login page
           console.error("Error verifying token:", error);
-          navigate("/prijava");
+          navigate("/forbidden");
         });
     } else {
       // If there's no token, redirect the user to the login page
@@ -48,9 +48,14 @@ const PopisBoravakaPage = () => {
   const handleDelete = (id_boravka) => {
     const isConfirmed = window.confirm("Želite li zaista obrisati objekt?");
     if (isConfirmed) {
+      const token = localStorage.getItem("token");
       console.log("Broj objekta to delete:", id_boravka);
       axios
-        .delete(`http://localhost:3000/brisanje-boravka/${id_boravka}`)
+        .delete(`http://localhost:3000/brisanje-boravka/${id_boravka}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then(() => {
           axios
             .get("http://localhost:3000/api/svi-boravci")
@@ -89,14 +94,14 @@ const PopisBoravakaPage = () => {
           <tbody>
             {data.map((boravak) => (
               <tr key={boravak.id_boravka}>
-                <td className="table-data">{boravak.ime}</td>
-                <td className="table-data">{boravak.prezime}</td>
+                <td className="table-data">{boravak.stanar.ime}</td>
+                <td className="table-data">{boravak.stanar.prezime}</td>
                 <td className="table-data">{boravak.datum_useljenja}</td>
                 <td className="table-data">{boravak.datum_iseljenja}</td>
-                <td className="table-data">{boravak.broj_objekta}</td>
-                <td className="table-data">{boravak.broj_sobe}</td>
-                <td className="table-data">{boravak.broj_kreveta}</td>
-                <td className="table-data">{boravak.email_korisnika}</td>
+                <td className="table-data">{boravak.krevet.soba.broj_objekta}</td>
+                <td className="table-data">{boravak.krevet.soba.broj_sobe}</td>
+                <td className="table-data">{boravak.krevet.broj_kreveta}</td>
+                <td className="table-data">{boravak.korisnik.email_korisnika}</td>
                 <td className="table-data">
                   <Link to={`/izmjenaBoravka/${boravak.id_boravka}`} className="btn btn-sm btn-primary">
                     Izmijeni

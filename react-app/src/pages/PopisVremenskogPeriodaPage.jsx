@@ -35,13 +35,13 @@ const PopisVremenskogPerioda = () => {
             fetchBoravciData();
           } else {
             // If the user is not authorized, redirect to "/not-authorized" page
-            navigate("/not-authorized");
+            navigate("/forbidden");
           }
         })
         .catch((error) => {
           // If there's an error (e.g., invalid token), redirect the user to the login page
           console.error("Error verifying token:", error);
-          navigate("/prijava");
+          navigate("/forbidden");
         });
     } else {
       // If there's no token, redirect the user to the login page

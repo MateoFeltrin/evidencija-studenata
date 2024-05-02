@@ -22,7 +22,4 @@ const Soba = sequelize.define(
   { tableName: "soba", timestamps: false }
 );
 
-const Objekt = require("./objektMode");
-Soba.belongsTo(Objekt, { foreignKey: "broj_objekta" });
-
 module.exports = Soba;

@@ -32,14 +32,4 @@ const Kvar = sequelize.define(
   { tableName: "kvar", timestamps: false }
 );
 
-// Import the Stanar model and set up associations
-const Soba = require("./sobaModel");
-Kvar.belongsTo(Soba, { foreignKey: "id_sobe" });
-
-const Korisnik = require("./korisnikModel");
-Kvar.belongsTo(Korisnik, { foreignKey: "id_korisnika" });
-
-const Stanar = require("./stanarModel");
-Kvar.belongsTo(Stanar, { foreignKey: "oib" });
-
 module.exports = Kvar;

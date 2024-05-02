@@ -1,32 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import CollapsableNavbar from "../components/CollapsableNavbar";
 import { IoArrowBackSharp } from "react-icons/io5";
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const UnosStanaraPage = () => {
   const [formData, setFormData] = useState({
-    oib: '',
-    jmbag: '',
-    ime: '',
-    prezime: '',
-    datum_rodenja: '',
-    adresa_prebivalista: '',
+    oib: "",
+    jmbag: "",
+    ime: "",
+    prezime: "",
+    datum_rodenja: "",
+    adresa_prebivalista: "",
     subvencioniranost: false,
-    uciliste: '',
+    uciliste: "",
     uplata_teretane: false,
-    komentar: '',
-    id_korisnika: '',
-    email_korisnika: '', 
-    lozinka: '', 
-   // uloga: '' 
+    komentar: "",
+    id_korisnika: "",
+    email_korisnika: "",
+    lozinka: "",
+    // uloga: ''
   });
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
@@ -35,26 +35,26 @@ const UnosStanaraPage = () => {
     console.log(formData);
     try {
       await axios.post("http://localhost:3000/unos-stanara", formData);
-      alert('Form data submitted successfully!');
+      alert("Form data submitted successfully!");
       setFormData({
-        oib: '',
-        jmbag: '',
-        ime: '',
-        prezime: '',
-        datum_rodenja: '',
-        adresa_prebivalista: '',
+        oib: "",
+        jmbag: "",
+        ime: "",
+        prezime: "",
+        datum_rodenja: "",
+        adresa_prebivalista: "",
         subvencioniranost: false,
-        uciliste: '',
-       uplata_teretane: false,
-        komentar: '',
-      id_korisnika: '',
-      email_korisnika: '', 
-      lozinka: '', 
-     // uloga: '' 
+        uciliste: "",
+        uplata_teretane: false,
+        komentar: "",
+        id_korisnika: "",
+        email_korisnika: "",
+        lozinka: "",
+        // uloga: ''
       });
     } catch (error) {
-      console.error('Error submitting form data:', error);
-      alert('An error occurred while submitting form data.');
+      console.error("Error submitting form data:", error);
+      alert("An error occurred while submitting form data.");
     }
   };
 
@@ -62,60 +62,84 @@ const UnosStanaraPage = () => {
     <div>
       <CollapsableNavbar />
       <div className="container mt-4">
-      <Link to="/popisSvihStanara" className="btn btn-sm btn-danger mb-5">
-      <IoArrowBackSharp />    
-            </Link>
+        <Link to="/popisSvihStanara" className="btn btn-sm btn-danger mb-5">
+          <IoArrowBackSharp />
+        </Link>
         <h1 className="mt-1">Unos novog stanara</h1>
-       
+
         <div className="row justify-content-center">
           <div className="col-md-6">
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label htmlFor="oib" className="form-label">OIB</label>
+                <label htmlFor="oib" className="form-label">
+                  OIB
+                </label>
                 <input type="text" className="form-control" id="oib" name="oib" value={formData.oib} onChange={handleChange} required />
               </div>
               <div className="mb-3">
-                <label htmlFor="jmbag" className="form-label">JMBAG</label>
+                <label htmlFor="jmbag" className="form-label">
+                  JMBAG
+                </label>
                 <input type="text" className="form-control" id="jmbag" name="jmbag" value={formData.jmbag} onChange={handleChange} required />
               </div>
               <div className="mb-3">
-                <label htmlFor="ime" className="form-label">Ime</label>
+                <label htmlFor="ime" className="form-label">
+                  Ime
+                </label>
                 <input type="text" className="form-control" id="ime" name="ime" value={formData.ime} onChange={handleChange} required />
               </div>
               <div className="mb-3">
-                <label htmlFor="prezime" className="form-label">Prezime</label>
+                <label htmlFor="prezime" className="form-label">
+                  Prezime
+                </label>
                 <input type="text" className="form-control" id="prezime" name="prezime" value={formData.prezime} onChange={handleChange} required />
               </div>
               <div className="mb-3">
-                <label htmlFor="datum_rodenja" className="form-label">Datum rođenja</label>
+                <label htmlFor="datum_rodenja" className="form-label">
+                  Datum rođenja
+                </label>
                 <input type="date" className="form-control" id="datum_rodenja" name="datum_rodenja" value={formData.datum_rodenja} onChange={handleChange} required />
               </div>
               <div className="mb-3">
-                <label htmlFor="adresa_prebivalista" className="form-label">Adresa prebivališta</label>
+                <label htmlFor="adresa_prebivalista" className="form-label">
+                  Adresa prebivališta
+                </label>
                 <input type="text" className="form-control" id="adresa_prebivalista" name="adresa_prebivalista" value={formData.adresa_prebivalista} onChange={handleChange} required />
               </div>
               <div className="mb-3 form-check">
                 <input type="checkbox" className="form-check-input" id="subvencioniranost" name="subvencioniranost" checked={formData.subvencioniranost} onChange={handleChange} />
-                <label className="form-check-label" htmlFor="subvencioniranost">Subvencioniranost</label>
+                <label className="form-check-label" htmlFor="subvencioniranost">
+                  Subvencioniranost
+                </label>
               </div>
               <div className="mb-3">
-                <label htmlFor="uciliste" className="form-label">Učilište</label>
+                <label htmlFor="uciliste" className="form-label">
+                  Učilište
+                </label>
                 <input type="text" className="form-control" id="uciliste" name="uciliste" value={formData.uciliste} onChange={handleChange} required />
               </div>
               <div className="mb-3 form-check">
                 <input type="checkbox" className="form-check-input" id="uplata_teretane" name="uplata_teretane" checked={formData.uplata_teretane} onChange={handleChange} />
-                <label className="form-check-label" htmlFor="uplata_teretane">Uplata teretane</label>
+                <label className="form-check-label" htmlFor="uplata_teretane">
+                  Uplata teretane
+                </label>
               </div>
               <div className="mb-3">
-                <label htmlFor="komentar" className="form-label">Komentar</label>
+                <label htmlFor="komentar" className="form-label">
+                  Komentar
+                </label>
                 <textarea className="form-control" id="komentar" name="komentar" value={formData.komentar} onChange={handleChange}></textarea>
               </div>
               <div className="mb-3">
-                <label htmlFor="email_korisnika" className="form-label">Email korisnika</label>
+                <label htmlFor="email_korisnika" className="form-label">
+                  Email korisnika
+                </label>
                 <input type="email" className="form-control" id="email_korisnika" name="email_korisnika" value={formData.email_korisnika} onChange={handleChange} required />
               </div>
               <div className="mb-3">
-                <label htmlFor="lozinka" className="form-label">Lozinka</label>
+                <label htmlFor="lozinka" className="form-label">
+                  Lozinka
+                </label>
                 <input type="password" className="form-control" id="lozinka" name="lozinka" value={formData.lozinka} onChange={handleChange} required />
               </div>
               {/*<div className="mb-3">
@@ -124,10 +148,10 @@ const UnosStanaraPage = () => {
                   <option value="Stanar">Stanar</option>
                 </select>
   </div>*/}
-              <button type="submit" className="btn btn-primary mb-3 mr-2">Unesi</button>
-              
+              <button type="submit" className="btn btn-primary mb-3 mr-2">
+                Unesi
+              </button>
             </form>
-            
           </div>
         </div>
       </div>

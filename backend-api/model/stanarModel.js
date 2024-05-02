@@ -47,7 +47,4 @@ const Stanar = sequelize.define(
   { tableName: "stanar", timestamps: false }
 );
 
-const Korisnik = require("./korisnikModel");
-Stanar.belongsTo(Korisnik, { foreignKey: "id_korisnika" });
-
 module.exports = Stanar;

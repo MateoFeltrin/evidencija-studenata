@@ -22,7 +22,4 @@ const Krevet = sequelize.define(
   { tableName: "krevet", timestamps: false }
 );
 
-const Soba = require("./sobaModel");
-Krevet.belongsTo(Soba, { foreignKey: "id_sobe" });
-
 module.exports = Krevet;

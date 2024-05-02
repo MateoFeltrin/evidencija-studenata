@@ -60,15 +60,13 @@ app.get("/api/trenutni-stanari1/:id", (req, res) => {
       return res.status(404).send({ error: true, message: "Stanar not found." });
     }
 
-    res.send(results[0]); 
+    res.send(results[0]);
   });
 });
 
-
-
-
 app.get("/api/svi-boravci", (req, res) => {
-  connection.query(`
+  connection.query(
+    `
     SELECT 
       s.ime, 
       s.prezime, 
@@ -85,19 +83,22 @@ app.get("/api/svi-boravci", (req, res) => {
     INNER JOIN objekt ON soba.broj_objekta = objekt.broj_objekta
     INNER JOIN stanar s ON b.oib = s.oib
     INNER JOIN korisnik k ON s.id_korisnika = k.id_korisnika
-  `, (error, results) => {
-    if (error) {
-      console.error("Error fetching boravci:", error);
-      return res.status(500).send({ error: true, message: "Failed to fetch boravci." });
-    }
+  `,
+    (error, results) => {
+      if (error) {
+        console.error("Error fetching boravci:", error);
+        return res.status(500).send({ error: true, message: "Failed to fetch boravci." });
+      }
 
-    res.send(results);
-  });
+      res.send(results);
+    }
+  );
 });
 
 app.get("/api/svi-boravci1/:id_boravka", (req, res) => {
   const id_boravka = req.params.id_boravka;
-  connection.query(`
+  connection.query(
+    `
     SELECT 
       s.ime, 
       s.prezime, 
@@ -115,17 +116,18 @@ app.get("/api/svi-boravci1/:id_boravka", (req, res) => {
     INNER JOIN stanar s ON b.oib = s.oib
     INNER JOIN korisnik k ON s.id_korisnika = k.id_korisnika
     WHERE b.id_boravka = ?
-  `, [id_boravka], (error, results) => {
-    if (error) {
-      console.error("Error fetching boravci:", error);
-      return res.status(500).send({ error: true, message: "Failed to fetch boravci." });
+  `,
+    [id_boravka],
+    (error, results) => {
+      if (error) {
+        console.error("Error fetching boravci:", error);
+        return res.status(500).send({ error: true, message: "Failed to fetch boravci." });
+      }
+
+      res.send(results[0]);
     }
-
-    res.send(results[0]); 
-  });
+  );
 });
-
-
 
 app.get("/api/svi-radnici", (req, res) => {
   connection.query("SELECT * FROM `korisnik` WHERE uloga IN ('recepcionar', 'domar', 'admin')", (error, results) => {
@@ -148,7 +150,6 @@ app.get("/api/svi-radnici1/:id_korisnika", (req, res) => {
   });
 });
 
-
 app.get("/api/aktivni-kvarovi", (req, res) => {
   connection.query("SELECT `id_kvara`,`datum_prijave_kvara`,`opis_kvara`,`soba`.`broj_objekta`,`soba`.`broj_sobe`, `stanar`.`ime`, `stanar`.`prezime` FROM `kvar` RIGHT JOIN `soba` ON `soba`.`id_sobe`= `kvar`.`id_sobe` RIGHT JOIN `stanar` ON `stanar`.`oib`= `kvar`.`oib` WHERE `stanje_kvara`=0;", (error, results) => {
     if (error) {
@@ -159,7 +160,7 @@ app.get("/api/aktivni-kvarovi", (req, res) => {
     res.send(results);
   });
 });
-
+//KOJA JE SVRHA?
 app.get("/api/aktivni-kvarovi/:id", (req, res) => {
   connection.query("SELECT `id_kvara`,`datum_prijave_kvara`,`opis_kvara`,`soba`.`broj_objekta`,`soba`.`broj_sobe`, `stanar`.`ime`, `stanar`.`prezime` FROM `kvar` RIGHT JOIN `soba` ON `soba`.`id_sobe`= `kvar`.`id_sobe` RIGHT JOIN `stanar` ON `stanar`.`oib`= `kvar`.`oib` WHERE `stanje_kvara`=0;", (error, results) => {
     if (error) {
@@ -172,7 +173,8 @@ app.get("/api/aktivni-kvarovi/:id", (req, res) => {
 });
 
 app.get("/api/svi-kvarovi", (req, res) => {
-  connection.query(`
+  connection.query(
+    `
     SELECT 
       k.id_kvara,
       k.datum_prijave_kvara,
@@ -186,34 +188,38 @@ app.get("/api/svi-kvarovi", (req, res) => {
     INNER JOIN soba s ON s.id_sobe = k.id_sobe
     INNER JOIN stanar st ON st.oib = k.oib
     LEFT JOIN korisnik kn ON kn.id_korisnika = k.id_korisnika
-  `, (error, results) => {
-    if (error) {
-      console.error("Error fetching kvarovi:", error);
-      return res.status(500).send({ error: true, message: "Failed to fetch kvarovi." });
-    }
+  `,
+    (error, results) => {
+      if (error) {
+        console.error("Error fetching kvarovi:", error);
+        return res.status(500).send({ error: true, message: "Failed to fetch kvarovi." });
+      }
 
-    res.send(results);
-  });
+      res.send(results);
+    }
+  );
 });
 
 app.get("/api/slobodni-stanari", (req, res) => {
-  connection.query(`
+  connection.query(
+    `
   SELECT s.ime, s.prezime, s.oib
 FROM stanar s
 LEFT JOIN boravak b ON s.id_korisnika = b.id_korisnika
 WHERE b.datum_useljenja IS NULL OR b.datum_iseljenja <= CURDATE()
 
   
-  `, (error, results) => {
-    if (error) {
-      console.error("Error fetching kvarovi:", error);
-      return res.status(500).send({ error: true, message: "Failed to fetch kvarovi." });
+  `,
+    (error, results) => {
+      if (error) {
+        console.error("Error fetching kvarovi:", error);
+        return res.status(500).send({ error: true, message: "Failed to fetch kvarovi." });
+      }
+
+      res.send(results);
     }
-
-    res.send(results);
-  });
+  );
 });
-
 
 app.get("/api/svi-kreveti", (req, res) => {
   connection.query("SELECT krevet.id_kreveta, krevet.broj_kreveta, krevet.zauzetost, soba.broj_sobe, objekt.broj_objekta FROM krevet JOIN soba ON krevet.id_sobe = soba.id_sobe JOIN objekt ON soba.broj_objekta = objekt.broj_objekta", (error, results) => {
@@ -225,7 +231,6 @@ app.get("/api/svi-kreveti", (req, res) => {
   });
 });
 
-
 app.get("/api/svi-kreveti1/:id_kreveta", (req, res) => {
   const id_kreveta = req.params.id_kreveta;
   connection.query("SELECT * FROM krevet WHERE id_kreveta = ?", [id_kreveta], (error, results) => {
@@ -236,12 +241,10 @@ app.get("/api/svi-kreveti1/:id_kreveta", (req, res) => {
     if (results.length === 0) {
       return res.status(404).json({ error: true, message: "Krevet not found." });
     }
-    
+
     res.json(results[0]);
   });
 });
-
-
 
 app.get("/api/svi-objekti", (req, res) => {
   connection.query("SELECT * FROM `objekt`", (error, results) => {
@@ -254,7 +257,6 @@ app.get("/api/svi-objekti", (req, res) => {
   });
 });
 
-
 app.get("/api/objekt/:broj_objekta", (req, res) => {
   const broj_objekta = req.params.broj_objekta;
   connection.query("SELECT * FROM objekt WHERE broj_objekta = ?", [broj_objekta], (error, results) => {
@@ -265,11 +267,10 @@ app.get("/api/objekt/:broj_objekta", (req, res) => {
     if (results.length === 0) {
       return res.status(404).json({ error: true, message: "Objekt not found." });
     }
-    
+
     res.json(results[0]);
   });
 });
-
 
 app.get("/api/sve-sobe", (req, res) => {
   connection.query("SELECT * FROM `soba`", (error, results) => {
@@ -292,34 +293,32 @@ app.get("/api/sve-sobe1/:id_sobe", (req, res) => {
     if (results.length === 0) {
       return res.status(404).json({ error: true, message: "Soba not found." });
     }
-    
+
     res.json(results[0]);
   });
 });
 
-
-app.get('/api/broj-sobe', (req, res) => { 
-  connection.query('SELECT broj_sobe FROM soba', (error, results) => {
+app.get("/api/broj-sobe", (req, res) => {
+  connection.query("SELECT broj_sobe FROM soba", (error, results) => {
     if (error) {
-      console.error('Error fetching sobe:', error);
-      res.status(500).json({ error: 'Error fetching sobe' });
+      console.error("Error fetching sobe:", error);
+      res.status(500).json({ error: "Error fetching sobe" });
       return;
     }
     res.json(results);
   });
 });
 
-app.get('/api/broj-kreveta', (req, res) => { 
-  connection.query('SELECT broj_kreveta FROM krevet WHERE zauzetost = 0', (error, results) => {
+app.get("/api/broj-kreveta", (req, res) => {
+  connection.query("SELECT broj_kreveta FROM krevet WHERE zauzetost = 0", (error, results) => {
     if (error) {
-      console.error('Error fetching sobe:', error);
-      res.status(500).json({ error: 'Error fetching sobe' });
+      console.error("Error fetching sobe:", error);
+      res.status(500).json({ error: "Error fetching sobe" });
       return;
     }
     res.json(results);
   });
 });
-
 
 app.get("/api/boravci-u-vremenskom-periodu/:datum_useljenja/:datum_iseljenja", (req, res) => {
   const { datum_useljenja, datum_iseljenja } = req.params;
@@ -401,7 +400,7 @@ app.post("/unos-radnika", function (req, res) {
 app.post("/unos-stanara", function (req, res) {
   const { email_korisnika, lozinka, uloga, oib, jmbag, ime, prezime, datum_rodenja, adresa_prebivalista, subvencioniranost, uciliste, uplata_teretane, komentar } = req.body;
 
-  if (!email_korisnika || !lozinka || !oib || !jmbag || !ime || !prezime || !datum_rodenja || !adresa_prebivalista  || !uciliste  || !komentar) {
+  if (!email_korisnika || !lozinka || !oib || !jmbag || !ime || !prezime || !datum_rodenja || !adresa_prebivalista || !uciliste || !komentar) {
     return res.status(400).send({ error: true, message: "All fields are required." });
   }
 
@@ -464,9 +463,7 @@ app.post("/unos-boravka", function (req, res) {
     res.status(201).send({ error: false, data: results, message: "Boravak je dodan." });
   });
 });
-
-
-
+//KOJA JE SVRHA, OVO MI JE CUDNO?
 app.post("/unos-boravka1", (req, res) => {
   const { id_kreveta, id_korisnika } = req.body;
 
@@ -530,7 +527,7 @@ app.put("/azuriranje-stanara/:id", function (req, res) {
   }
   if (datum_rodenja !== undefined) {
     // Convert datum_rodenja to the desired format
-    const formattedDatumRodjenja = new Date(datum_rodenja).toISOString().split('T')[0];
+    const formattedDatumRodjenja = new Date(datum_rodenja).toISOString().split("T")[0];
     updateQuery += " `datum_rodenja` = ?,";
     values.push(formattedDatumRodjenja);
   }
@@ -572,7 +569,6 @@ app.put("/azuriranje-stanara/:id", function (req, res) {
   });
 });
 
-
 app.put("/azuriranje-korisnika/:id_korisnika", function (req, res) {
   const { id_korisnika } = req.params;
   const { email_korisnika, lozinka, uloga } = req.body;
@@ -593,7 +589,7 @@ app.put("/azuriranje-korisnika/:id_korisnika", function (req, res) {
 app.put("/azuriranje-objekta/:id", (req, res) => {
   const { id } = req.params;
   const updatedObjekt = req.body; // Assuming you're sending the updated object data in the request body
-  
+
   connection.query("UPDATE `objekt` SET ? WHERE broj_objekta = ?", [updatedObjekt, id], (error, results) => {
     if (error) {
       console.error("Error updating objekt:", error);
@@ -603,8 +599,6 @@ app.put("/azuriranje-objekta/:id", (req, res) => {
     res.send({ error: false, data: results, message: "Objekt uspješno ažuriran." });
   });
 });
-
-
 
 app.put("/azuriranje-sobe/:id_sobe", function (req, res) {
   const { id_sobe } = req.params;

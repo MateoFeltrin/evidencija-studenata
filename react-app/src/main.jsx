@@ -32,7 +32,7 @@ import IzmjenaSobaPage from "./pages/IzmjenaSobaPage";
 import IzmjenaRadnikaPage from "./pages/IzmjenaRadnikaPage";
 import UnosRadnikaPage from "./pages/UnosRadnikaPage";
 import UnosBoravkaPage from "./pages/UnosBoravkaPage";
-
+import ForbiddenPage from "./pages/ForbiddenPage";
 
 const router = createBrowserRouter([
   {
@@ -138,6 +138,10 @@ const router = createBrowserRouter([
   {
     path: "/unosRadnika",
     element: <UnosRadnikaPage />,
+  },
+  {
+    path: "/forbidden",
+    element: <ForbiddenPage />,
   },
 ]);
 

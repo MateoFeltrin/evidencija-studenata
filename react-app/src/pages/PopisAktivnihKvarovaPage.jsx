@@ -30,13 +30,13 @@ const PopisAktivnihKvarovaPage = () => {
               .catch((err) => console.log(err));
           } else {
             // If the user is not authorized, redirect to "/not-authorized" page
-            navigate("/not-authorized");
+            navigate("/forbidden");
           }
         })
         .catch((error) => {
           // If there's an error (e.g., invalid token), redirect the user to the login page
           console.error("Error verifying token:", error);
-          navigate("/prijava");
+          navigate("/forbidden");
         });
     } else {
       // If there's no token, redirect the user to the login page
@@ -90,10 +90,10 @@ const PopisAktivnihKvarovaPage = () => {
                 <td className="table-data">{kvar.id_kvara}</td>
                 <td className="table-data">{kvar.datum_prijave_kvara}</td>
                 <td className="table-data">{kvar.opis_kvara}</td>
-                <td className="table-data">{kvar.broj_sobe}</td>
-                <td className="table-data">{kvar.broj_objekta}</td>
-                <td className="table-data">{kvar.ime}</td>
-                <td className="table-data">{kvar.prezime}</td>
+                <td className="table-data">{kvar.soba.broj_sobe}</td>
+                <td className="table-data">{kvar.soba.broj_objekta}</td>
+                <td className="table-data">{kvar.stanar.ime}</td>
+                <td className="table-data">{kvar.stanar.prezime}</td>
                 <td className="table-data">
                   <button className="btn btn-sm btn-primary" onClick={() => handleChange(index)}>
                     Izmijeni

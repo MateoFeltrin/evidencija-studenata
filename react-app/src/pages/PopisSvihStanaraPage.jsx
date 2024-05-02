@@ -30,13 +30,13 @@ const PopisSvihStanaraPage = () => {
               .catch((err) => console.log(err));
           } else {
             // If the user is not authorized, redirect to "/not-authorized" page
-            navigate("/not-authorized");
+            navigate("/forbidden");
           }
         })
         .catch((error) => {
           // If there's an error (e.g., invalid token), redirect the user to the login page
           console.error("Error verifying token:", error);
-          navigate("/prijava");
+          navigate("/forbidden");
         });
     } else {
       // If there's no token, redirect the user to the login page
@@ -92,15 +92,17 @@ const PopisSvihStanaraPage = () => {
               {data.map((student) => (
                 <tr key={student.oib}>
                   <td className="table-data">{student.oib}</td>
-                  <td className="table-data">{student.jmbag}</td>
-                  <td className="table-data">{student.ime}</td>
-                  <td className="table-data">{student.prezime}</td>
-                  <td className="table-data">{student.datum_rodenja}</td>
-                  <td className="table-data">{student.adresa_prebivalista}</td>
-                  <td className="table-data">{student.subvencioniranost}</td>
-                  <td className="table-data">{student.uciliste}</td>
-                  <td className="table-data">{student.uplata_teretane}</td>
-                  <td className="table-data">{student.komentar}</td>
+                  <td className="table-data">{student.stanar.jmbag}</td>
+                  <td className="table-data">{student.stanar.ime}</td>
+                  <td className="table-data">{student.stanar.prezime}</td>
+                  <td className="table-data">{student.stanar.datum_rodenja}</td>
+                  <td className="table-data">{student.stanar.adresa_prebivalista}</td>
+                  {/* Display 'Da' for true and 'Ne' for false for subvencioniranost */}
+                  <td className="table-data">{student.stanar.subvencioniranost ? "Da" : "Ne"}</td>
+                  <td className="table-data">{student.stanar.uciliste}</td>
+                  {/* Display 'Da' for true and 'Ne' for false for uplata_teretane */}
+                  <td className="table-data">{student.stanar.uplata_teretane ? "Da" : "Ne"}</td>
+                  <td className="table-data">{student.stanar.komentar}</td>
                   <td className="table-data">{student.datum_useljenja}</td>
                   <td className="table-data">
                     <Link to={`/izmjenaStanara/${student.oib}`} className="btn btn-sm btn-primary">
@@ -109,7 +111,7 @@ const PopisSvihStanaraPage = () => {
                     <button className="btn btn-sm btn-danger" onClick={() => handleDelete(student.oib)}>
                       Izbriši
                     </button>
-                    <button className="btn btn-sm btn-secondary">Iseljenje </button>
+                    <button className="btn btn-sm btn-secondary">Iseljenje</button>
                   </td>
                 </tr>
               ))}

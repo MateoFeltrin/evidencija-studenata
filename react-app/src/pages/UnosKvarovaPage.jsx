@@ -22,7 +22,7 @@ const UnosKvarovaPage = () => {
     if (token) {
       // Send a request to the backend server to verify the token and check the user's role
       axios
-        .get("http://localhost:3000/verify-token?roles=stanar", {
+        .get("http://localhost:3000/verify-token?roles=stanar,domar,admin", {
           headers: {
             Authorization: `Bearer ${token}`, // Include the token in the request headers
           },
@@ -40,13 +40,13 @@ const UnosKvarovaPage = () => {
               });
           } else {
             // If the user is not authorized, redirect to "/not-authorized" page
-            navigate("/not-authorized");
+            navigate("/forbidden");
           }
         })
         .catch((error) => {
           // If there's an error (e.g., invalid token), redirect the user to the login page
           console.error("Error verifying token:", error);
-          navigate("/prijava");
+          navigate("/forbidden");
         });
     } else {
       // If there's no token, redirect the user to the login page
