@@ -447,16 +447,14 @@ app.post("/unos-stanara", function (req, res) {
 app.post("/unos-boravka", function (req, res) {
   const { id_kreveta, oib, id_korisnika, datum_useljenja, datum_iseljenja } = req.body;
 
-  // Check if required fields are provided
   if (!id_kreveta || !oib || !datum_useljenja) {
     return res.status(400).send({ error: true, message: "All fields are required." });
   }
 
-  // You may want to validate other fields here if needed
+  const izmDatumIseljenja = datum_iseljenja || null;
 
-  // Insert data into the database
   const query = "INSERT INTO `boravak` (`id_kreveta`, `oib`, `id_korisnika`, `datum_useljenja`, `datum_iseljenja`) VALUES (?, ?, ?, ?, ?)";
-  const values = [id_kreveta, oib, id_korisnika, datum_useljenja, datum_iseljenja];
+  const values = [id_kreveta, oib, id_korisnika, datum_useljenja, izmDatumIseljenja];
 
   connection.query(query, values, function (error, results, fields) {
     if (error) {
@@ -466,6 +464,7 @@ app.post("/unos-boravka", function (req, res) {
     res.status(201).send({ error: false, data: results, message: "Boravak je dodan." });
   });
 });
+
 
 
 app.post("/unos-boravka1", (req, res) => {
