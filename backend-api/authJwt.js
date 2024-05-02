@@ -26,6 +26,11 @@ verifyToken = (roles) => (req, res, next) => {
     req.userId = decoded.id;
     const userRole = decoded.uloga;
 
+    // Make sure roles is a string
+    if (typeof roles !== "string") {
+      roles = String(roles);
+    }
+
     // Split the input roles string by commas and trim whitespace
     const rolesArray = roles.split(",").map((role) => role.trim());
 

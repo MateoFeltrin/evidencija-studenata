@@ -102,6 +102,25 @@ app.post("/login", async (req, res) => {
   }
 });
 
+app.get("/verify-token", async (req, res) => {
+  // Retrieve the desired roles from the query parameters
+  const roles = req.query.roles;
+
+  // Check if roles were specified
+  if (!roles) {
+    return res.status(400).json({ error: true, message: "Roles are required." });
+  }
+
+  // Split the roles string by commas and trim whitespace
+  const rolesArray = roles.split(",").map((role) => role.trim());
+
+  // Use a function that verifies the token and checks if the user's role matches any of the specified roles
+  authJwt.verifyToken(rolesArray)(req, res, () => {
+    // If the token is verified and the user has one of the specified roles, send a 200 OK response
+    res.sendStatus(200);
+  });
+});
+
 app.get("/api/trenutni-stanari", async (req, res) => {
   try {
     // Fetching the residents and their current stay details

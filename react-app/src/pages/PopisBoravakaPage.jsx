@@ -1,18 +1,49 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import CollapsableNavbar from "../components/CollapsableNavbar";
+import { useNavigate } from "react-router-dom";
 
 const PopisBoravakaPage = () => {
   const [data, setData] = useState([]);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/svi-boravci")
-      .then((res) => setData(res.data))
-      .catch((err) => console.log(err));
-  }, []);
+    // Fetch token from local storage
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      // Send a request to the backend server to verify the token and check the user's role
+      axios
+        .get("http://localhost:3000/verify-token?roles=admin,recepcionar", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the request headers
+          },
+        })
+        .then((response) => {
+          // If the response status is 200, proceed with fetching the data
+          if (response.status === 200) {
+            axios
+              .get("http://localhost:3000/api/svi-boravci")
+              .then((res) => setData(res.data))
+              .catch((err) => console.log(err));
+          } else {
+            // If the user is not authorized, redirect to "/not-authorized" page
+            navigate("/not-authorized");
+          }
+        })
+        .catch((error) => {
+          // If there's an error (e.g., invalid token), redirect the user to the login page
+          console.error("Error verifying token:", error);
+          navigate("/prijava");
+        });
+    } else {
+      // If there's no token, redirect the user to the login page
+      navigate("/prijava");
+    }
+  }, [navigate]);
 
   const handleDelete = (id_boravka) => {
     const isConfirmed = window.confirm("Želite li zaista obrisati objekt?");
@@ -28,7 +59,7 @@ const PopisBoravakaPage = () => {
         })
         .catch((err) => {
           console.log(err);
-          alert('Došlo je do pogreške prilikom brisanja!', err.message);
+          alert("Došlo je do pogreške prilikom brisanja!", err.message);
         });
     }
   };
@@ -38,8 +69,8 @@ const PopisBoravakaPage = () => {
       <CollapsableNavbar />
       <h1>Popis boravaka</h1>
       <Link to="/unosBoravka" className="btn btn-sm btn-primary mb-3">
-      Dodaj boravak
-    </Link>
+        Dodaj boravak
+      </Link>
       <div className="table-responsive">
         <table className="table table-striped table-hover">
           <thead>
@@ -67,8 +98,12 @@ const PopisBoravakaPage = () => {
                 <td className="table-data">{boravak.broj_kreveta}</td>
                 <td className="table-data">{boravak.email_korisnika}</td>
                 <td className="table-data">
-                <Link to={`/izmjenaBoravka/${boravak.id_boravka}`} className="btn btn-sm btn-primary">Izmijeni</Link>
-                  <button className="btn btn-sm btn-danger" onClick={() => handleDelete(boravak.id_boravka)}>Izbriši</button>
+                  <Link to={`/izmjenaBoravka/${boravak.id_boravka}`} className="btn btn-sm btn-primary">
+                    Izmijeni
+                  </Link>
+                  <button className="btn btn-sm btn-danger" onClick={() => handleDelete(boravak.id_boravka)}>
+                    Izbriši
+                  </button>
                   <button className="btn btn-sm btn-secondary">Iseljenje </button>
                 </td>
               </tr>
