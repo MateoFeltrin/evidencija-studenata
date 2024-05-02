@@ -62,21 +62,31 @@ const IzmjenaBoravkaPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
     
-    const formattedDatumIseljenja = new Date(boravakData.datum_iseljenja).toISOString().slice(0, 19).replace('T', ' ');
+    
+    const formattedDatumUseljenja = formatDateForServer(boravakData.datum_useljenja);
+    const formattedDatumIseljenja = formatDateForServer(boravakData.datum_iseljenja);
+    
+    
     setBoravakData(prevState => ({
       ...prevState,
+      datum_useljenja: formattedDatumUseljenja,
       datum_iseljenja: formattedDatumIseljenja
     }));
   
     try {
-    
+      
       await axios.put(`http://localhost:3000/azuriranje-boravka/${id_boravka}`, boravakData);
       alert('Podaci uspješno izmjenjeni!');
     } catch (error) {
       console.error("Error updating data:", error);
     }
+  };
+  
+  // Function to format date for the server (dd-mm-yyyy to yyyy-mm-dd)
+  const formatDateForServer = (dateString) => {
+    const [day, month, year] = dateString.split('-');
+    return `${year}-${month}-${day}`;
   };
   
 
