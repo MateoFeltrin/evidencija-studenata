@@ -11,6 +11,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import UnosStanaraPage from "./pages/UnosStanaraPage";
 import PopisKorisnikaPage from "./pages/PopisKorisnikaPage";
 import PopisSvihStanaraPage from "./pages/PopisSvihStanaraPage";
+import PopisUnesenihStanaraPage from "./pages/PopisUnesenihStanaraPage";
 import PopisVremenskogPerioda from "./pages/PopisVremenskogPeriodaPage";
 import PopisBoravakaPage from "./pages/PopisBoravakaPage";
 import PrijavaPage from "./pages/PrijavaPage";
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
   {
     path: "/popisSvihStanara",
     element: <PopisSvihStanaraPage />,
+  },
+  {
+    path: "/popisUnesenihStanara",
+    element: <PopisUnesenihStanaraPage />,
   },
   {
     path: "/popisVremenskogPeroida",

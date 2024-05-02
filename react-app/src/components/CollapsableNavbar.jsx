@@ -85,7 +85,7 @@ const CollapsableNavbar = () => {
             <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
               {(isAdmin() || isRecepcionar()) && (
                 <li className="nav-item dropdown-center">
-                  <button className={`nav-link dropdown-toggle icon-link ${location.pathname === "/popisSvihStanara" || location.pathname === "/popisVremenskogPeroida" ? "active" : ""}`} role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <button className={`nav-link dropdown-toggle icon-link ${location.pathname === "/popisSvihStanara" || location.pathname === "/popisVremenskogPeroida" || location.pathname === "/popisUnesenihStanara" ? "active" : ""}`} role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <PiStudent />
                     Popisi studenata
                   </button>
@@ -94,6 +94,12 @@ const CollapsableNavbar = () => {
                       <Link className="icon-link dropdown-item" aria-current="page" to="/popisSvihStanara">
                         <FaList />
                         Popis svih trenutačnih stanara
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="icon-link dropdown-item" aria-current="page" to="/popisUnesenihStanara">
+                        <FaList />
+                        Popis unesenih stanara
                       </Link>
                     </li>
                     <li>

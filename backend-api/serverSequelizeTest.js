@@ -182,6 +182,26 @@ app.get("/api/trenutni-stanari", async (req, res) => {
   }
 });
 
+app.get("/api/sviupisani-stanari", async (req, res) => {
+  try {
+    // Fetching all residents and including an associated model if needed
+    const allStanari = await Stanar.findAll({
+      include: [
+        {
+          model: Stanar, // Include the associated Stanar model
+          required: true,
+        }
+      ]
+    });
+
+    // Sending the results as a JSON response
+    res.json(allStanari);
+  } catch (error) {
+    console.error("Error fetching all stanari:", error);
+    res.status(500).send({ error: true, message: "Failed to fetch all stanari." });
+  }
+});
+
 app.get("/api/aktivni-kvarovi", async (req, res) => {
   try {
     const aktivniKvarovi = await Kvar.findAll({
