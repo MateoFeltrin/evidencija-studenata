@@ -85,12 +85,12 @@ const UnosKvarovaPage = () => {
         <div className="col-md-6">
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="opis_kvara">Opis kvara:</label>
+              <label htmlFor="opis_kvara">Opis kvara: <span className="text-danger">*</span></label>
               <textarea className="form-control" id="opis_kvara" name="opis_kvara" value={formData.opis_kvara} onChange={handleChange} required />
             </div>
 
             <div className="form-group">
-              <label htmlFor="broj_sobe">Broj sobe:</label>
+              <label htmlFor="broj_sobe">Broj sobe:<span className="text-danger">*</span> </label>
               <select
                 className="form-control"
                 id="broj_sobe"

@@ -79,7 +79,7 @@ const UnosBoravakaPage = () => {
       <h1>Unos Boravaka</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Broj Kreveta:</label>
+          <label>Broj Kreveta: <span className="text-danger">*</span></label>
           <select className="form-control" name="id_kreveta" value={formData.id_kreveta} onChange={handleChange}>
             <option value="">Odaberi broj Kreveta</option>
             {krevetaOptions.map(option => (
@@ -88,7 +88,7 @@ const UnosBoravakaPage = () => {
           </select>
         </div>
         <div className="form-group">
-          <label>Stanar:</label>
+          <label>Stanar: <span className="text-danger">*</span></label>
           <select className="form-control" name="oib" value={formData.oib} onChange={handleChange}>
             <option value="">Odaberi stanara</option>
             {oibOptions.map(option => (
@@ -97,7 +97,7 @@ const UnosBoravakaPage = () => {
           </select>
         </div>
         <div className="form-group">
-          <label>Korisnik:</label>
+          <label>Korisnik: <span className="text-danger">*</span></label>
           <select className="form-control" name="id_korisnika" value={formData.id_korisnika} onChange={handleChange}>
             <option value="">Odaberi Korisnika</option>
             {korisnikaOptions.map(option => (
@@ -106,7 +106,7 @@ const UnosBoravakaPage = () => {
           </select>
         </div>
         <div className="form-group">
-          <label>Datum Useljenja:</label>
+          <label>Datum Useljenja: <span className="text-danger">*</span></label>
           <input type="date" className="form-control" name="datum_useljenja" value={formData.datum_useljenja} onChange={handleChange} />
         </div>
         <div className="form-group">

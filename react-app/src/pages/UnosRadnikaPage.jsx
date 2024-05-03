@@ -51,7 +51,7 @@ const UnosRadnikaPage = () => {
           <div className="col-md-6">
             <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label htmlFor="email_korisnika">Email korisnika:</label>
+                <label htmlFor="email_korisnika">Email korisnika: <span className="text-danger">*</span></label>
                 <input
                   type="email"
                   className="form-control"
@@ -64,7 +64,7 @@ const UnosRadnikaPage = () => {
               </div>
             
               <div className="form-group">
-                <label htmlFor="lozinka">Lozinka:</label>
+                <label htmlFor="lozinka">Lozinka: <span className="text-danger">*</span></label>
                 <input
                   type="password"
                   className="form-control"
@@ -77,7 +77,7 @@ const UnosRadnikaPage = () => {
               </div>
               
               <div className="form-group">
-                <label htmlFor="uloga">Uloga:</label>
+                <label htmlFor="uloga">Uloga: <span className="text-danger">*</span></label>
                 <select
                   className="form-control"
                   id="uloga"
