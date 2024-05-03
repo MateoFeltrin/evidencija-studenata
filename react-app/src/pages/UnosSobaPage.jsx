@@ -62,7 +62,7 @@ const UnosSobaPage = () => {
           <div className="col-md-6">
             <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label htmlFor="broj_objekta">Objekt:</label>
+                <label htmlFor="broj_objekta">Objekt: <span className="text-danger">*</span></label>
                 <select
                   className="form-control"
                   id="broj_objekta"
@@ -81,7 +81,7 @@ const UnosSobaPage = () => {
               </div>
             
               <div className="form-group">
-                <label htmlFor="kat_sobe">Kat sobe:</label>
+                <label htmlFor="kat_sobe">Kat sobe: <span className="text-danger">*</span></label>
                 <input
                   type="number"
                   className="form-control"
@@ -94,7 +94,7 @@ const UnosSobaPage = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="broj_sobe">Broj sobe:</label>
+                <label htmlFor="broj_sobe">Broj sobe: <span className="text-danger">*</span></label>
                 <input
                   type="number"
                   className="form-control"

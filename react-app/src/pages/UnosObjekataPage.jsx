@@ -51,7 +51,7 @@ const UnosObjekataPage = () => {
           <div className="col-md-6">
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label htmlFor="broj_objekta" className="form-label">Broj objekta</label>
+                <label htmlFor="broj_objekta" className="form-label">Broj objekta <span className="text-danger">*</span></label>
                 <input type="number" className="form-control" id="broj_objekta" name="broj_objekta" value={formData.broj_objekta} onChange={handleChange} required />
               </div>
               <button type="submit" className="btn btn-primary">Unesi</button>

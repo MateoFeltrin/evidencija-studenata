@@ -65,7 +65,7 @@ const UnosKrevetaPage = () => {
         <div className="col-md-6">
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="broj_kreveta">Broj kreveta:</label>
+              <label htmlFor="broj_kreveta">Broj kreveta: <span className="text-danger">*</span></label>
               <input
                 type="number"
                 className="form-control"
@@ -78,7 +78,7 @@ const UnosKrevetaPage = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="id_sobe">Soba:</label>
+              <label htmlFor="id_sobe">Soba: <span className="text-danger">*</span> </label>
               <select
                 className="form-control"
                 id="id_sobe"

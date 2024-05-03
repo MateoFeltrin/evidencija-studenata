@@ -69,6 +69,22 @@ const PopisBoravakaPage = () => {
     }
   };
 
+  const handleIseljenje = (id_boravka) => {
+    const isConfirmed = window.confirm("Želite li zaista iseliti stanara?");
+    if (isConfirmed) {
+      axios.put(`http://localhost:3000/azuriranje-boravka/${id_boravka}`, {
+        datum_iseljenja: new Date(), // Set move-out date to current date
+      })
+      .then(() => {
+        alert("Stanar uspješno iseljen!");
+        // You may want to redirect the user or do other actions here
+      })
+      .catch((error) => {
+        console.error("Error updating move-out date:", error);
+      });
+    }
+  };
+
   return (
     <div className="container-fluid">
       <CollapsableNavbar />
@@ -109,7 +125,9 @@ const PopisBoravakaPage = () => {
                   <button className="btn btn-sm btn-danger" onClick={() => handleDelete(boravak.id_boravka)}>
                     Izbriši
                   </button>
-                  <button className="btn btn-sm btn-secondary">Iseljenje </button>
+                  <button className="btn btn-sm btn-secondary" onClick={() => handleIseljenje(boravak.id_boravka)}>
+                      Iseljenje
+                    </button>
                 </td>
               </tr>
             ))}
