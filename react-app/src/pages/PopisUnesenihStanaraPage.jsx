@@ -84,7 +84,6 @@ const PopisUnesenihStanaraPage = () => {
                 <th scope="col">Učilište</th>
                 <th scope="col">Uplata teretane</th>
                 <th scope="col">Komentar</th>
-                <th scope="col">Datum useljenja</th>
                 <th scope="col">Akcije</th>
               </tr>
             </thead>
@@ -97,11 +96,10 @@ const PopisUnesenihStanaraPage = () => {
                   <td className="table-data">{student.prezime}</td>
                   <td className="table-data">{student.datum_rodenja}</td>
                   <td className="table-data">{student.adresa_prebivalista}</td>
-                  <td className="table-data">{student.subvencioniranost}</td>
+                  <td className="table-data">{student.subvencioniranost ? "Da" : "Ne"}</td>
                   <td className="table-data">{student.uciliste}</td>
-                  <td className="table-data">{student.uplata_teretane}</td>
+                  <td className="table-data">{student.uplata_teretane ? "Da" : "Ne"}</td>
                   <td className="table-data">{student.komentar}</td>
-                  <td className="table-data">{student.datum_useljenja}</td>
                   <td className="table-data">
                     <Link to={`/izmjenaStanara/${student.oib}`} className="btn btn-sm btn-primary">
                       Izmijeni

@@ -185,14 +185,7 @@ app.get("/api/trenutni-stanari", async (req, res) => {
 app.get("/api/sviupisani-stanari", async (req, res) => {
   try {
     // Fetching all residents and including an associated model if needed
-    const allStanari = await Stanar.findAll({
-      include: [
-        {
-          model: Stanar, // Include the associated Stanar model
-          required: true,
-        }
-      ]
-    });
+    const allStanari = await Stanar.findAll({});
 
     // Sending the results as a JSON response
     res.json(allStanari);

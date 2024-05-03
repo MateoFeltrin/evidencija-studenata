@@ -35,14 +35,17 @@ const IzmjenaStanaraPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.put(
+      console.log(studentData);
+      const token = localStorage.getItem("token");
+      console.log(token);
+      const response = await axios.put(
         `http://localhost:3000/azuriranje-stanara/${id}`,
+        studentData, // Data to send in the request body
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, // Include the token in the headers
           },
-        },
-        studentData
+        }
       );
       alert("Podaci uspješno izmjenjeni!");
       // Redirect to the page where you display all students after successful update

@@ -77,7 +77,12 @@ const IzmjenaBoravkaPage = () => {
     }));
 
     try {
-      await axios.put(`http://localhost:3000/azuriranje-boravka/${id_boravka}`, boravakData);
+      const token = localStorage.getItem("token");
+      await axios.put(`http://localhost:3000/azuriranje-boravka/${id_boravka}`, boravakData, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the headers
+        },
+      });
       alert("Podaci uspješno izmjenjeni!");
     } catch (error) {
       console.error("Error updating data:", error);
