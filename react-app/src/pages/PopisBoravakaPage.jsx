@@ -6,13 +6,13 @@ import CollapsableNavbar from "../components/CollapsableNavbar";
 import { useNavigate } from "react-router-dom";
 
 const PopisBoravakaPage = () => {
+  const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch token from local storage
-    const token = localStorage.getItem("token");
 
     if (token) {
       // Send a request to the backend server to verify the token and check the user's role
@@ -26,7 +26,11 @@ const PopisBoravakaPage = () => {
           // If the response status is 200, proceed with fetching the data
           if (response.status === 200) {
             axios
-              .get("http://localhost:3000/api/svi-boravci")
+              .get("http://localhost:3000/api/svi-boravci", {
+                headers: {
+                  Authorization: `Bearer ${token}`, // Include the token in the headers
+                },
+              })
               .then((res) => setData(res.data))
               .catch((err) => console.log(err));
           } else {
@@ -48,7 +52,6 @@ const PopisBoravakaPage = () => {
   const handleDelete = (id_boravka) => {
     const isConfirmed = window.confirm("Želite li zaista obrisati objekt?");
     if (isConfirmed) {
-      const token = localStorage.getItem("token");
       console.log("Broj objekta to delete:", id_boravka);
       axios
         .delete(`http://localhost:3000/brisanje-boravka/${id_boravka}`, {
@@ -58,7 +61,11 @@ const PopisBoravakaPage = () => {
         })
         .then(() => {
           axios
-            .get("http://localhost:3000/api/svi-boravci")
+            .get("http://localhost:3000/api/svi-boravci", {
+              headers: {
+                Authorization: `Bearer ${token}`, // Include the token in the headers
+              },
+            })
             .then((res) => setData(res.data))
             .catch((err) => console.log(err));
         })
@@ -72,16 +79,25 @@ const PopisBoravakaPage = () => {
   const handleIseljenje = (id_boravka) => {
     const isConfirmed = window.confirm("Želite li zaista iseliti stanara?");
     if (isConfirmed) {
-      axios.put(`http://localhost:3000/azuriranje-boravka/${id_boravka}`, {
-        datum_iseljenja: new Date(), // Set move-out date to current date
-      })
-      .then(() => {
-        alert("Stanar uspješno iseljen!");
-        // You may want to redirect the user or do other actions here
-      })
-      .catch((error) => {
-        console.error("Error updating move-out date:", error);
-      });
+      axios
+        .put(
+          `http://localhost:3000/azuriranje-boravka/${id_boravka}`,
+          {
+            datum_iseljenja: new Date(), // Set move-out date to current date
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Include the token in the headers
+            },
+          }
+        )
+        .then(() => {
+          alert("Stanar uspješno iseljen!");
+          // You may want to redirect the user or do other actions here
+        })
+        .catch((error) => {
+          console.error("Error updating move-out date:", error);
+        });
     }
   };
 
@@ -126,8 +142,8 @@ const PopisBoravakaPage = () => {
                     Izbriši
                   </button>
                   <button className="btn btn-sm btn-secondary" onClick={() => handleIseljenje(boravak.id_boravka)}>
-                      Iseljenje
-                    </button>
+                    Iseljenje
+                  </button>
                 </td>
               </tr>
             ))}

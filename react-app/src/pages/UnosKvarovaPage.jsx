@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 const UnosKvarovaPage = () => {
+  const token = localStorage.getItem("token");
   const [formData, setFormData] = useState({
     opis_kvara: "",
     id_sobe: "",
@@ -16,9 +17,6 @@ const UnosKvarovaPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch token from local storage
-    const token = localStorage.getItem("token");
-
     if (token) {
       // Send a request to the backend server to verify the token and check the user's role
       axios
@@ -31,7 +29,11 @@ const UnosKvarovaPage = () => {
           // If the response status is 200, proceed with fetching the data
           if (response.status === 200) {
             axios
-              .get("http://localhost:3000/api/broj-sobe")
+              .get("http://localhost:3000/api/broj-sobe", {
+                headers: {
+                  Authorization: `Bearer ${token}`, // Include the token in the headers
+                },
+              })
               .then((response) => {
                 setSobeOptions(response.data);
               })
@@ -85,12 +87,16 @@ const UnosKvarovaPage = () => {
         <div className="col-md-6">
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="opis_kvara">Opis kvara: <span className="text-danger">*</span></label>
+              <label htmlFor="opis_kvara">
+                Opis kvara: <span className="text-danger">*</span>
+              </label>
               <textarea className="form-control" id="opis_kvara" name="opis_kvara" value={formData.opis_kvara} onChange={handleChange} required />
             </div>
 
             <div className="form-group">
-              <label htmlFor="broj_sobe">Broj sobe:<span className="text-danger">*</span> </label>
+              <label htmlFor="broj_sobe">
+                Broj sobe:<span className="text-danger">*</span>{" "}
+              </label>
               <select
                 className="form-control"
                 id="broj_sobe"

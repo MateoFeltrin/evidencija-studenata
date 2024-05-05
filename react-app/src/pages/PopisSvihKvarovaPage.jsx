@@ -6,14 +6,12 @@ import CollapsableNavbar from "../components/CollapsableNavbar";
 import { useNavigate } from "react-router-dom";
 
 const PopisSvihKvarovaPage = () => {
+  const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch token from local storage
-    const token = localStorage.getItem("token");
-
     if (token) {
       // Send a request to the backend server to verify the token and check the user's role
       axios
@@ -26,7 +24,11 @@ const PopisSvihKvarovaPage = () => {
           // If the response status is 200, proceed with fetching the data
           if (response.status === 200) {
             axios
-              .get("http://localhost:3000/api/svi-kvarovi")
+              .get("http://localhost:3000/api/svi-kvarovi", {
+                headers: {
+                  Authorization: `Bearer ${token}`, // Include the token in the headers
+                },
+              })
               .then((res) => setData(res.data))
               .catch((err) => console.log(err));
           } else {
@@ -50,10 +52,18 @@ const PopisSvihKvarovaPage = () => {
     if (isConfirmed) {
       console.log("Broj objekta to delete:", id_kvara);
       axios
-        .delete(`http://localhost:3000/brisanje-kvara/${id_kvara}`)
+        .delete(`http://localhost:3000/brisanje-kvara/${id_kvara}`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the headers
+          },
+        })
         .then(() => {
           axios
-            .get("http://localhost:3000/api/svi-kvarovi")
+            .get("http://localhost:3000/api/svi-kvarovi", {
+              headers: {
+                Authorization: `Bearer ${token}`, // Include the token in the headers
+              },
+            })
             .then((res) => setData(res.data))
             .catch((err) => console.log(err));
         })
@@ -97,7 +107,7 @@ const PopisSvihKvarovaPage = () => {
                   <td className="table-data">{kvar.soba.broj_objekta}</td>
                   <td className="table-data">{kvar.stanar.ime}</td>
                   <td className="table-data">{kvar.stanar.prezime}</td>
-                  <td className="table-data">{kvar.korisnik.email_korisnika}</td>
+                  <td className="table-data">{kvar.korisnik ? kvar.korisnik.email_korisnika || "Neodređen" : "Neodređen"}</td>
                   <td className="table-data">
                     <button className="btn btn-sm btn-primary" onClick={() => handleChange(index)}>
                       Izmijeni

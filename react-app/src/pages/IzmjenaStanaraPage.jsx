@@ -6,6 +6,7 @@ import axios from "axios";
 import CollapsableNavbar from "../components/CollapsableNavbar";
 
 const IzmjenaStanaraPage = () => {
+  const token = localStorage.getItem("token");
   const { id } = useParams();
 
   const [studentData, setStudentData] = useState({
@@ -24,7 +25,11 @@ const IzmjenaStanaraPage = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/api/trenutni-stanari1/${id}`)
+      .get(`http://localhost:3000/api/trenutni-stanari1/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the headers
+        },
+      })
       .then((res) => {
         const data = res.data;
         setStudentData(data);
@@ -36,7 +41,6 @@ const IzmjenaStanaraPage = () => {
     event.preventDefault();
     try {
       console.log(studentData);
-      const token = localStorage.getItem("token");
       console.log(token);
       const response = await axios.put(
         `http://localhost:3000/azuriranje-stanara/${id}`,

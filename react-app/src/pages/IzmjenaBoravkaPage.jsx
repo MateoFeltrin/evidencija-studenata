@@ -6,6 +6,7 @@ import axios from "axios";
 import CollapsableNavbar from "../components/CollapsableNavbar";
 
 const IzmjenaBoravkaPage = () => {
+  const token = localStorage.getItem("token");
   const { id_boravka } = useParams();
 
   const [boravakData, setBoravakData] = useState({
@@ -23,7 +24,11 @@ const IzmjenaBoravkaPage = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/api/svi-boravci1/${id_boravka}`)
+      .get(`http://localhost:3000/api/svi-boravci1/${id_boravka}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the headers
+        },
+      })
       .then((res) => {
         const data = res.data;
         setBoravakData(data);
@@ -31,7 +36,11 @@ const IzmjenaBoravkaPage = () => {
       .catch((error) => console.error("Error fetching boravak data:", error));
 
     axios
-      .get("http://localhost:3000/api/slobodni-stanari")
+      .get("http://localhost:3000/api/slobodni-stanari", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the headers
+        },
+      })
       .then((res) => {
         const options = res.data.map((stanar) => ({
           value: stanar.oib,
@@ -42,7 +51,11 @@ const IzmjenaBoravkaPage = () => {
       .catch((error) => console.error("Error fetching oib options:", error));
 
     axios
-      .get("http://localhost:3000/api/svi-radnici")
+      .get("http://localhost:3000/api/svi-radnici", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the headers
+        },
+      })
       .then((res) => {
         const options = res.data.map((korisnik) => ({
           value: korisnik.id_korisnika,
@@ -53,7 +66,11 @@ const IzmjenaBoravkaPage = () => {
       .catch((error) => console.error("Error fetching korisnik options:", error));
 
     axios
-      .get("http://localhost:3000/api/svi-kreveti")
+      .get("http://localhost:3000/api/svi-kreveti", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the headers
+        },
+      })
       .then((res) => {
         const options = res.data.map((krevet) => ({
           value: krevet.id_kreveta,
@@ -66,9 +83,11 @@ const IzmjenaBoravkaPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    let formattedDatumIseljenja = null;
     const formattedDatumUseljenja = formatDateForServer(boravakData.datum_useljenja);
-    const formattedDatumIseljenja = formatDateForServer(boravakData.datum_iseljenja);
+    if (boravakData.datum_iseljenja != null) {
+      formattedDatumIseljenja = formatDateForServer(boravakData.datum_iseljenja);
+    }
 
     setBoravakData((prevState) => ({
       ...prevState,
@@ -77,7 +96,7 @@ const IzmjenaBoravkaPage = () => {
     }));
 
     try {
-      const token = localStorage.getItem("token");
+      console.log("Submitting update with data:", boravakData);
       await axios.put(`http://localhost:3000/azuriranje-boravka/${id_boravka}`, boravakData, {
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the headers

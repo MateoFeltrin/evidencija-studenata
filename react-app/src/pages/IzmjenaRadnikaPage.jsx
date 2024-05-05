@@ -1,25 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from "react-router-dom";
 import CollapsableNavbar from "../components/CollapsableNavbar";
 import { IoArrowBackSharp } from "react-icons/io5";
 import axios from "axios";
 
 const IzmjenaRadnikaPage = () => {
-  const { id_korisnika } = useParams(); 
+  const token = localStorage.getItem("token");
+  const { id_korisnika } = useParams();
 
   const [korisnikData, setKorisnikData] = useState({
     id_korisnika: "",
     email_korisnika: "",
     lozinka: "",
-    uloga: ""
+    uloga: "",
   });
 
   useEffect(() => {
     console.log("ID Korisnika:", id_korisnika);
-    axios.get(`http://localhost:3000/api/svi-radnici1/${id_korisnika}`)
+    axios
+      .get(`http://localhost:3000/api/svi-radnici1/${id_korisnika}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the headers
+        },
+      })
       .then((res) => {
         const data = res.data;
-        console.log("Data received:", data); 
+        console.log("Data received:", data);
         setKorisnikData(data);
       })
       .catch((error) => {
@@ -31,8 +37,12 @@ const IzmjenaRadnikaPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.put(`http://localhost:3000/azuriranje-korisnika/${id_korisnika}`, korisnikData);
-      alert('Podaci uspješno izmjenjeni!');
+      await axios.put(`http://localhost:3000/azuriranje-korisnika/${id_korisnika}`, korisnikData, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the headers
+        },
+      });
+      alert("Podaci uspješno izmjenjeni!");
       // Redirect to the page where you display all users after successful update
       // Example: history.push("/popisKorisnika");
     } catch (error) {
@@ -42,9 +52,9 @@ const IzmjenaRadnikaPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setKorisnikData(prevState => ({
+    setKorisnikData((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -62,28 +72,13 @@ const IzmjenaRadnikaPage = () => {
               <label htmlFor="id_korisnika" className="form-label">
                 ID Korisnika:
               </label>
-              <input
-                type="number"
-                className="form-control"
-                disabled
-                id="id_korisnika"
-                name="id_korisnika"
-                value={korisnikData.id_korisnika}
-                onChange={handleChange}
-              />
+              <input type="number" className="form-control" disabled id="id_korisnika" name="id_korisnika" value={korisnikData.id_korisnika} onChange={handleChange} />
             </div>
             <div className="col-md-6 mb-3">
               <label htmlFor="email_korisnika" className="form-label">
                 Email Korisnika:
               </label>
-              <input
-                type="email"
-                className="form-control"
-                id="email_korisnika"
-                name="email_korisnika"
-                value={korisnikData.email_korisnika}
-                onChange={handleChange}
-              />
+              <input type="email" className="form-control" id="email_korisnika" name="email_korisnika" value={korisnikData.email_korisnika} onChange={handleChange} />
             </div>
           </div>
           <div className="row">
@@ -91,33 +86,20 @@ const IzmjenaRadnikaPage = () => {
               <label htmlFor="lozinka" className="form-label">
                 Lozinka:
               </label>
-              <input
-                type="password"
-                className="form-control"
-                id="lozinka"
-                name="lozinka"
-                value={korisnikData.lozinka}
-                onChange={handleChange}
-              />
+              <input type="password" className="form-control" id="lozinka" name="lozinka" value={korisnikData.lozinka} onChange={handleChange} />
             </div>
             <div className="col-md-6 mb-3">
-          <label htmlFor="uloga" className="form-label">
-          Uloga:
-          </label>
-         <select
-        className="form-select"
-        id="uloga"
-        name="uloga"
-       value={korisnikData.uloga}
-        onChange={handleChange}
-  >
-    <option value="">Odaberi ulogu</option>
-    <option value="Recepcionar">Recepcionar</option>
-    <option value="Domar">Domar</option>
-    <option value="Admin">Admin</option>
-  </select>
-</div>
-         </div>
+              <label htmlFor="uloga" className="form-label">
+                Uloga:
+              </label>
+              <select className="form-select" id="uloga" name="uloga" value={korisnikData.uloga} onChange={handleChange}>
+                <option value="">Odaberi ulogu</option>
+                <option value="Recepcionar">Recepcionar</option>
+                <option value="Domar">Domar</option>
+                <option value="Admin">Admin</option>
+              </select>
+            </div>
+          </div>
           <button type="submit" className="btn btn-primary">
             Izmijeni
           </button>

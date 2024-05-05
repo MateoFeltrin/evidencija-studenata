@@ -8,6 +8,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const PopisVremenskogPerioda = () => {
+  const token = localStorage.getItem("token");
   const [selectionRange, setSelectionRange] = useState({
     startDate: new Date(),
     endDate: new Date(),
@@ -18,9 +19,6 @@ const PopisVremenskogPerioda = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch token from local storage
-    const token = localStorage.getItem("token");
-
     if (token) {
       // Send a request to the backend server to verify the token and check the user's role
       axios

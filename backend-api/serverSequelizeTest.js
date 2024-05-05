@@ -115,7 +115,7 @@ app.get("/verify-token", async (req, res) => {
   });
 });
 
-app.get("/api/svi-radnici1/:id_korisnika", async (req, res) => {
+app.get("/api/svi-radnici1/:id_korisnika", authJwt.verifyToken("admin"), async (req, res) => {
   try {
     const id_korisnika = req.params.id_korisnika;
 
@@ -137,7 +137,7 @@ app.get("/api/svi-radnici1/:id_korisnika", async (req, res) => {
   }
 });
 
-app.get("/api/trenutni-stanari1/:id", async (req, res) => {
+app.get("/api/trenutni-stanari1/:id", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   try {
     const id = req.params.id;
 
@@ -159,7 +159,7 @@ app.get("/api/trenutni-stanari1/:id", async (req, res) => {
   }
 });
 
-app.get("/api/trenutni-stanari", async (req, res) => {
+app.get("/api/trenutni-stanari", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   try {
     // Fetching the residents and their current stay details
     const trenutniStanari = await Boravak.findAll({
@@ -182,7 +182,7 @@ app.get("/api/trenutni-stanari", async (req, res) => {
   }
 });
 
-app.get("/api/sviupisani-stanari", async (req, res) => {
+app.get("/api/sviupisani-stanari", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   try {
     // Fetching all residents and including an associated model if needed
     const allStanari = await Stanar.findAll({});
@@ -195,7 +195,7 @@ app.get("/api/sviupisani-stanari", async (req, res) => {
   }
 });
 
-app.get("/api/aktivni-kvarovi", async (req, res) => {
+app.get("/api/aktivni-kvarovi", authJwt.verifyToken("domar, admin"), async (req, res) => {
   try {
     const aktivniKvarovi = await Kvar.findAll({
       where: {
@@ -219,7 +219,7 @@ app.get("/api/aktivni-kvarovi", async (req, res) => {
   }
 });
 
-app.get("/api/aktivni-kvarovi/:id", async (req, res) => {
+app.get("/api/aktivni-kvarovi/:id", authJwt.verifyToken("domar, admin"), async (req, res) => {
   try {
     // Fetch the active faults (kvarovi) with related Soba and Stanar models
     const kvarovi = await Kvar.findAll({
@@ -246,7 +246,7 @@ app.get("/api/aktivni-kvarovi/:id", async (req, res) => {
   }
 });
 
-app.get("/api/svi-radnici", async (req, res) => {
+app.get("/api/svi-radnici", authJwt.verifyToken("admin"), async (req, res) => {
   try {
     const sviKorisnici = await Korisnik.findAll({
       where: {
@@ -262,7 +262,7 @@ app.get("/api/svi-radnici", async (req, res) => {
   }
 });
 
-app.get("/api/svi-boravci", async (req, res) => {
+app.get("/api/svi-boravci", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   try {
     const sviBoravci = await Boravak.findAll({
       include: [
@@ -294,7 +294,7 @@ app.get("/api/svi-boravci", async (req, res) => {
   }
 });
 
-app.get("/api/svi-kvarovi", async (req, res) => {
+app.get("/api/svi-kvarovi", authJwt.verifyToken("domar, admin"), async (req, res) => {
   try {
     const aktivniKvarovi = await Kvar.findAll({
       include: [
@@ -319,7 +319,7 @@ app.get("/api/svi-kvarovi", async (req, res) => {
   }
 });
 
-app.get("/api/svi-kreveti", async (req, res) => {
+app.get("/api/svi-kreveti", authJwt.verifyToken("admin"), async (req, res) => {
   try {
     const sviKreveti = await Krevet.findAll({
       include: [
@@ -336,7 +336,7 @@ app.get("/api/svi-kreveti", async (req, res) => {
   }
 });
 
-app.get("/api/svi-objekti", async (req, res) => {
+app.get("/api/svi-objekti", authJwt.verifyToken("admin"), async (req, res) => {
   try {
     const sviObjekti = await Objekt.findAll({});
     res.json(sviObjekti);
@@ -346,7 +346,7 @@ app.get("/api/svi-objekti", async (req, res) => {
   }
 });
 
-app.get("/api/objekt/:broj_objekta", async (req, res) => {
+app.get("/api/objekt/:broj_objekta", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   const { broj_objekta } = req.params;
 
   try {
@@ -371,7 +371,7 @@ app.get("/api/objekt/:broj_objekta", async (req, res) => {
   }
 });
 
-app.get("/api/sve-sobe", async (req, res) => {
+app.get("/api/sve-sobe", authJwt.verifyToken("admin"), async (req, res) => {
   try {
     const sveSobe = await Soba.findAll({});
     res.json(sveSobe);
@@ -381,7 +381,7 @@ app.get("/api/sve-sobe", async (req, res) => {
   }
 });
 
-app.get("/api/boravci-u-vremenskom-periodu/:datum_useljenja/:datum_iseljenja", async (req, res) => {
+app.get("/api/boravci-u-vremenskom-periodu/:datum_useljenja/:datum_iseljenja", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   const { datum_useljenja, datum_iseljenja } = req.params;
   try {
     const boravciPerioda = await Boravak.findAll({
@@ -479,7 +479,7 @@ app.post("/unos-radnika", authJwt.verifyToken("admin"), async (req, res) => {
   }
 });
 
-app.get("/api/slobodni-stanari", async (req, res) => {
+app.get("/api/slobodni-stanari", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   try {
     // Fetch Stanar records that meet the specified conditions
     const slobodniStanari = await Stanar.findAll({
@@ -508,7 +508,7 @@ app.get("/api/slobodni-stanari", async (req, res) => {
   }
 });
 
-app.get("/api/sve-sobe1/:id_sobe", async (req, res) => {
+app.get("/api/sve-sobe1/:id_sobe", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   try {
     const id_sobe = req.params.id_sobe;
 
@@ -530,7 +530,7 @@ app.get("/api/sve-sobe1/:id_sobe", async (req, res) => {
   }
 });
 
-app.get("/api/broj-sobe", async (req, res) => {
+app.get("/api/broj-sobe", authJwt.verifyToken("admin"), async (req, res) => {
   try {
     // Fetch all room numbers (broj_sobe) from the Soba table
     const sobe = await Soba.findAll({
@@ -546,7 +546,7 @@ app.get("/api/broj-sobe", async (req, res) => {
   }
 });
 
-app.get("/api/broj-kreveta", async (req, res) => {
+app.get("/api/broj-kreveta", authJwt.verifyToken("admin"), async (req, res) => {
   try {
     // Fetch all bed numbers (broj_kreveta) from the Krevet table where zauzetost is false (available beds)
     const availableBeds = await Krevet.findAll({
@@ -565,7 +565,7 @@ app.get("/api/broj-kreveta", async (req, res) => {
   }
 });
 
-app.get("/api/svi-kreveti1/:id_kreveta", async (req, res) => {
+app.get("/api/svi-kreveti1/:id_kreveta", authJwt.verifyToken("admin"), async (req, res) => {
   try {
     const id_kreveta = req.params.id_kreveta;
 
@@ -587,7 +587,7 @@ app.get("/api/svi-kreveti1/:id_kreveta", async (req, res) => {
   }
 });
 
-app.get("/api/svi-boravci1/:id_boravka", async (req, res) => {
+app.get("/api/svi-boravci1/:id_boravka", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   try {
     const id_boravka = req.params.id_boravka;
 
@@ -644,7 +644,7 @@ app.get("/api/svi-boravci1/:id_boravka", async (req, res) => {
   }
 });
 
-app.post("/unos-stanara", async (req, res) => {
+app.post("/unos-stanara", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   const saltRounds = 10;
   const { email_korisnika, lozinka, oib, jmbag, ime, prezime, datum_rodenja, adresa_prebivalista, subvencioniranost, uciliste, uplata_teretane, komentar } = req.body;
   const uloga = "stanar";
@@ -858,7 +858,7 @@ app.put("/azuriranje-korisnika/:id_korisnika", authJwt.verifyToken("admin"), asy
   }
 });
 
-app.put("/azuriranje-objekta/:id", async (req, res) => {
+app.put("/azuriranje-objekta/:id", authJwt.verifyToken("admin"), async (req, res) => {
   const { id } = req.params; // The `id` parameter from the URL
   const updatedObjekt = req.body; // The updated object data from the request body
 
@@ -1132,7 +1132,7 @@ app.delete("/brisanje-kreveta/:id_kreveta", authJwt.verifyToken("admin"), async 
   }
 });
 
-app.delete("/brisanje-kvara/:id_kvara", authJwt.verifyToken("admin"), async (req, res) => {
+app.delete("/brisanje-kvara/:id_kvara", authJwt.verifyToken("domar, admin"), async (req, res) => {
   const { id_kvara } = req.params;
 
   if (!id_kvara) {

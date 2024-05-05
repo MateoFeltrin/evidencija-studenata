@@ -6,14 +6,12 @@ import CollapsableNavbar from "../components/CollapsableNavbar";
 import { useNavigate } from "react-router-dom";
 
 const PopisObjekataPage = () => {
+  const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch token from local storage
-    const token = localStorage.getItem("token");
-
     if (token) {
       // Send a request to the backend server to verify the token and check the user's role
       axios
@@ -26,7 +24,11 @@ const PopisObjekataPage = () => {
           // If the response status is 200, proceed with fetching the data
           if (response.status === 200) {
             axios
-              .get("http://localhost:3000/api/svi-objekti")
+              .get("http://localhost:3000/api/svi-objekti", {
+                headers: {
+                  Authorization: `Bearer ${token}`, // Include the token in the headers
+                },
+              })
               .then((res) => setData(res.data))
               .catch((err) => console.log(err));
           } else {
@@ -50,10 +52,18 @@ const PopisObjekataPage = () => {
     if (isConfirmed) {
       console.log("Broj objekta to delete:", broj_objekta);
       axios
-        .delete(`http://localhost:3000/brisanje-objekta/${broj_objekta}`)
+        .delete(`http://localhost:3000/brisanje-objekta/${broj_objekta}`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the headers
+          },
+        })
         .then(() => {
           axios
-            .get("http://localhost:3000/api/svi-objekti")
+            .get("http://localhost:3000/api/svi-objekti", {
+              headers: {
+                Authorization: `Bearer ${token}`, // Include the token in the headers
+              },
+            })
             .then((res) => setData(res.data))
             .catch((err) => console.log(err));
         })

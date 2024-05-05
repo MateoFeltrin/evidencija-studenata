@@ -6,14 +6,12 @@ import CollapsableNavbar from "../components/CollapsableNavbar";
 import { useNavigate } from "react-router-dom";
 
 const PopisSobaPage = () => {
+  const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch token from local storage
-    const token = localStorage.getItem("token");
-
     if (token) {
       // Send a request to the backend server to verify the token and check the user's role
       axios
@@ -26,7 +24,11 @@ const PopisSobaPage = () => {
           // If the response status is 200, proceed with fetching the data
           if (response.status === 200) {
             axios
-              .get("http://localhost:3000/api/sve-sobe")
+              .get("http://localhost:3000/api/sve-sobe", {
+                headers: {
+                  Authorization: `Bearer ${token}`, // Include the token in the headers
+                },
+              })
               .then((res) => setData(res.data))
               .catch((err) => console.log(err));
           } else {
@@ -50,10 +52,18 @@ const PopisSobaPage = () => {
     if (isConfirmed) {
       console.log("Broj objekta to delete:", id_sobe);
       axios
-        .delete(`http://localhost:3000/brisanje-sobe/${id_sobe}`)
+        .delete(`http://localhost:3000/brisanje-sobe/${id_sobe}`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the headers
+          },
+        })
         .then(() => {
           axios
-            .get("http://localhost:3000/api/sve-sobe")
+            .get("http://localhost:3000/api/sve-sobe", {
+              headers: {
+                Authorization: `Bearer ${token}`, // Include the token in the headers
+              },
+            })
             .then((res) => setData(res.data))
             .catch((err) => console.log(err));
         })

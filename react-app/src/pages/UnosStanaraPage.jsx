@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const UnosStanaraPage = () => {
+  const token = localStorage.getItem("token");
   const [formData, setFormData] = useState({
     oib: "",
     jmbag: "",
@@ -44,7 +45,11 @@ const UnosStanaraPage = () => {
     e.preventDefault();
     console.log(formData);
     try {
-      await axios.post("http://localhost:3000/unos-stanara", formData);
+      await axios.post("http://localhost:3000/unos-stanara", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the headers
+        },
+      });
       alert("Form data submitted successfully!");
       setFormData({
         oib: "",
@@ -84,100 +89,41 @@ const UnosStanaraPage = () => {
                 <label htmlFor="oib" className="form-label">
                   OIB <span className="text-danger">*</span>
                 </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="oib"
-                  name="oib"
-                  value={formData.oib}
-                  onChange={handleChange}
-                  required
-                />
-                {formData.oib.length !== 11 && (
-                  <div className="text-danger">
-                    OIB mora imati 11 znamenki.
-                  </div>
-                )}
+                <input type="text" className="form-control" id="oib" name="oib" value={formData.oib} onChange={handleChange} required />
+                {formData.oib.length !== 11 && <div className="text-danger">OIB mora imati 11 znamenki.</div>}
               </div>
               <div className="mb-3">
                 <label htmlFor="jmbag" className="form-label">
                   JMBAG <span className="text-danger">*</span>
                 </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="jmbag"
-                  name="jmbag"
-                  value={formData.jmbag}
-                  onChange={handleChange}
-                  required
-                />
+                <input type="text" className="form-control" id="jmbag" name="jmbag" value={formData.jmbag} onChange={handleChange} required />
               </div>
               <div className="mb-3">
                 <label htmlFor="ime" className="form-label">
                   Ime <span className="text-danger">*</span>
                 </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="ime"
-                  name="ime"
-                  value={formData.ime}
-                  onChange={handleChange}
-                  required
-                />
+                <input type="text" className="form-control" id="ime" name="ime" value={formData.ime} onChange={handleChange} required />
               </div>
               <div className="mb-3">
                 <label htmlFor="prezime" className="form-label">
                   Prezime <span className="text-danger">*</span>
                 </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="prezime"
-                  name="prezime"
-                  value={formData.prezime}
-                  onChange={handleChange}
-                  required
-                />
+                <input type="text" className="form-control" id="prezime" name="prezime" value={formData.prezime} onChange={handleChange} required />
               </div>
               <div className="mb-3">
                 <label htmlFor="datum_rodenja" className="form-label">
                   Datum rođenja <span className="text-danger">*</span>
                 </label>
-                <input
-                  type="date"
-                  className="form-control"
-                  id="datum_rodenja"
-                  name="datum_rodenja"
-                  value={formData.datum_rodenja}
-                  onChange={handleChange}
-                  required
-                />
+                <input type="date" className="form-control" id="datum_rodenja" name="datum_rodenja" value={formData.datum_rodenja} onChange={handleChange} required />
               </div>
               <div className="mb-3">
                 <label htmlFor="adresa_prebivalista" className="form-label">
                   Adresa prebivališta <span className="text-danger">*</span>
                 </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="adresa_prebivalista"
-                  name="adresa_prebivalista"
-                  value={formData.adresa_prebivalista}
-                  onChange={handleChange}
-                  required
-                />
+                <input type="text" className="form-control" id="adresa_prebivalista" name="adresa_prebivalista" value={formData.adresa_prebivalista} onChange={handleChange} required />
               </div>
               <div className="mb-3 form-check">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="subvencioniranost"
-                  name="subvencioniranost"
-                  checked={formData.subvencioniranost}
-                  onChange={handleChange}
-                />
+                <input type="checkbox" className="form-check-input" id="subvencioniranost" name="subvencioniranost" checked={formData.subvencioniranost} onChange={handleChange} />
                 <label className="form-check-label" htmlFor="subvencioniranost">
                   Subvencioniranost
                 </label>
@@ -186,25 +132,10 @@ const UnosStanaraPage = () => {
                 <label htmlFor="uciliste" className="form-label">
                   Učilište <span className="text-danger">*</span>
                 </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="uciliste"
-                  name="uciliste"
-                  value={formData.uciliste}
-                  onChange={handleChange}
-                  required
-                />
+                <input type="text" className="form-control" id="uciliste" name="uciliste" value={formData.uciliste} onChange={handleChange} required />
               </div>
               <div className="mb-3 form-check">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id="uplata_teretane"
-                  name="uplata_teretane"
-                  checked={formData.uplata_teretane}
-                  onChange={handleChange}
-                />
+                <input type="checkbox" className="form-check-input" id="uplata_teretane" name="uplata_teretane" checked={formData.uplata_teretane} onChange={handleChange} />
                 <label className="form-check-label" htmlFor="uplata_teretane">
                   Uplata teretane
                 </label>
@@ -213,41 +144,19 @@ const UnosStanaraPage = () => {
                 <label htmlFor="komentar" className="form-label">
                   Komentar <span className="text-danger">*</span>
                 </label>
-                <textarea
-                  className="form-control"
-                  id="komentar"
-                  name="komentar"
-                  value={formData.komentar}
-                  onChange={handleChange}
-                ></textarea>
+                <textarea className="form-control" id="komentar" name="komentar" value={formData.komentar} onChange={handleChange}></textarea>
               </div>
               <div className="mb-3">
                 <label htmlFor="email_korisnika" className="form-label">
                   Email korisnika <span className="text-danger">*</span>
                 </label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="email_korisnika"
-                  name="email_korisnika"
-                  value={formData.email_korisnika}
-                  onChange={handleChange}
-                  required
-                />
+                <input type="email" className="form-control" id="email_korisnika" name="email_korisnika" value={formData.email_korisnika} onChange={handleChange} required />
               </div>
               <div className="mb-3">
                 <label htmlFor="lozinka" className="form-label">
                   Lozinka <span className="text-danger">*</span>
                 </label>
-                <input
-                  type="password"
-                  className="form-control"
-                  id="lozinka"
-                  name="lozinka"
-                  value={formData.lozinka}
-                  onChange={handleChange}
-                  required
-                />
+                <input type="password" className="form-control" id="lozinka" name="lozinka" value={formData.lozinka} onChange={handleChange} required />
               </div>
               {/*<div className="mb-3">
                 <label htmlFor="uloga" className="form-label">Uloga</label>

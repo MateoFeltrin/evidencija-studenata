@@ -5,14 +5,12 @@ import Navbar from "../components/Navbar";
 import CollapsableNavbar from "../components/CollapsableNavbar";
 import { useNavigate } from "react-router-dom";
 const PopisKrevetaPage = () => {
+  const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch token from local storage
-    const token = localStorage.getItem("token");
-
     if (token) {
       // Send a request to the backend server to verify the token and check the user's role
       axios
@@ -25,7 +23,11 @@ const PopisKrevetaPage = () => {
           // If the response status is 200, proceed with fetching the data
           if (response.status === 200) {
             axios
-              .get("http://localhost:3000/api/svi-kreveti")
+              .get("http://localhost:3000/api/svi-kreveti", {
+                headers: {
+                  Authorization: `Bearer ${token}`, // Include the token in the headers
+                },
+              })
               .then((res) => setData(res.data))
               .catch((err) => console.log(err));
           } else {
@@ -49,10 +51,18 @@ const PopisKrevetaPage = () => {
     if (isConfirmed) {
       console.log("Broj objekta to delete:", id_kreveta);
       axios
-        .delete(`http://localhost:3000/brisanje-kreveta/${id_kreveta}`)
+        .delete(`http://localhost:3000/brisanje-kreveta/${id_kreveta}`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the headers
+          },
+        })
         .then(() => {
           axios
-            .get("http://localhost:3000/api/svi-kreveti")
+            .get("http://localhost:3000/api/svi-kreveti", {
+              headers: {
+                Authorization: `Bearer ${token}`, // Include the token in the headers
+              },
+            })
             .then((res) => setData(res.data))
             .catch((err) => console.log(err));
         })

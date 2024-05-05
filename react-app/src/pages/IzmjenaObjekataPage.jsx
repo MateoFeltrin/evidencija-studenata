@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from "react-router-dom";
 import { IoArrowBackSharp } from "react-icons/io5";
 import axios from "axios";
 
 import CollapsableNavbar from "../components/CollapsableNavbar";
 
 const IzmjenaObjektaPage = () => {
+  const token = localStorage.getItem("token");
   const { broj_objekta } = useParams();
- 
+
   const [objektData, setObjektData] = useState({
     broj_objekta: "",
-    
   });
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/api/objekt/${broj_objekta}`)
+    axios
+      .get(`http://localhost:3000/api/objekt/${broj_objekta}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the headers
+        },
+      })
       .then((res) => {
         const data = res.data;
         setObjektData(data);
@@ -25,8 +30,12 @@ const IzmjenaObjektaPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.put(`http://localhost:3000/azuriranje-objekta/${broj_objekta}`, objektData);
-      alert('Podaci uspješno izmjenjeni!');
+      await axios.put(`http://localhost:3000/azuriranje-objekta/${broj_objekta}`, objektData, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the headers
+        },
+      });
+      alert("Podaci uspješno izmjenjeni!");
       // Redirect to the page where you display all objects after successful update
       // Example: history.push("/popisSvihObjekata");
     } catch (error) {
@@ -36,15 +45,14 @@ const IzmjenaObjektaPage = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    const newValue = type === 'checkbox' ? checked : value;
-    
-    setObjektData(prevState => ({
+    const newValue = type === "checkbox" ? checked : value;
+
+    setObjektData((prevState) => ({
       ...prevState,
-      [name]: type === 'checkbox' ? checked : newValue
+      [name]: type === "checkbox" ? checked : newValue,
     }));
   };
-  
-  
+
   return (
     <div className="container-fluid">
       <CollapsableNavbar />
@@ -56,11 +64,15 @@ const IzmjenaObjektaPage = () => {
         <form onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-md-6 mb-3">
-              <label htmlFor="broj_objekta" className="form-label">Broj objekta:</label>
+              <label htmlFor="broj_objekta" className="form-label">
+                Broj objekta:
+              </label>
               <input type="number" className="form-control" id="broj_objekta" name="broj_objekta" value={objektData.broj_objekta} onChange={handleChange} />
             </div>
           </div>
-          <button type="submit" className="btn btn-primary">Izmijeni</button>
+          <button type="submit" className="btn btn-primary">
+            Izmijeni
+          </button>
         </form>
       </div>
     </div>
