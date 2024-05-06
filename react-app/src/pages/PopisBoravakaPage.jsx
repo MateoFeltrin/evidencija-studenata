@@ -4,12 +4,21 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import CollapsableNavbar from "../components/CollapsableNavbar";
 import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
 
 const PopisBoravakaPage = () => {
   const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
 
   const navigate = useNavigate();
+
+  // Format the date using date-fns
+  const formatDate = (dateString) => {
+    if (dateString != null) {
+      return format(new Date(dateString), "dd.MM.yyyy.");
+    }
+    return null;
+  };
 
   useEffect(() => {
     // Fetch token from local storage
@@ -128,8 +137,8 @@ const PopisBoravakaPage = () => {
               <tr key={boravak.id_boravka}>
                 <td className="table-data">{boravak.stanar.ime}</td>
                 <td className="table-data">{boravak.stanar.prezime}</td>
-                <td className="table-data">{boravak.datum_useljenja}</td>
-                <td className="table-data">{boravak.datum_iseljenja}</td>
+                <td className="table-data">{formatDate(boravak.datum_useljenja)}</td>
+                <td className="table-data">{formatDate(boravak.datum_iseljenja)}</td>
                 <td className="table-data">{boravak.krevet.soba.broj_objekta}</td>
                 <td className="table-data">{boravak.krevet.soba.broj_sobe}</td>
                 <td className="table-data">{boravak.krevet.broj_kreveta}</td>

@@ -24,9 +24,11 @@ const Kvar = sequelize.define(
     },
     id_korisnika: {
       type: DataTypes.INTEGER,
+      allowNull: true,
     },
     oib: {
       type: DataTypes.INTEGER,
+      allowNull: true,
     },
   },
   { tableName: "kvar", timestamps: false }

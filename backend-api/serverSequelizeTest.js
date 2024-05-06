@@ -530,19 +530,40 @@ app.get("/api/sve-sobe1/:id_sobe", authJwt.verifyToken("recepcionar, admin"), as
   }
 });
 
-app.get("/api/broj-sobe", authJwt.verifyToken("admin"), async (req, res) => {
+app.get("/api/broj-sobe", authJwt.verifyToken("domar, admin, stanar"), async (req, res) => {
+  try {
+    const { broj_objekta } = req.query;
+    if (!broj_objekta) {
+      return res.status(400).json({ error: "broj_objekta parameter is required" });
+    }
+
+    const sobe = await Soba.findAll({
+      attributes: ["broj_sobe"],
+      where: {
+        broj_objekta: broj_objekta,
+      },
+    });
+
+    res.json(sobe);
+  } catch (error) {
+    console.error("Error fetching sobe:", error);
+    res.status(500).json({ error: "Error fetching sobe" });
+  }
+});
+
+app.get("/api/broj-objekta", authJwt.verifyToken("domar, admin, stanar"), async (req, res) => {
   try {
     // Fetch all room numbers (broj_sobe) from the Soba table
-    const sobe = await Soba.findAll({
-      attributes: ["broj_sobe"], // Specify the attributes to return
+    const objekti = await Objekt.findAll({
+      attributes: ["broj_objekta"], // Specify the attributes to return
     });
 
     // Send the list of room numbers as a JSON response
-    res.json(sobe);
+    res.json(objekti);
   } catch (error) {
     // Log any errors and return a 500 status with an error message
-    console.error("Error fetching sobe:", error);
-    res.status(500).json({ error: "Error fetching sobe" });
+    console.error("Error fetching objekt:", error);
+    res.status(500).json({ error: "Error fetching pbjekt" });
   }
 });
 
@@ -729,6 +750,75 @@ app.post("/unos-boravka", authJwt.verifyToken("recepcionar, admin"), async (req,
   } catch (error) {
     console.error("Error inserting boravak:", error);
     res.status(500).send({ error: true, message: "Neuspjesno dodavanje boravka." });
+  }
+});
+
+app.post("/unos-kvara", authJwt.verifyToken("domar, admin, stanar"), async (req, res) => {
+  const { datum_prijave_kvara, opis_kvara, broj_sobe, broj_objekta } = req.body;
+
+  let id_korisnika = null;
+  let oib = null;
+  let stanje_kvara = 0;
+
+  // Decode the token to access `id_korisnika` and `uloga`
+  const token = req.headers.authorization.split(" ")[1]; // Assuming the token is passed as "Bearer <token>"
+  const decodedToken = jwt.decode(token);
+
+  if (!decodedToken) {
+    return res.status(401).send({ error: true, message: "Invalid token." });
+  }
+
+  const uloga = decodedToken.uloga;
+  id_korisnika = decodedToken.id;
+
+  if (uloga === "domar" || uloga === "admin") {
+    oib = null;
+  } else if (uloga === "stanar") {
+    try {
+      const stanar = await Stanar.findOne({ where: { id_korisnika } });
+      if (stanar) {
+        oib = stanar.oib; // Set `oib` from `stanar`
+        id_korisnika = null;
+      }
+    } catch (error) {
+      console.error("Error fetching stanar:", error);
+      return res.status(500).send({ error: true, message: "Error fetching stanar." });
+    }
+  }
+
+  // Find `id_sobe` using `broj_sobe` and possibly `broj_objekta`
+  let id_sobe = null;
+  try {
+    const soba = await Soba.findOne({
+      where: { broj_sobe, broj_objekta },
+    });
+
+    if (soba) {
+      id_sobe = soba.id_sobe;
+    } else {
+      return res.status(400).send({ error: true, message: "Soba not found." });
+    }
+  } catch (error) {
+    console.error("Error fetching soba:", error);
+    return res.status(500).send({ error: true, message: "Error fetching soba." });
+  }
+
+  if (!datum_prijave_kvara || !opis_kvara || !id_sobe) {
+    return res.status(400).send({ error: true, message: "All fields are required." });
+  }
+  try {
+    const newKvar = await Kvar.create({
+      datum_prijave_kvara: datum_prijave_kvara,
+      opis_kvara: opis_kvara,
+      stanje_kvara: stanje_kvara,
+      id_sobe: id_sobe,
+      id_korisnika: id_korisnika,
+      oib: oib,
+    });
+    res.status(201).send({ error: false, data: newKvar, message: "Kvar je dodan." });
+  } catch (error) {
+    console.error("Error inserting kvar:", error);
+    res.status(500).send({ error: true, message: "Neuspjesno dodavanje kvara." });
   }
 });
 

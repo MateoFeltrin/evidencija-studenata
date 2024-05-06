@@ -4,12 +4,21 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import CollapsableNavbar from "../components/CollapsableNavbar";
 import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
 
 const PopisSvihKvarovaPage = () => {
   const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
 
   const navigate = useNavigate();
+
+  // Format the date using date-fns
+  const formatDate = (dateString) => {
+    if (dateString != null) {
+      return format(new Date(dateString), "dd.MM.yyyy.");
+    }
+    return null;
+  };
 
   useEffect(() => {
     if (token) {
@@ -101,12 +110,12 @@ const PopisSvihKvarovaPage = () => {
               {data.map((kvar) => (
                 <tr key={kvar.id_kvara}>
                   <td className="table-data">{kvar.id_kvara}</td>
-                  <td className="table-data">{kvar.datum_prijave_kvara}</td>
+                  <td className="table-data">{formatDate(kvar.datum_prijave_kvara)}</td>
                   <td className="table-data">{kvar.opis_kvara}</td>
                   <td className="table-data">{kvar.soba.broj_sobe}</td>
                   <td className="table-data">{kvar.soba.broj_objekta}</td>
-                  <td className="table-data">{kvar.stanar.ime}</td>
-                  <td className="table-data">{kvar.stanar.prezime}</td>
+                  <td className="table-data">{kvar.stanar ? kvar.stanar.ime || "Neodređen" : "Neodređen"}</td>
+                  <td className="table-data">{kvar.stanar ? kvar.stanar.prezime || "Neodređen" : "Neodređen"}</td>
                   <td className="table-data">{kvar.korisnik ? kvar.korisnik.email_korisnika || "Neodređen" : "Neodređen"}</td>
                   <td className="table-data">
                     <button className="btn btn-sm btn-primary" onClick={() => handleChange(index)}>

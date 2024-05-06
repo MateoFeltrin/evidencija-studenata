@@ -3,12 +3,21 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
 
 const PopisUnesenihStanaraPage = () => {
   const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
 
   const navigate = useNavigate();
+
+  // Format the date using date-fns
+  const formatDate = (dateString) => {
+    if (dateString != null) {
+      return format(new Date(dateString), "dd.MM.yyyy.");
+    }
+    return null;
+  };
 
   useEffect(() => {
     if (token) {
@@ -104,7 +113,7 @@ const PopisUnesenihStanaraPage = () => {
                   <td className="table-data">{student.jmbag}</td>
                   <td className="table-data">{student.ime}</td>
                   <td className="table-data">{student.prezime}</td>
-                  <td className="table-data">{student.datum_rodenja}</td>
+                  <td className="table-data">{formatDate(student.datum_rodenja)}</td>
                   <td className="table-data">{student.adresa_prebivalista}</td>
                   <td className="table-data">{student.subvencioniranost ? "Da" : "Ne"}</td>
                   <td className="table-data">{student.uciliste}</td>

@@ -3,12 +3,21 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
 
 const PopisSvihStanaraPage = () => {
   const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
 
   const navigate = useNavigate();
+
+  // Format the date using date-fns
+  const formatDate = (dateString) => {
+    if (dateString != null) {
+      return format(new Date(dateString), "dd.MM.yyyy.");
+    }
+    return null;
+  };
 
   useEffect(() => {
     if (token) {
@@ -105,7 +114,7 @@ const PopisSvihStanaraPage = () => {
                   <td className="table-data">{student.stanar.jmbag}</td>
                   <td className="table-data">{student.stanar.ime}</td>
                   <td className="table-data">{student.stanar.prezime}</td>
-                  <td className="table-data">{student.stanar.datum_rodenja}</td>
+                  <td className="table-data">{formatDate(student.stanar.datum_rodenja)}</td>
                   <td className="table-data">{student.stanar.adresa_prebivalista}</td>
                   {/* Display 'Da' for true and 'Ne' for false for subvencioniranost */}
                   <td className="table-data">{student.stanar.subvencioniranost ? "Da" : "Ne"}</td>
@@ -113,7 +122,7 @@ const PopisSvihStanaraPage = () => {
                   {/* Display 'Da' for true and 'Ne' for false for uplata_teretane */}
                   <td className="table-data">{student.stanar.uplata_teretane ? "Da" : "Ne"}</td>
                   <td className="table-data">{student.stanar.komentar}</td>
-                  <td className="table-data">{student.datum_useljenja}</td>
+                  <td className="table-data">{formatDate(student.datum_useljenja)}</td>
                   <td className="table-data">
                     <Link to={`/izmjenaStanara/${student.oib}`} className="btn btn-sm btn-primary">
                       Izmijeni

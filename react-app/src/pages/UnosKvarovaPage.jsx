@@ -7,12 +7,19 @@ import { Link } from "react-router-dom";
 
 const UnosKvarovaPage = () => {
   const token = localStorage.getItem("token");
+
+  // Get the current date in yyyy-mm-dd format
+  const currentDate = new Date().toISOString().split("T")[0];
+
   const [formData, setFormData] = useState({
     opis_kvara: "",
-    id_sobe: "",
+    broj_objekta: "",
+    broj_sobe: "",
+    datum_prijave_kvara: currentDate, // Set current date
   });
 
   const [sobeOptions, setSobeOptions] = useState([]);
+  const [objektOptions, setObjektOptions] = useState([]);
 
   const navigate = useNavigate();
 
@@ -29,13 +36,13 @@ const UnosKvarovaPage = () => {
           // If the response status is 200, proceed with fetching the data
           if (response.status === 200) {
             axios
-              .get("http://localhost:3000/api/broj-sobe", {
+              .get("http://localhost:3000/api/broj-objekta", {
                 headers: {
                   Authorization: `Bearer ${token}`, // Include the token in the headers
                 },
               })
               .then((response) => {
-                setSobeOptions(response.data);
+                setObjektOptions(response.data);
               })
               .catch((error) => {
                 console.error("Error fetching sobe:", error);
@@ -56,22 +63,53 @@ const UnosKvarovaPage = () => {
     }
   }, [navigate]);
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
+
+    // If the field changed is "broj_objekta", fetch associated rooms
+    if (name === "broj_objekta") {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/broj-sobe?broj_objekta=${value}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Update the sobeOptions with the fetched room numbers
+        setSobeOptions(response.data);
+      } catch (error) {
+        console.error("Error fetching sobe:", error);
+      }
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    // Here you can send the form data to your backend or perform any other actions
     console.log(formData);
-    // Reset form fields
-    setFormData({
-      opis_kvara: "",
-      id_sobe: "",
-    });
+    try {
+      // Send POST request to backend API endpoint
+      await axios.post("http://localhost:3000/unos-kvara", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the headers
+        },
+      });
+      alert("Form data submitted successfully!");
+      // Clear form after successful submission
+      setFormData({
+        opis_kvara: "",
+        broj_objekta: "",
+        broj_sobe: "",
+        datum_prijave_kvara: currentDate,
+      });
+    } catch (error) {
+      console.error("Error submitting form data:", error);
+      alert("An error occurred while submitting form data.");
+    }
   };
 
   return (
@@ -94,21 +132,28 @@ const UnosKvarovaPage = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="broj_sobe">
-                Broj sobe:<span className="text-danger">*</span>{" "}
+              <label htmlFor="broj_objekta">
+                Objekta sobe:<span className="text-danger">*</span>{" "}
               </label>
-              <select
-                className="form-control"
-                id="broj_sobe"
-                name="id_sobe" // Changed from "broj_sobe" to "id_sobe"
-                value={formData.id_sobe}
-                onChange={handleChange}
-                required
-              >
+              <select className="form-control" id="broj_objekta" name="broj_objekta" value={formData.broj_objekta} onChange={handleChange} required>
+                <option value="">Odaberi</option>
+                {objektOptions &&
+                  objektOptions.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.broj_objekta}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="broj_sobe">
+                Sobne sobe: <span className="text-danger">*</span>
+              </label>
+              <select className="form-control" id="broj_sobe" name="broj_sobe" value={formData.broj_sobe} onChange={handleChange} required>
                 <option value="">Odaberi</option>
                 {sobeOptions &&
                   sobeOptions.map((option) => (
-                    <option key={option.id} value={option.id}>
+                    <option key={option.broj_sobe} value={option.broj_sobe}>
                       {option.broj_sobe}
                     </option>
                   ))}
