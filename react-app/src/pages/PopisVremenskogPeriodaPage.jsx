@@ -3,6 +3,7 @@ import CollapsableNavbar from "../components/CollapsableNavbar";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css"; // Main style file
 import "react-date-range/dist/theme/default.css"; // Theme CSS file
+import moment from "moment";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -14,8 +15,7 @@ const PopisVremenskogPerioda = () => {
     endDate: new Date(),
     key: "selection",
   });
-  const [boravciData, setBoravciData] = useState([]);
-
+  const [data, setData] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,7 +30,16 @@ const PopisVremenskogPerioda = () => {
         .then((response) => {
           // If the response status is 200, proceed with fetching the data
           if (response.status === 200) {
-            fetchBoravciData();
+            const formattedStartDate = moment(selectionRange.startDate).format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+            const formattedEndDate = moment(selectionRange.endDate).format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+            axios
+  .get(`http://localhost:3000/api/boravci-u-vremenskom-periodu/${formattedStartDate}/${formattedEndDate}`, {
+    headers: {
+      Authorization: `Bearer ${token}`, // Include the token in the headers
+    },
+  })
+  .then((res) => setData(res.data))
+  .catch((err) => console.log(err));
           } else {
             // If the user is not authorized, redirect to "/not-authorized" page
             navigate("/forbidden");
@@ -45,20 +54,12 @@ const PopisVremenskogPerioda = () => {
       // If there's no token, redirect the user to the login page
       navigate("/prijava");
     }
-  }, [navigate, selectionRange]);
+  }, [token, navigate, selectionRange]);
 
   const handleSelect = (ranges) => {
     setSelectionRange(ranges.selection);
   };
 
-  const fetchBoravciData = async () => {
-    try {
-      const response = await axios.get(`/api/stanari?startDate=${selectionRange.startDate.toISOString()}&endDate=${selectionRange.endDate.toISOString()}`);
-      setBoravciData(response.data);
-    } catch (error) {
-      console.error("Error fetching boravci data:", error);
-    }
-  };
 
   return (
     <div>
@@ -66,10 +67,10 @@ const PopisVremenskogPerioda = () => {
       <div className="container">
         <div className="row justify-content-center mt-4">
           <div className="col-md-8">
-            <h2 className="text-center mb-4">Popis stanara u određenom vremenskom periodu</h2>
+            <h2 className="text-center mb-4">Popis boravaka u određenom vremenskom periodu</h2>
             {/* Date range picker */}
             <DateRange editableDateInputs={true} onChange={handleSelect} moveRangeOnFirstSelection={false} ranges={[selectionRange]} />
-            {/* Prikaz boravci data */}
+            {/* Display boravci data */}
             <div className="mt-4">
               <div className="table-responsive">
                 <table className="table">
@@ -82,16 +83,17 @@ const PopisVremenskogPerioda = () => {
                       <th>Datum iseljenja</th>
                     </tr>
                   </thead>
-                  {/* <tbody>
-  {boravciData && boravciData.map((stay, index) => (
-    <tr key={index}>
-      <td>{stay.ime}</td>
-      <td>{stay.prezime}</td>
-      <td>{new Date(stay.datum_useljenja).toDateString()}</td>
-      <td>{stay.datum_iseljenja ? new Date(stay.datum_iseljenja).toDateString() : 'N/A'}</td>
-    </tr>
-  ))}
-</tbody> */}
+                  <tbody>
+                    {data.map((boravak) => (
+                      <tr key={boravak.id_boravka}>
+                        <td>{boravak.oib}</td>
+                        <td>{boravak.ime}</td>
+                        <td>{boravak.prezime}</td>
+                        <td>{new Date(boravak.datum_useljenja).toDateString()}</td>
+                        <td>{boravak.datum_iseljenja ? new Date(boravak.datum_iseljenja).toDateString() : "/"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
                 </table>
               </div>
             </div>
