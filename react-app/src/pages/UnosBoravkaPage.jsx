@@ -9,14 +9,14 @@ const UnosBoravakaPage = () => {
   const [formData, setFormData] = useState({
     id_kreveta: "",
     oib: "",
-    id_korisnika: "",
+    //id_korisnika: "",
     datum_useljenja: "",
     datum_iseljenja: "",
   });
 
   const [krevetaOptions, setKrevetaOptions] = useState([]);
   const [oibOptions, setOibOptions] = useState([]);
-  const [korisnikaOptions, setKorisnikaOptions] = useState([]);
+  //const [korisnikaOptions, setKorisnikaOptions] = useState([]);
 
   useEffect(() => {
     // Fetch data for dropdowns
@@ -44,7 +44,7 @@ const UnosBoravakaPage = () => {
       })
       .catch((err) => console.error("Error fetching oib data:", err));
 
-    axios
+    /*  axios
       .get("http://localhost:3000/api/svi-radnici", {
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the headers
@@ -54,7 +54,7 @@ const UnosBoravakaPage = () => {
         console.log("korisnik Data:", res.data); // Log the data received from the API
         setKorisnikaOptions(res.data);
       })
-      .catch((err) => console.error("Error fetching korisnika data:", err));
+      .catch((err) => console.error("Error fetching korisnika data:", err));*/
   }, []);
 
   const handleChange = (e) => {
@@ -78,7 +78,7 @@ const UnosBoravakaPage = () => {
         setFormData({
           id_kreveta: "",
           oib: "",
-          id_korisnika: "",
+          // id_korisnika: "",
           datum_useljenja: "",
           datum_iseljenja: "",
         });
@@ -126,30 +126,38 @@ const UnosBoravakaPage = () => {
               ))}
             </select>
           </div>
-          <div className="form-group">
-            <label>
-              Korisnik: <span className="text-danger">*</span>
-            </label>
-            <select className="form-control" name="id_korisnika" value={formData.id_korisnika} onChange={handleChange}>
-              <option value="">Odaberi Korisnika</option>
-              {korisnikaOptions.map((option) => (
-                <option key={option.id_korisnika} value={option.id_korisnika}>
-                  {" "}
-                  {option.email_korisnika}
-                </option>
-              ))}
-            </select>
-          </div>
+          {/* 
+<div className="form-group">
+    <label>
+      Korisnik: <span className="text-danger">*</span>
+    </label>
+    <select className="form-control" name="id_korisnika" value={formData.id_korisnika} onChange={handleChange}>
+      <option value="">Odaberi Korisnika</option>
+      {korisnikaOptions.map((option) => (
+        <option key={option.id_korisnika} value={option.id_korisnika}>
+          {" "}
+          {option.email_korisnika}
+        </option>
+      ))}
+    </select>
+  </div>
+  */}
           <div className="form-group">
             <label>
               Datum Useljenja: <span className="text-danger">*</span>
             </label>
             <input type="date" className="form-control" name="datum_useljenja" value={formData.datum_useljenja} onChange={handleChange} />
           </div>
-          <div className="form-group">
+          {/*<div className="form-group">
             <label>Datum Iseljenja:</label>
-            <input type="date" className="form-control" name="datum_iseljenja" value={formData.datum_iseljenja} onChange={handleChange} />
-          </div>
+            <input
+            type="date"
+            className="form-control"
+            name="datum_iseljenja"
+            value={formData.datum_iseljenja}
+            onChange={handleChange}
+            />
+</div>*/}
           <button type="submit" className="btn btn-primary">
             Dodaj Boravak
           </button>

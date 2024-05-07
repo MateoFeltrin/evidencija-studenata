@@ -319,7 +319,7 @@ app.get("/api/svi-kvarovi", authJwt.verifyToken("domar, admin"), async (req, res
   }
 });
 
-app.get("/api/svi-kreveti", authJwt.verifyToken("admin"), async (req, res) => {
+app.get("/api/svi-kreveti", authJwt.verifyToken("admin, recepcionar"), async (req, res) => {
   try {
     const sviKreveti = await Krevet.findAll({
       include: [
@@ -733,25 +733,47 @@ app.post("/unos-stanara", authJwt.verifyToken("recepcionar, admin"), async (req,
 });
 
 app.post("/unos-boravka", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
-  const { id_kreveta, oib, id_korisnika, datum_useljenja } = req.body;
+  const { id_kreveta, oib, datum_useljenja } = req.body;
 
-  if (!id_kreveta || !oib || !id_korisnika || !datum_useljenja) {
+  let id_korisnika = null;
+
+  // Decode the token to access `id_korisnika` and `uloga`
+  const token = req.headers.authorization.split(" ")[1]; // Assuming the token is passed as "Bearer <token>"
+  const decodedToken = jwt.decode(token);
+
+  if (!decodedToken) {
+    return res.status(401).send({ error: true, message: "Invalid token." });
+  }
+
+  const uloga = decodedToken.uloga;
+  id_korisnika = decodedToken.id;
+
+  if (!id_kreveta || !oib || !datum_useljenja) {
     return res.status(400).send({ error: true, message: "All fields are required." });
   }
+
   try {
-    const newBoravak = await Boravak.create({
+    const newBoravakData = {
       id_kreveta: id_kreveta,
       oib: oib,
-      id_korisnika: id_korisnika,
+      id_korisnika: null, // Initialize id_korisnika as null by default
       datum_useljenja: datum_useljenja,
       datum_iseljenja: null,
-    });
+    };
+
+    // If the uloga is 'admin' or 'recepcionar', assign id_korisnika
+    if (uloga === 'admin' || uloga === 'recepcionar') {
+      newBoravakData.id_korisnika = id_korisnika;
+    }
+
+    const newBoravak = await Boravak.create(newBoravakData);
     res.status(201).send({ error: false, data: newBoravak, message: "Boravak je dodan." });
   } catch (error) {
     console.error("Error inserting boravak:", error);
     res.status(500).send({ error: true, message: "Neuspjesno dodavanje boravka." });
   }
 });
+
 
 app.post("/unos-kvara", authJwt.verifyToken("domar, admin, stanar"), async (req, res) => {
   const { datum_prijave_kvara, opis_kvara, broj_sobe, broj_objekta } = req.body;
