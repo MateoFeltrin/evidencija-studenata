@@ -113,57 +113,59 @@ const UnosKvarovaPage = () => {
   };
 
   return (
-    <div className="container">
+    <div>
       <CollapsableNavbar />
-      <div className="container mt-4">
-        <Link to="/popisSvihKvarova" className="btn btn-sm btn-danger mb-5">
-          <IoArrowBackSharp />
-        </Link>
-      </div>
-      <h1 className="mt-4">Dodaj kvar</h1>
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="opis_kvara">
-                Opis kvara: <span className="text-danger">*</span>
-              </label>
-              <textarea className="form-control" id="opis_kvara" name="opis_kvara" value={formData.opis_kvara} onChange={handleChange} required />
-            </div>
+      <div className="container">
+        <div className="container mt-4">
+          <Link to="/popisSvihKvarova" className="btn btn-sm btn-danger mb-5">
+            <IoArrowBackSharp />
+          </Link>
+        </div>
+        <h1 className="mt-4">Dodaj kvar</h1>
+        <div className="row justify-content-center">
+          <div className="col-md-6">
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="opis_kvara">
+                  Opis kvara: <span className="text-danger">*</span>
+                </label>
+                <textarea className="form-control" id="opis_kvara" name="opis_kvara" value={formData.opis_kvara} onChange={handleChange} required />
+              </div>
 
-            <div className="form-group">
-              <label htmlFor="broj_objekta">
-                Objekta sobe:<span className="text-danger">*</span>{" "}
-              </label>
-              <select className="form-control" id="broj_objekta" name="broj_objekta" value={formData.broj_objekta} onChange={handleChange} required>
-                <option value="">Odaberi</option>
-                {objektOptions &&
-                  objektOptions.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.broj_objekta}
-                    </option>
-                  ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label htmlFor="broj_sobe">
-                Sobne sobe: <span className="text-danger">*</span>
-              </label>
-              <select className="form-control" id="broj_sobe" name="broj_sobe" value={formData.broj_sobe} onChange={handleChange} required>
-                <option value="">Odaberi</option>
-                {sobeOptions &&
-                  sobeOptions.map((option) => (
-                    <option key={option.broj_sobe} value={option.broj_sobe}>
-                      {option.broj_sobe}
-                    </option>
-                  ))}
-              </select>
-            </div>
+              <div className="form-group">
+                <label htmlFor="broj_objekta">
+                  Objekta sobe:<span className="text-danger">*</span>{" "}
+                </label>
+                <select className="form-control" id="broj_objekta" name="broj_objekta" value={formData.broj_objekta} onChange={handleChange} required>
+                  <option value="">Odaberi</option>
+                  {objektOptions &&
+                    objektOptions.map((option) => (
+                      <option key={option.id} value={option.id}>
+                        {option.broj_objekta}
+                      </option>
+                    ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="broj_sobe">
+                  Sobne sobe: <span className="text-danger">*</span>
+                </label>
+                <select className="form-control" id="broj_sobe" name="broj_sobe" value={formData.broj_sobe} onChange={handleChange} required>
+                  <option value="">Odaberi</option>
+                  {sobeOptions &&
+                    sobeOptions.map((option) => (
+                      <option key={option.broj_sobe} value={option.broj_sobe}>
+                        {option.broj_sobe}
+                      </option>
+                    ))}
+                </select>
+              </div>
 
-            <button type="submit" className="btn btn-primary">
-              Prijavi kvar
-            </button>
-          </form>
+              <button type="submit" className="btn btn-primary">
+                Prijavi kvar
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>

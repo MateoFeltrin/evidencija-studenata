@@ -75,43 +75,45 @@ const PopisSobaPage = () => {
   };
 
   return (
-    <div className="container-fluid">
+    <div>
       <CollapsableNavbar />
-      <div className="container mt-4">
-        <h1>Popis soba</h1>
-        <Link to="/unosSoba" className="btn btn-sm btn-primary mb-3">
-          Dodaj sobu
-        </Link>
-        <div className="table-responsive">
-          <table className="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th scope="col">Id sobe</th>
-                <th scope="col">Broj objekta</th>
-                <th scope="col">Kat sobe</th>
-                <th scope="col">Broj sobe</th>
-                <th scope="col">Akcije</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((soba) => (
-                <tr key={soba.id_sobe}>
-                  <td className="table-data">{soba.id_sobe}</td>
-                  <td className="table-data">{soba.broj_objekta}</td>
-                  <td className="table-data">{soba.kat_sobe}</td>
-                  <td className="table-data">{soba.broj_sobe}</td>
-                  <td className="table-data">
-                    <Link to={`/izmjenaSoba/${soba.id_sobe}`} className="btn btn-sm btn-primary">
-                      Izmijeni
-                    </Link>
-                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(soba.id_sobe)}>
-                      Izbriši
-                    </button>
-                  </td>
+      <div className="container-fluid">
+        <div className="container mt-4">
+          <h1>Popis soba</h1>
+          <Link to="/unosSoba" className="btn btn-sm btn-primary mb-3">
+            Dodaj sobu
+          </Link>
+          <div className="table-responsive">
+            <table className="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Id sobe</th>
+                  <th scope="col">Broj objekta</th>
+                  <th scope="col">Kat sobe</th>
+                  <th scope="col">Broj sobe</th>
+                  <th scope="col">Akcije</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {data.map((soba) => (
+                  <tr key={soba.id_sobe}>
+                    <td className="table-data">{soba.id_sobe}</td>
+                    <td className="table-data">{soba.broj_objekta}</td>
+                    <td className="table-data">{soba.kat_sobe}</td>
+                    <td className="table-data">{soba.broj_sobe}</td>
+                    <td className="table-data">
+                      <Link to={`/izmjenaSoba/${soba.id_sobe}`} className="btn btn-sm btn-primary">
+                        Izmijeni
+                      </Link>
+                      <button className="btn btn-sm btn-danger" onClick={() => handleDelete(soba.id_sobe)}>
+                        Izbriši
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

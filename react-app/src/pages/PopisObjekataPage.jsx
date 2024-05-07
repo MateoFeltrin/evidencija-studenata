@@ -75,37 +75,39 @@ const PopisObjekataPage = () => {
   };
 
   return (
-    <div className="container-fluid">
+    <div>
       <CollapsableNavbar />
-      <div className="container mt-4">
-        <h1>Popis objekata</h1>
-        <Link to="/unosObjekata" className="btn btn-sm btn-primary mb-3">
-          Dodaj objekt
-        </Link>
-        <div className="table-responsive">
-          <table className="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th scope="col">Broj objekta</th>
-                <th scope="col">Akcije</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((objekt) => (
-                <tr key={objekt.broj_objekta}>
-                  <td className="table-data">{objekt.broj_objekta}</td>
-                  <td className="table-data">
-                    <Link to={`/izmjenaObjekata/${objekt.broj_objekta}`} className="btn btn-sm btn-primary">
-                      Izmijeni
-                    </Link>
-                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(objekt.broj_objekta)}>
-                      Izbriši
-                    </button>
-                  </td>
+      <div className="container-fluid">
+        <div className="container mt-4">
+          <h1>Popis objekata</h1>
+          <Link to="/unosObjekata" className="btn btn-sm btn-primary mb-3">
+            Dodaj objekt
+          </Link>
+          <div className="table-responsive">
+            <table className="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Broj objekta</th>
+                  <th scope="col">Akcije</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {data.map((objekt) => (
+                  <tr key={objekt.broj_objekta}>
+                    <td className="table-data">{objekt.broj_objekta}</td>
+                    <td className="table-data">
+                      <Link to={`/izmjenaObjekata/${objekt.broj_objekta}`} className="btn btn-sm btn-primary">
+                        Izmijeni
+                      </Link>
+                      <button className="btn btn-sm btn-danger" onClick={() => handleDelete(objekt.broj_objekta)}>
+                        Izbriši
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

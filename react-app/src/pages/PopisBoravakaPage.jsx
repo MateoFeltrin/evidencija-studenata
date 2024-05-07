@@ -119,53 +119,55 @@ const PopisBoravakaPage = () => {
   };
 
   return (
-    <div className="container-fluid">
+    <div>
       <CollapsableNavbar />
-      <h1>Popis boravaka</h1>
-      <Link to="/unosBoravka" className="btn btn-sm btn-primary mb-3">
-        Dodaj boravak
-      </Link>
-      <div className="table-responsive">
-        <table className="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th scope="col">Ime stanara</th>
-              <th scope="col">Prezime stanara</th>
-              <th scope="col">Datum Useljenja</th>
-              <th scope="col">Datum Iseljenja</th>
-              <th scope="col">Broj Objekta</th>
-              <th scope="col">Broj sobe</th>
-              <th scope="col">Broj Kreveta</th>
-              <th scope="col">Korisnik</th>
-              <th scope="col">Akcije</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((boravak) => (
-              <tr key={boravak.id_boravka}>
-                <td className="table-data">{boravak.stanar.ime}</td>
-                <td className="table-data">{boravak.stanar.prezime}</td>
-                <td className="table-data">{formatDate(boravak.datum_useljenja)}</td>
-                <td className="table-data">{formatDate(boravak.datum_iseljenja)}</td>
-                <td className="table-data">{boravak.krevet.soba.broj_objekta}</td>
-                <td className="table-data">{boravak.krevet.soba.broj_sobe}</td>
-                <td className="table-data">{boravak.krevet.broj_kreveta}</td>
-                <td className="table-data">{boravak.korisnik.email_korisnika}</td>
-                <td className="table-data">
-                  <Link to={`/izmjenaBoravka/${boravak.id_boravka}`} className="btn btn-sm btn-primary">
-                    Izmijeni
-                  </Link>
-                  <button className="btn btn-sm btn-danger" onClick={() => handleDelete(boravak.id_boravka)}>
-                    Izbriši
-                  </button>
-                  <button className="btn btn-sm btn-secondary" onClick={() => handleIseljenje(boravak.id_boravka)}>
-                    Iseljenje
-                  </button>
-                </td>
+      <div className="container-fluid">
+        <h1>Popis boravaka</h1>
+        <Link to="/unosBoravka" className="btn btn-sm btn-primary mb-3">
+          Dodaj boravak
+        </Link>
+        <div className="table-responsive">
+          <table className="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Ime stanara</th>
+                <th scope="col">Prezime stanara</th>
+                <th scope="col">Datum Useljenja</th>
+                <th scope="col">Datum Iseljenja</th>
+                <th scope="col">Broj Objekta</th>
+                <th scope="col">Broj sobe</th>
+                <th scope="col">Broj Kreveta</th>
+                <th scope="col">Korisnik</th>
+                <th scope="col">Akcije</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.map((boravak) => (
+                <tr key={boravak.id_boravka}>
+                  <td className="table-data">{boravak.stanar.ime}</td>
+                  <td className="table-data">{boravak.stanar.prezime}</td>
+                  <td className="table-data">{formatDate(boravak.datum_useljenja)}</td>
+                  <td className="table-data">{formatDate(boravak.datum_iseljenja)}</td>
+                  <td className="table-data">{boravak.krevet.soba.broj_objekta}</td>
+                  <td className="table-data">{boravak.krevet.soba.broj_sobe}</td>
+                  <td className="table-data">{boravak.krevet.broj_kreveta}</td>
+                  <td className="table-data">{boravak.korisnik.email_korisnika}</td>
+                  <td className="table-data">
+                    <Link to={`/izmjenaBoravka/${boravak.id_boravka}`} className="btn btn-sm btn-primary">
+                      Izmijeni
+                    </Link>
+                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(boravak.id_boravka)}>
+                      Izbriši
+                    </button>
+                    <button className="btn btn-sm btn-secondary" onClick={() => handleIseljenje(boravak.id_boravka)}>
+                      Iseljenje
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

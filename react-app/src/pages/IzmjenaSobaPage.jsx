@@ -73,53 +73,55 @@ const IzmjenaSobaPage = () => {
   };
 
   return (
-    <div className="container-fluid">
+    <div>
       <CollapsableNavbar />
-      <div className="container mt-4">
-        <Link to="/popisSoba" className="btn btn-sm btn-danger mb-5">
-          <IoArrowBackSharp />
-        </Link>
-        <h2>Izmjena sobe</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label htmlFor="id_sobe" className="form-label">
-                ID Sobe:
-              </label>
-              <input type="number" className="form-control" id="id_sobe" name="id_sobe" value={sobaData.id_sobe} onChange={handleChange} />
+      <div className="container-fluid">
+        <div className="container mt-4">
+          <Link to="/popisSoba" className="btn btn-sm btn-danger mb-5">
+            <IoArrowBackSharp />
+          </Link>
+          <h2>Izmjena sobe</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <label htmlFor="id_sobe" className="form-label">
+                  ID Sobe:
+                </label>
+                <input type="number" className="form-control" id="id_sobe" name="id_sobe" value={sobaData.id_sobe} onChange={handleChange} />
+              </div>
+              <div className="col-md-6 mb-3">
+                <label htmlFor="broj_objekta" className="form-label">
+                  Broj Objekta:
+                </label>
+                <select className="form-select" id="broj_objekta" name="broj_objekta" value={sobaData.broj_objekta} onChange={handleChange}>
+                  <option value="">Odaberi broj objekta</option>
+                  {brojObjektaOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <div className="col-md-6 mb-3">
-              <label htmlFor="broj_objekta" className="form-label">
-                Broj Objekta:
-              </label>
-              <select className="form-select" id="broj_objekta" name="broj_objekta" value={sobaData.broj_objekta} onChange={handleChange}>
-                <option value="">Odaberi broj objekta</option>
-                {brojObjektaOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <label htmlFor="kat_sobe" className="form-label">
+                  Kat Sobe:
+                </label>
+                <input type="number" className="form-control" id="kat_sobe" name="kat_sobe" value={sobaData.kat_sobe} onChange={handleChange} />
+              </div>
+              <div className="col-md-6 mb-3">
+                <label htmlFor="broj_sobe" className="form-label">
+                  Broj Sobe:
+                </label>
+                <input type="number" className="form-control" id="broj_sobe" name="broj_sobe" value={sobaData.broj_sobe} onChange={handleChange} />
+              </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label htmlFor="kat_sobe" className="form-label">
-                Kat Sobe:
-              </label>
-              <input type="number" className="form-control" id="kat_sobe" name="kat_sobe" value={sobaData.kat_sobe} onChange={handleChange} />
-            </div>
-            <div className="col-md-6 mb-3">
-              <label htmlFor="broj_sobe" className="form-label">
-                Broj Sobe:
-              </label>
-              <input type="number" className="form-control" id="broj_sobe" name="broj_sobe" value={sobaData.broj_sobe} onChange={handleChange} />
-            </div>
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Izmijeni
-          </button>
-        </form>
+            <button type="submit" className="btn btn-primary">
+              Izmijeni
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

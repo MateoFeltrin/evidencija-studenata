@@ -123,81 +123,83 @@ const IzmjenaBoravkaPage = () => {
   };
 
   return (
-    <div className="container-fluid">
+    <div>
       <CollapsableNavbar />
-      <div className="container mt-4">
-        <Link to="/popisBoravaka" className="btn btn-sm btn-danger mb-5">
-          <IoArrowBackSharp />
-        </Link>
-        <h2>Izmjena boravka</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="row mb-3">
-            <div className="col-md-6">
-              <label htmlFor="id_boravka" className="form-label">
-                ID Boravka:
-              </label>
-              <input type="text" className="form-control" id="id_boravka" name="id_boravka" value={boravakData.id_boravka} onChange={handleChange} />
+      <div className="container-fluid">
+        <div className="container mt-4">
+          <Link to="/popisBoravaka" className="btn btn-sm btn-danger mb-5">
+            <IoArrowBackSharp />
+          </Link>
+          <h2>Izmjena boravka</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <label htmlFor="id_boravka" className="form-label">
+                  ID Boravka:
+                </label>
+                <input type="text" className="form-control" id="id_boravka" name="id_boravka" value={boravakData.id_boravka} onChange={handleChange} />
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="id_kreveta" className="form-label">
+                  ID Kreveta:
+                </label>
+                <select className="form-select" id="id_kreveta" name="id_kreveta" value={boravakData.id_kreveta} onChange={handleChange}>
+                  <option value="">Odaberi broj kreveta</option>
+                  {id_krevetaOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <div className="col-md-6">
-              <label htmlFor="id_kreveta" className="form-label">
-                ID Kreveta:
-              </label>
-              <select className="form-select" id="id_kreveta" name="id_kreveta" value={boravakData.id_kreveta} onChange={handleChange}>
-                <option value="">Odaberi broj kreveta</option>
-                {id_krevetaOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <label htmlFor="oib" className="form-label">
+                  Stanar:
+                </label>
+                <select className="form-select" id="oib" name="oib" value={boravakData.oib} onChange={handleChange}>
+                  <option value="">Odaberi OIB</option>
+                  {oibOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="id_korisnika" className="form-label">
+                  Korisnik:
+                </label>
+                <select className="form-select" id="id_korisnika" name="id_korisnika" value={boravakData.id_korisnika} onChange={handleChange}>
+                  <option value="">Odaberi korisnika</option>
+                  {id_korisnikaOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-          </div>
-          <div className="row mb-3">
-            <div className="col-md-6">
-              <label htmlFor="oib" className="form-label">
-                Stanar:
-              </label>
-              <select className="form-select" id="oib" name="oib" value={boravakData.oib} onChange={handleChange}>
-                <option value="">Odaberi OIB</option>
-                {oibOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <label htmlFor="datum_useljenja" className="form-label">
+                  Datum Useljenja:
+                </label>
+                <input type="date" className="form-control" id="datum_useljenja" name="datum_useljenja" value={boravakData.datum_useljenja} onChange={handleChange} />
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="datum_iseljenja" className="form-label">
+                  Datum Iseljenja:
+                </label>
+                <input type="date" className="form-control" id="datum_iseljenja" name="datum_iseljenja" value={boravakData.datum_iseljenja} onChange={handleChange} />
+              </div>
             </div>
-            <div className="col-md-6">
-              <label htmlFor="id_korisnika" className="form-label">
-                Korisnik:
-              </label>
-              <select className="form-select" id="id_korisnika" name="id_korisnika" value={boravakData.id_korisnika} onChange={handleChange}>
-                <option value="">Odaberi korisnika</option>
-                {id_korisnikaOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div className="row mb-3">
-            <div className="col-md-6">
-              <label htmlFor="datum_useljenja" className="form-label">
-                Datum Useljenja:
-              </label>
-              <input type="date" className="form-control" id="datum_useljenja" name="datum_useljenja" value={boravakData.datum_useljenja} onChange={handleChange} />
-            </div>
-            <div className="col-md-6">
-              <label htmlFor="datum_iseljenja" className="form-label">
-                Datum Iseljenja:
-              </label>
-              <input type="date" className="form-control" id="datum_iseljenja" name="datum_iseljenja" value={boravakData.datum_iseljenja} onChange={handleChange} />
-            </div>
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Izmijeni
-          </button>
-        </form>
+            <button type="submit" className="btn btn-primary">
+              Izmijeni
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

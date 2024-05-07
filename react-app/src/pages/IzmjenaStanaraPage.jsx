@@ -70,96 +70,98 @@ const IzmjenaStanaraPage = () => {
   };
 
   return (
-    <div className="container-fluid">
+    <div>
       <CollapsableNavbar />
-      <div className="container mt-4">
-        <Link to="/popisSvihStanara" className="btn btn-sm btn-danger mb-5">
-          <IoArrowBackSharp />
-        </Link>
-        <h2>Izmjena stanara</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label htmlFor="oib" className="form-label">
-                OIB:
-              </label>
-              <input type="number" className="form-control" id="oib" name="oib" value={studentData.oib} onChange={handleChange} />
+      <div className="container-fluid">
+        <div className="container mt-4">
+          <Link to="/popisSvihStanara" className="btn btn-sm btn-danger mb-5">
+            <IoArrowBackSharp />
+          </Link>
+          <h2>Izmjena stanara</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <label htmlFor="oib" className="form-label">
+                  OIB:
+                </label>
+                <input type="number" className="form-control" id="oib" name="oib" value={studentData.oib} onChange={handleChange} />
+              </div>
+              <div className="col-md-6 mb-3">
+                <label htmlFor="jmbag" className="form-label">
+                  JMBAG:
+                </label>
+                <input type="number" className="form-control" id="jmbag" name="jmbag" value={studentData.jmbag} onChange={handleChange} />
+              </div>
             </div>
-            <div className="col-md-6 mb-3">
-              <label htmlFor="jmbag" className="form-label">
-                JMBAG:
-              </label>
-              <input type="number" className="form-control" id="jmbag" name="jmbag" value={studentData.jmbag} onChange={handleChange} />
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <label htmlFor="ime" className="form-label">
+                  Ime:
+                </label>
+                <input type="text" className="form-control" id="ime" name="ime" value={studentData.ime} onChange={handleChange} />
+              </div>
+              <div className="col-md-6 mb-3">
+                <label htmlFor="prezime" className="form-label">
+                  Prezime:
+                </label>
+                <input type="text" className="form-control" id="prezime" name="prezime" value={studentData.prezime} onChange={handleChange} />
+              </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label htmlFor="ime" className="form-label">
-                Ime:
-              </label>
-              <input type="text" className="form-control" id="ime" name="ime" value={studentData.ime} onChange={handleChange} />
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <label htmlFor="datum_rodenja" className="form-label">
+                  Datum Rođenja:
+                </label>
+                <input type="date" className="form-control" id="datum_rodenja" name="datum_rodenja" value={studentData.datum_rodenja} onChange={handleChange} />
+              </div>
+              <div className="col-md-6 mb-3">
+                <label htmlFor="adresa_prebivalista" className="form-label">
+                  Adresa Prebivališta:
+                </label>
+                <input type="text" className="form-control" id="adresa_prebivalista" name="adresa_prebivalista" value={studentData.adresa_prebivalista} onChange={handleChange} />
+              </div>
             </div>
-            <div className="col-md-6 mb-3">
-              <label htmlFor="prezime" className="form-label">
-                Prezime:
-              </label>
-              <input type="text" className="form-control" id="prezime" name="prezime" value={studentData.prezime} onChange={handleChange} />
+            <div className="row">
+              <div className="col-md-6 mb-3 form-check">
+                <input type="checkbox" className="form-check-input" id="subvencioniranost" name="subvencioniranost" checked={studentData.subvencioniranost} onChange={handleChange} />
+                <label className="form-check-label" htmlFor="subvencioniranost">
+                  Subvencioniranost
+                </label>
+              </div>
+              <div className="col-md-6 mb-3">
+                <label htmlFor="uciliste" className="form-label">
+                  Učilište:
+                </label>
+                <input type="text" className="form-control" id="uciliste" name="uciliste" value={studentData.uciliste} onChange={handleChange} />
+              </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label htmlFor="datum_rodenja" className="form-label">
-                Datum Rođenja:
-              </label>
-              <input type="date" className="form-control" id="datum_rodenja" name="datum_rodenja" value={studentData.datum_rodenja} onChange={handleChange} />
+            <div className="row">
+              <div className="col-md-6 mb-3 form-check">
+                <input type="checkbox" className="form-check-input" id="uplata_teretane" name="uplata_teretane" checked={studentData.uplata_teretane} onChange={handleChange} />
+                <label className="form-check-label" htmlFor="uplataTeretane">
+                  Uplata Teretane
+                </label>
+              </div>
+              <div className="col-md-6 mb-3">
+                <label htmlFor="komentar" className="form-label">
+                  Komentar:
+                </label>
+                <textarea className="form-control" id="komentar" name="komentar" rows="3" value={studentData.komentar} onChange={handleChange}></textarea>
+              </div>
             </div>
-            <div className="col-md-6 mb-3">
-              <label htmlFor="adresa_prebivalista" className="form-label">
-                Adresa Prebivališta:
-              </label>
-              <input type="text" className="form-control" id="adresa_prebivalista" name="adresa_prebivalista" value={studentData.adresa_prebivalista} onChange={handleChange} />
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <label htmlFor="id_korisnika" className="form-label">
+                  ID Korisnika:
+                </label>
+                <input type="number" className="form-control" id="id_korisnika" name="id_korisnika" value={studentData.id_korisnika} onChange={handleChange} />
+              </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-md-6 mb-3 form-check">
-              <input type="checkbox" className="form-check-input" id="subvencioniranost" name="subvencioniranost" checked={studentData.subvencioniranost} onChange={handleChange} />
-              <label className="form-check-label" htmlFor="subvencioniranost">
-                Subvencioniranost
-              </label>
-            </div>
-            <div className="col-md-6 mb-3">
-              <label htmlFor="uciliste" className="form-label">
-                Učilište:
-              </label>
-              <input type="text" className="form-control" id="uciliste" name="uciliste" value={studentData.uciliste} onChange={handleChange} />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-6 mb-3 form-check">
-              <input type="checkbox" className="form-check-input" id="uplata_teretane" name="uplata_teretane" checked={studentData.uplata_teretane} onChange={handleChange} />
-              <label className="form-check-label" htmlFor="uplataTeretane">
-                Uplata Teretane
-              </label>
-            </div>
-            <div className="col-md-6 mb-3">
-              <label htmlFor="komentar" className="form-label">
-                Komentar:
-              </label>
-              <textarea className="form-control" id="komentar" name="komentar" rows="3" value={studentData.komentar} onChange={handleChange}></textarea>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label htmlFor="id_korisnika" className="form-label">
-                ID Korisnika:
-              </label>
-              <input type="number" className="form-control" id="id_korisnika" name="id_korisnika" value={studentData.id_korisnika} onChange={handleChange} />
-            </div>
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Izmijeni
-          </button>
-        </form>
+            <button type="submit" className="btn btn-primary">
+              Izmijeni
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

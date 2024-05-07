@@ -54,26 +54,28 @@ const IzmjenaObjektaPage = () => {
   };
 
   return (
-    <div className="container-fluid">
+    <div>
       <CollapsableNavbar />
-      <div className="container mt-4">
-        <Link to="/popisObjekata" className="btn btn-sm btn-danger mb-5">
-          <IoArrowBackSharp />
-        </Link>
-        <h2>Izmjena objekta</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label htmlFor="broj_objekta" className="form-label">
-                Broj objekta:
-              </label>
-              <input type="number" className="form-control" id="broj_objekta" name="broj_objekta" value={objektData.broj_objekta} onChange={handleChange} />
+      <div className="container-fluid">
+        <div className="container mt-4">
+          <Link to="/popisObjekata" className="btn btn-sm btn-danger mb-5">
+            <IoArrowBackSharp />
+          </Link>
+          <h2>Izmjena objekta</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <label htmlFor="broj_objekta" className="form-label">
+                  Broj objekta:
+                </label>
+                <input type="number" className="form-control" id="broj_objekta" name="broj_objekta" value={objektData.broj_objekta} onChange={handleChange} />
+              </div>
             </div>
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Izmijeni
-          </button>
-        </form>
+            <button type="submit" className="btn btn-primary">
+              Izmijeni
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

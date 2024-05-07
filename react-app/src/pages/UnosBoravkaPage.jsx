@@ -90,69 +90,71 @@ const UnosBoravakaPage = () => {
   };
 
   return (
-    <div className="container">
+    <div>
       <CollapsableNavbar />
-      <div className="container mt-3">
-        <Link to="/popisBoravaka" className="btn btn-sm btn-danger mb-5">
-          <IoArrowBackSharp />
-        </Link>
+      <div className="container">
+        <div className="container mt-3">
+          <Link to="/popisBoravaka" className="btn btn-sm btn-danger mb-5">
+            <IoArrowBackSharp />
+          </Link>
+        </div>
+        <h1>Unos Boravaka</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>
+              Broj Kreveta: <span className="text-danger">*</span>
+            </label>
+            <select className="form-control" name="id_kreveta" value={formData.id_kreveta} onChange={handleChange}>
+              <option value="">Odaberi broj Kreveta</option>
+              {krevetaOptions.map((option) => (
+                <option key={option.id_kreveta} value={option.id_kreveta}>
+                  {option.broj_kreveta}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label>
+              Stanar: <span className="text-danger">*</span>
+            </label>
+            <select className="form-control" name="oib" value={formData.oib} onChange={handleChange}>
+              <option value="">Odaberi stanara</option>
+              {oibOptions.map((option) => (
+                <option key={option.oib} value={option.oib}>
+                  {option.ime} {option.prezime}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label>
+              Korisnik: <span className="text-danger">*</span>
+            </label>
+            <select className="form-control" name="id_korisnika" value={formData.id_korisnika} onChange={handleChange}>
+              <option value="">Odaberi Korisnika</option>
+              {korisnikaOptions.map((option) => (
+                <option key={option.id_korisnika} value={option.id_korisnika}>
+                  {" "}
+                  {option.email_korisnika}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label>
+              Datum Useljenja: <span className="text-danger">*</span>
+            </label>
+            <input type="date" className="form-control" name="datum_useljenja" value={formData.datum_useljenja} onChange={handleChange} />
+          </div>
+          <div className="form-group">
+            <label>Datum Iseljenja:</label>
+            <input type="date" className="form-control" name="datum_iseljenja" value={formData.datum_iseljenja} onChange={handleChange} />
+          </div>
+          <button type="submit" className="btn btn-primary">
+            Dodaj Boravak
+          </button>
+        </form>
       </div>
-      <h1>Unos Boravaka</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>
-            Broj Kreveta: <span className="text-danger">*</span>
-          </label>
-          <select className="form-control" name="id_kreveta" value={formData.id_kreveta} onChange={handleChange}>
-            <option value="">Odaberi broj Kreveta</option>
-            {krevetaOptions.map((option) => (
-              <option key={option.id_kreveta} value={option.id_kreveta}>
-                {option.broj_kreveta}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="form-group">
-          <label>
-            Stanar: <span className="text-danger">*</span>
-          </label>
-          <select className="form-control" name="oib" value={formData.oib} onChange={handleChange}>
-            <option value="">Odaberi stanara</option>
-            {oibOptions.map((option) => (
-              <option key={option.oib} value={option.oib}>
-                {option.ime} {option.prezime}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="form-group">
-          <label>
-            Korisnik: <span className="text-danger">*</span>
-          </label>
-          <select className="form-control" name="id_korisnika" value={formData.id_korisnika} onChange={handleChange}>
-            <option value="">Odaberi Korisnika</option>
-            {korisnikaOptions.map((option) => (
-              <option key={option.id_korisnika} value={option.id_korisnika}>
-                {" "}
-                {option.email_korisnika}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="form-group">
-          <label>
-            Datum Useljenja: <span className="text-danger">*</span>
-          </label>
-          <input type="date" className="form-control" name="datum_useljenja" value={formData.datum_useljenja} onChange={handleChange} />
-        </div>
-        <div className="form-group">
-          <label>Datum Iseljenja:</label>
-          <input type="date" className="form-control" name="datum_iseljenja" value={formData.datum_iseljenja} onChange={handleChange} />
-        </div>
-        <button type="submit" className="btn btn-primary">
-          Dodaj Boravak
-        </button>
-      </form>
     </div>
   );
 };

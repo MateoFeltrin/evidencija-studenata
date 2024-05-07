@@ -73,55 +73,57 @@ const IzmjenaKrevetaPage = () => {
   };
 
   return (
-    <div className="container-fluid">
+    <div>
       <CollapsableNavbar />
-      <div className="container mt-4">
-        <Link to="/popisKreveta" className="btn btn-sm btn-danger mb-5">
-          <IoArrowBackSharp />
-        </Link>
-        <h2>Izmjena kreveta</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="row mb-3">
-            <div className="col-md-6">
-              <label htmlFor="id_kreveta" className="form-label">
-                ID Kreveta:
-              </label>
-              <input type="text" className="form-control" id="id_kreveta" name="id_kreveta" value={krevetData.id_kreveta} onChange={handleChange} />
-            </div>
-            <div className="col-md-6">
-              <label htmlFor="broj_kreveta" className="form-label">
-                Broj Kreveta:
-              </label>
-              <input type="number" className="form-control" id="broj_kreveta" name="broj_kreveta" value={krevetData.broj_kreveta} onChange={handleChange} />
-            </div>
-          </div>
-          <div className="row mb-3">
-            <div className="col-md-6">
-              <label htmlFor="id_sobe" className="form-label">
-                Broj Sobe:
-              </label>
-              <select className="form-select" id="id_sobe" name="id_sobe" value={krevetData.id_sobe} onChange={handleChange}>
-                <option value="">Odaberi broj sobe</option>
-                {brojSobeOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="col-md-6">
-              <div className="mb-3 form-check">
-                <input type="checkbox" className="form-check-input" id="zauzetost" name="zauzetost" checked={krevetData.zauzetost} onChange={handleChange} />
-                <label className="form-check-label" htmlFor="zauzetost">
-                  Zauzet
+      <div className="container-fluid">
+        <div className="container mt-4">
+          <Link to="/popisKreveta" className="btn btn-sm btn-danger mb-5">
+            <IoArrowBackSharp />
+          </Link>
+          <h2>Izmjena kreveta</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <label htmlFor="id_kreveta" className="form-label">
+                  ID Kreveta:
                 </label>
+                <input type="text" className="form-control" id="id_kreveta" name="id_kreveta" value={krevetData.id_kreveta} onChange={handleChange} />
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="broj_kreveta" className="form-label">
+                  Broj Kreveta:
+                </label>
+                <input type="number" className="form-control" id="broj_kreveta" name="broj_kreveta" value={krevetData.broj_kreveta} onChange={handleChange} />
               </div>
             </div>
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Izmijeni
-          </button>
-        </form>
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <label htmlFor="id_sobe" className="form-label">
+                  Broj Sobe:
+                </label>
+                <select className="form-select" id="id_sobe" name="id_sobe" value={krevetData.id_sobe} onChange={handleChange}>
+                  <option value="">Odaberi broj sobe</option>
+                  {brojSobeOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-md-6">
+                <div className="mb-3 form-check">
+                  <input type="checkbox" className="form-check-input" id="zauzetost" name="zauzetost" checked={krevetData.zauzetost} onChange={handleChange} />
+                  <label className="form-check-label" htmlFor="zauzetost">
+                    Zauzet
+                  </label>
+                </div>
+              </div>
+            </div>
+            <button type="submit" className="btn btn-primary">
+              Izmijeni
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

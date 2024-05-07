@@ -43,8 +43,8 @@ const UnosObjekataPage = () => {
 
   return (
     <div>
+      <CollapsableNavbar />
       <div className="container">
-        <CollapsableNavbar />
         <div className="container mt-4">
           <Link to="/popisObjekata" className="btn btn-sm btn-danger mb-5">
             <IoArrowBackSharp />

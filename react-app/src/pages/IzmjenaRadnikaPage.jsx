@@ -59,51 +59,53 @@ const IzmjenaRadnikaPage = () => {
   };
 
   return (
-    <div className="container-fluid">
+    <div>
       <CollapsableNavbar />
-      <div className="container mt-4">
-        <Link to="/popisKorisnika" className="btn btn-sm btn-danger mb-5">
-          <IoArrowBackSharp />
-        </Link>
-        <h2>Izmjena korisnika</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label htmlFor="id_korisnika" className="form-label">
-                ID Korisnika:
-              </label>
-              <input type="number" className="form-control" disabled id="id_korisnika" name="id_korisnika" value={korisnikData.id_korisnika} onChange={handleChange} />
+      <div className="container-fluid">
+        <div className="container mt-4">
+          <Link to="/popisKorisnika" className="btn btn-sm btn-danger mb-5">
+            <IoArrowBackSharp />
+          </Link>
+          <h2>Izmjena korisnika</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <label htmlFor="id_korisnika" className="form-label">
+                  ID Korisnika:
+                </label>
+                <input type="number" className="form-control" disabled id="id_korisnika" name="id_korisnika" value={korisnikData.id_korisnika} onChange={handleChange} />
+              </div>
+              <div className="col-md-6 mb-3">
+                <label htmlFor="email_korisnika" className="form-label">
+                  Email Korisnika:
+                </label>
+                <input type="email" className="form-control" id="email_korisnika" name="email_korisnika" value={korisnikData.email_korisnika} onChange={handleChange} />
+              </div>
             </div>
-            <div className="col-md-6 mb-3">
-              <label htmlFor="email_korisnika" className="form-label">
-                Email Korisnika:
-              </label>
-              <input type="email" className="form-control" id="email_korisnika" name="email_korisnika" value={korisnikData.email_korisnika} onChange={handleChange} />
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <label htmlFor="lozinka" className="form-label">
+                  Lozinka:
+                </label>
+                <input type="password" className="form-control" id="lozinka" name="lozinka" value={korisnikData.lozinka} onChange={handleChange} />
+              </div>
+              <div className="col-md-6 mb-3">
+                <label htmlFor="uloga" className="form-label">
+                  Uloga:
+                </label>
+                <select className="form-select" id="uloga" name="uloga" value={korisnikData.uloga} onChange={handleChange}>
+                  <option value="">Odaberi ulogu</option>
+                  <option value="Recepcionar">Recepcionar</option>
+                  <option value="Domar">Domar</option>
+                  <option value="Admin">Admin</option>
+                </select>
+              </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label htmlFor="lozinka" className="form-label">
-                Lozinka:
-              </label>
-              <input type="password" className="form-control" id="lozinka" name="lozinka" value={korisnikData.lozinka} onChange={handleChange} />
-            </div>
-            <div className="col-md-6 mb-3">
-              <label htmlFor="uloga" className="form-label">
-                Uloga:
-              </label>
-              <select className="form-select" id="uloga" name="uloga" value={korisnikData.uloga} onChange={handleChange}>
-                <option value="">Odaberi ulogu</option>
-                <option value="Recepcionar">Recepcionar</option>
-                <option value="Domar">Domar</option>
-                <option value="Admin">Admin</option>
-              </select>
-            </div>
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Izmijeni
-          </button>
-        </form>
+            <button type="submit" className="btn btn-primary">
+              Izmijeni
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

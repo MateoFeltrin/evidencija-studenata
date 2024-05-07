@@ -74,45 +74,47 @@ const PopisKrevetaPage = () => {
   };
 
   return (
-    <div className="container-fluid">
+    <div>
       <CollapsableNavbar />
-      <div className="container mt-4">
-        <h1>Popis kreveta</h1>
-        <Link to="/unosKreveta" className="btn btn-sm btn-primary mb-3">
-          Dodaj krevet
-        </Link>
-        <div className="table-responsive">
-          <table className="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th scope="col">Id kreveta</th>
-                <th scope="col">Broj objekta</th>
-                <th scope="col">Broj sobe</th>
-                <th scope="col">Broj kreveta</th>
-                <th scope="col">Zauzetost</th>
-                <th scope="col">Akcije</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((krevet) => (
-                <tr key={krevet.id_kreveta}>
-                  <td className="table-data">{krevet.id_kreveta}</td>
-                  <td className="table-data">{krevet.soba.broj_objekta}</td>
-                  <td className="table-data">{krevet.soba.broj_sobe}</td>
-                  <td className="table-data">{krevet.broj_kreveta}</td>
-                  <td className="table-data">{krevet.zauzetost ? "Da" : "Ne"}</td>
-                  <td className="table-data">
-                    <Link to={`/izmjenaKreveta/${krevet.id_kreveta}`} className="btn btn-sm btn-primary">
-                      Izmijeni
-                    </Link>
-                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(krevet.id_kreveta)}>
-                      Izbriši
-                    </button>
-                  </td>
+      <div className="container-fluid">
+        <div className="container mt-4">
+          <h1>Popis kreveta</h1>
+          <Link to="/unosKreveta" className="btn btn-sm btn-primary mb-3">
+            Dodaj krevet
+          </Link>
+          <div className="table-responsive">
+            <table className="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Id kreveta</th>
+                  <th scope="col">Broj objekta</th>
+                  <th scope="col">Broj sobe</th>
+                  <th scope="col">Broj kreveta</th>
+                  <th scope="col">Zauzetost</th>
+                  <th scope="col">Akcije</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {data.map((krevet) => (
+                  <tr key={krevet.id_kreveta}>
+                    <td className="table-data">{krevet.id_kreveta}</td>
+                    <td className="table-data">{krevet.soba.broj_objekta}</td>
+                    <td className="table-data">{krevet.soba.broj_sobe}</td>
+                    <td className="table-data">{krevet.broj_kreveta}</td>
+                    <td className="table-data">{krevet.zauzetost ? "Da" : "Ne"}</td>
+                    <td className="table-data">
+                      <Link to={`/izmjenaKreveta/${krevet.id_kreveta}`} className="btn btn-sm btn-primary">
+                        Izmijeni
+                      </Link>
+                      <button className="btn btn-sm btn-danger" onClick={() => handleDelete(krevet.id_kreveta)}>
+                        Izbriši
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

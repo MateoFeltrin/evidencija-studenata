@@ -63,43 +63,45 @@ const UnosKrevetaPage = () => {
   };
 
   return (
-    <div className="container">
+    <div>
       <CollapsableNavbar />
-      <div className="container mt-3">
-        <Link to="/popisKreveta" className="btn btn-sm btn-danger mb-5">
-          <IoArrowBackSharp />
-        </Link>
-      </div>
-      <h1 className="mt-4">Dodaj krevet</h1>
-      <div className="row justify-content-center">
-        <div className="col-md-6">
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="broj_kreveta">
-                Broj kreveta: <span className="text-danger">*</span>
-              </label>
-              <input type="number" className="form-control" id="broj_kreveta" name="broj_kreveta" value={formData.broj_kreveta} onChange={handleChange} required />
-            </div>
+      <div className="container">
+        <div className="container mt-3">
+          <Link to="/popisKreveta" className="btn btn-sm btn-danger mb-5">
+            <IoArrowBackSharp />
+          </Link>
+        </div>
+        <h1 className="mt-4">Dodaj krevet</h1>
+        <div className="row justify-content-center">
+          <div className="col-md-6">
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="broj_kreveta">
+                  Broj kreveta: <span className="text-danger">*</span>
+                </label>
+                <input type="number" className="form-control" id="broj_kreveta" name="broj_kreveta" value={formData.broj_kreveta} onChange={handleChange} required />
+              </div>
 
-            <div className="form-group">
-              <label htmlFor="id_sobe">
-                Soba: <span className="text-danger">*</span>{" "}
-              </label>
-              <select className="form-control" id="id_sobe" name="id_sobe" value={formData.id_sobe} onChange={handleChange} required>
-                <option value="">Odaberi</option>
-                {sobaOptions &&
-                  sobaOptions.map((option) => (
-                    <option key={option.id_sobe} value={option.id_sobe}>
-                      {option.broj_sobe}
-                    </option>
-                  ))}
-              </select>
-            </div>
+              <div className="form-group">
+                <label htmlFor="id_sobe">
+                  Soba: <span className="text-danger">*</span>{" "}
+                </label>
+                <select className="form-control" id="id_sobe" name="id_sobe" value={formData.id_sobe} onChange={handleChange} required>
+                  <option value="">Odaberi</option>
+                  {sobaOptions &&
+                    sobaOptions.map((option) => (
+                      <option key={option.id_sobe} value={option.id_sobe}>
+                        {option.broj_sobe}
+                      </option>
+                    ))}
+                </select>
+              </div>
 
-            <button type="submit" className="btn btn-primary">
-              Unesi
-            </button>
-          </form>
+              <button type="submit" className="btn btn-primary">
+                Unesi
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>

@@ -45,7 +45,7 @@ const UnosStanaraPage = () => {
     e.preventDefault();
     if (formData.oib.length !== 11) {
       alert("OIB mora imati 11 znamenaka.");
-      return; 
+      return;
     }
     console.log(formData);
     try {

@@ -113,63 +113,65 @@ const PopisSvihStanaraPage = () => {
     }
   };
   return (
-    <div className="container-fluid">
+    <div>
       <CollapsableNavbar />
-      <div className="mt-4">
-        <h1>Tablica trenutačnih stanara</h1>
-        <Link to="/UnosStanara" className="btn btn-sm btn-primary mb-3">
-          Dodaj novog stanara
-        </Link>
+      <div className="container-fluid">
+        <div className="mt-4">
+          <h1>Tablica trenutačnih stanara</h1>
+          <Link to="/UnosStanara" className="btn btn-sm btn-primary mb-3">
+            Dodaj novog stanara
+          </Link>
 
-        <div className="table-responsive">
-          <table className="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th scope="col">OIB</th>
-                <th scope="col">JMBAG</th>
-                <th scope="col">Ime</th>
-                <th scope="col">Prezime</th>
-                <th scope="col">Datum rođenja</th>
-                <th scope="col">Adresa prebivališta</th>
-                <th scope="col">Subvencioniranost</th>
-                <th scope="col">Učilište</th>
-                <th scope="col">Uplata teretane</th>
-                <th scope="col">Komentar</th>
-                <th scope="col">Datum useljenja</th>
-                <th scope="col">Akcije</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((student) => (
-                <tr key={student.oib}>
-                  <td className="table-data">{student.oib}</td>
-                  <td className="table-data">{student.stanar.jmbag}</td>
-                  <td className="table-data">{student.stanar.ime}</td>
-                  <td className="table-data">{student.stanar.prezime}</td>
-                  <td className="table-data">{formatDate(student.stanar.datum_rodenja)}</td>
-                  <td className="table-data">{student.stanar.adresa_prebivalista}</td>
-                  {/* Display 'Da' for true and 'Ne' for false for subvencioniranost */}
-                  <td className="table-data">{student.stanar.subvencioniranost ? "Da" : "Ne"}</td>
-                  <td className="table-data">{student.stanar.uciliste}</td>
-                  {/* Display 'Da' for true and 'Ne' for false for uplata_teretane */}
-                  <td className="table-data">{student.stanar.uplata_teretane ? "Da" : "Ne"}</td>
-                  <td className="table-data">{student.stanar.komentar}</td>
-                  <td className="table-data">{formatDate(student.datum_useljenja)}</td>
-                  <td className="table-data">
-                    <Link to={`/izmjenaStanara/${student.oib}`} className="btn btn-sm btn-primary">
-                      Izmijeni
-                    </Link>
-                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(student.oib)}>
-                      Izbriši
-                    </button>
-                    <button className="btn btn-sm btn-secondary" onClick={() => handleIseljenje(student.id_boravka)}>
-                      Iseljenje
-                    </button>
-                  </td>
+          <div className="table-responsive">
+            <table className="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">OIB</th>
+                  <th scope="col">JMBAG</th>
+                  <th scope="col">Ime</th>
+                  <th scope="col">Prezime</th>
+                  <th scope="col">Datum rođenja</th>
+                  <th scope="col">Adresa prebivališta</th>
+                  <th scope="col">Subvencioniranost</th>
+                  <th scope="col">Učilište</th>
+                  <th scope="col">Uplata teretane</th>
+                  <th scope="col">Komentar</th>
+                  <th scope="col">Datum useljenja</th>
+                  <th scope="col">Akcije</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {data.map((student) => (
+                  <tr key={student.oib}>
+                    <td className="table-data">{student.oib}</td>
+                    <td className="table-data">{student.stanar.jmbag}</td>
+                    <td className="table-data">{student.stanar.ime}</td>
+                    <td className="table-data">{student.stanar.prezime}</td>
+                    <td className="table-data">{formatDate(student.stanar.datum_rodenja)}</td>
+                    <td className="table-data">{student.stanar.adresa_prebivalista}</td>
+                    {/* Display 'Da' for true and 'Ne' for false for subvencioniranost */}
+                    <td className="table-data">{student.stanar.subvencioniranost ? "Da" : "Ne"}</td>
+                    <td className="table-data">{student.stanar.uciliste}</td>
+                    {/* Display 'Da' for true and 'Ne' for false for uplata_teretane */}
+                    <td className="table-data">{student.stanar.uplata_teretane ? "Da" : "Ne"}</td>
+                    <td className="table-data">{student.stanar.komentar}</td>
+                    <td className="table-data">{formatDate(student.datum_useljenja)}</td>
+                    <td className="table-data">
+                      <Link to={`/izmjenaStanara/${student.oib}`} className="btn btn-sm btn-primary">
+                        Izmijeni
+                      </Link>
+                      <button className="btn btn-sm btn-danger" onClick={() => handleDelete(student.oib)}>
+                        Izbriši
+                      </button>
+                      <button className="btn btn-sm btn-secondary" onClick={() => handleIseljenje(student.id_boravka)}>
+                        Iseljenje
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

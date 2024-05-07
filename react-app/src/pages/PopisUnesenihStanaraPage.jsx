@@ -65,9 +65,7 @@ const PopisUnesenihStanaraPage = () => {
           },
         })
         .then(() => {
-          
-          
-          setData(data.filter(student => student.oib !== oib));
+          setData(data.filter((student) => student.oib !== oib));
           alert("Stanar uspješno obrisan!");
         })
         .catch((err) => {
@@ -76,58 +74,60 @@ const PopisUnesenihStanaraPage = () => {
         });
     }
   };
-  
-  return (
-    <div className="container-fluid">
-      <CollapsableNavbar />
-      <div className="mt-4">
-        <h1>Tablica svih unesenih stanara</h1>
-        <Link to="/UnosStanara" className="btn btn-sm btn-primary mb-3">
-          Dodaj novog stanara
-        </Link>
 
-        <div className="table-responsive">
-          <table className="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th scope="col">OIB</th>
-                <th scope="col">JMBAG</th>
-                <th scope="col">Ime</th>
-                <th scope="col">Prezime</th>
-                <th scope="col">Datum rođenja</th>
-                <th scope="col">Adresa prebivališta</th>
-                <th scope="col">Subvencioniranost</th>
-                <th scope="col">Učilište</th>
-                <th scope="col">Uplata teretane</th>
-                <th scope="col">Komentar</th>
-                <th scope="col">Akcije</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((student) => (
-                <tr key={student.oib}>
-                  <td className="table-data">{student.oib}</td>
-                  <td className="table-data">{student.jmbag}</td>
-                  <td className="table-data">{student.ime}</td>
-                  <td className="table-data">{student.prezime}</td>
-                  <td className="table-data">{formatDate(student.datum_rodenja)}</td>
-                  <td className="table-data">{student.adresa_prebivalista}</td>
-                  <td className="table-data">{student.subvencioniranost ? "Da" : "Ne"}</td>
-                  <td className="table-data">{student.uciliste}</td>
-                  <td className="table-data">{student.uplata_teretane ? "Da" : "Ne"}</td>
-                  <td className="table-data">{student.komentar}</td>
-                  <td className="table-data">
-                    <Link to={`/izmjenaStanara/${student.oib}`} className="btn btn-sm btn-primary">
-                      Izmijeni
-                    </Link>
-                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(student.oib)}>
-                      Izbriši
-                    </button>
-                  </td>
+  return (
+    <div>
+      <CollapsableNavbar />
+      <div className="container-fluid">
+        <div className="mt-4">
+          <h1>Tablica svih unesenih stanara</h1>
+          <Link to="/UnosStanara" className="btn btn-sm btn-primary mb-3">
+            Dodaj novog stanara
+          </Link>
+
+          <div className="table-responsive">
+            <table className="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">OIB</th>
+                  <th scope="col">JMBAG</th>
+                  <th scope="col">Ime</th>
+                  <th scope="col">Prezime</th>
+                  <th scope="col">Datum rođenja</th>
+                  <th scope="col">Adresa prebivališta</th>
+                  <th scope="col">Subvencioniranost</th>
+                  <th scope="col">Učilište</th>
+                  <th scope="col">Uplata teretane</th>
+                  <th scope="col">Komentar</th>
+                  <th scope="col">Akcije</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {data.map((student) => (
+                  <tr key={student.oib}>
+                    <td className="table-data">{student.oib}</td>
+                    <td className="table-data">{student.jmbag}</td>
+                    <td className="table-data">{student.ime}</td>
+                    <td className="table-data">{student.prezime}</td>
+                    <td className="table-data">{formatDate(student.datum_rodenja)}</td>
+                    <td className="table-data">{student.adresa_prebivalista}</td>
+                    <td className="table-data">{student.subvencioniranost ? "Da" : "Ne"}</td>
+                    <td className="table-data">{student.uciliste}</td>
+                    <td className="table-data">{student.uplata_teretane ? "Da" : "Ne"}</td>
+                    <td className="table-data">{student.komentar}</td>
+                    <td className="table-data">
+                      <Link to={`/izmjenaStanara/${student.oib}`} className="btn btn-sm btn-primary">
+                        Izmijeni
+                      </Link>
+                      <button className="btn btn-sm btn-danger" onClick={() => handleDelete(student.oib)}>
+                        Izbriši
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

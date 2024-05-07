@@ -85,48 +85,50 @@ const PopisAktivnihKvarovaPage = () => {
   };
 
   return (
-    <div className="container-fluid">
+    <div>
       <CollapsableNavbar />
-      <h1 className="mt-4">Popis aktivnih kvarova</h1>
-      <Link to="/unosKvarova" className="btn btn-sm btn-primary mb-3">
-        Dodaj kvar
-      </Link>
-      <div className="table-responsive">
-        <table className="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th scope="col">ID kvara</th>
-              <th scope="col">Datum prijave</th>
-              <th scope="col">Opis</th>
-              <th scope="col">Soba</th>
-              <th scope="col">Objekt</th>
-              <th scope="col">Ime stanara</th>
-              <th scope="col">Prezime stanara</th>
-              <th scope="col">Akcije</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((kvar) => (
-              <tr key={kvar.id_kvara}>
-                <td className="table-data">{kvar.id_kvara}</td>
-                <td className="table-data">{formatDate(kvar.datum_prijave_kvara)}</td>
-                <td className="table-data">{kvar.opis_kvara}</td>
-                <td className="table-data">{kvar.soba.broj_sobe}</td>
-                <td className="table-data">{kvar.soba.broj_objekta}</td>
-                <td className="table-data">{kvar.stanar ? kvar.stanar.ime || "Neodređen" : "Neodređen"}</td>
-                <td className="table-data">{kvar.stanar ? kvar.stanar.prezime || "Neodređen" : "Neodređen"}</td>
-                <td className="table-data">
-                  <button className="btn btn-sm btn-primary" onClick={() => handleChange(index)}>
-                    Izmijeni
-                  </button>
-                  <button className="btn btn-sm btn-danger" onClick={() => handleDelete(kvar.id_kvara)}>
-                    Izbriši
-                  </button>
-                </td>
+      <div className="container-fluid">
+        <h1 className="mt-4">Popis aktivnih kvarova</h1>
+        <Link to="/unosKvarova" className="btn btn-sm btn-primary mb-3">
+          Dodaj kvar
+        </Link>
+        <div className="table-responsive">
+          <table className="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th scope="col">ID kvara</th>
+                <th scope="col">Datum prijave</th>
+                <th scope="col">Opis</th>
+                <th scope="col">Soba</th>
+                <th scope="col">Objekt</th>
+                <th scope="col">Ime stanara</th>
+                <th scope="col">Prezime stanara</th>
+                <th scope="col">Akcije</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.map((kvar) => (
+                <tr key={kvar.id_kvara}>
+                  <td className="table-data">{kvar.id_kvara}</td>
+                  <td className="table-data">{formatDate(kvar.datum_prijave_kvara)}</td>
+                  <td className="table-data">{kvar.opis_kvara}</td>
+                  <td className="table-data">{kvar.soba.broj_sobe}</td>
+                  <td className="table-data">{kvar.soba.broj_objekta}</td>
+                  <td className="table-data">{kvar.stanar ? kvar.stanar.ime || "Neodređen" : "Neodređen"}</td>
+                  <td className="table-data">{kvar.stanar ? kvar.stanar.prezime || "Neodređen" : "Neodređen"}</td>
+                  <td className="table-data">
+                    <button className="btn btn-sm btn-primary" onClick={() => handleChange(index)}>
+                      Izmijeni
+                    </button>
+                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(kvar.id_kvara)}>
+                      Izbriši
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
