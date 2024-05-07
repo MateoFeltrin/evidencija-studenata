@@ -85,12 +85,14 @@ const IzmjenaStanaraPage = () => {
                   OIB:
                 </label>
                 <input type="number" className="form-control" id="oib" name="oib" value={studentData.oib} onChange={handleChange} />
+                {studentData.oib.length !== 11 && <div className="text-danger">OIB mora imati 11 znamenki.</div>}
               </div>
               <div className="col-md-6 mb-3">
                 <label htmlFor="jmbag" className="form-label">
                   JMBAG:
                 </label>
                 <input type="number" className="form-control" id="jmbag" name="jmbag" value={studentData.jmbag} onChange={handleChange} />
+                {studentData.jmbag.length !== 10 && <div className="text-danger">JMBAG mora imati 10 znamenki.</div>}
               </div>
             </div>
             <div className="row">

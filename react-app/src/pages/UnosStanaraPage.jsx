@@ -101,6 +101,7 @@ const UnosStanaraPage = () => {
                   JMBAG <span className="text-danger">*</span>
                 </label>
                 <input type="text" className="form-control" id="jmbag" name="jmbag" value={formData.jmbag} onChange={handleChange} required />
+                {formData.jmbag.length !== 10 && <div className="text-danger">JMBAG mora imati 10 znamenki.</div>}
               </div>
               <div className="mb-3">
                 <label htmlFor="ime" className="form-label">
