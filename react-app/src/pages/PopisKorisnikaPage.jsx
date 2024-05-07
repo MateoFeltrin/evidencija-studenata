@@ -47,7 +47,7 @@ const PopisKorisnikaPage = () => {
   }, [navigate]);
 
   const handleDelete = (id_korisnika) => {
-    const isConfirmed = window.confirm("Želite li zaista obrisati objekt?");
+    const isConfirmed = window.confirm("Želite li zaista obrisati korisnika?");
     if (isConfirmed) {
       console.log("Broj objekta to delete:", id_korisnika);
       axios

@@ -48,7 +48,7 @@ const PopisSobaPage = () => {
   }, [navigate]);
 
   const handleDelete = (id_sobe) => {
-    const isConfirmed = window.confirm("Želite li zaista obrisati objekt?");
+    const isConfirmed = window.confirm("Želite li zaista obrisati sobu?");
     if (isConfirmed) {
       console.log("Broj objekta to delete:", id_sobe);
       axios

@@ -65,14 +65,10 @@ const PopisUnesenihStanaraPage = () => {
           },
         })
         .then(() => {
-          axios
-            .get("http://localhost:3000/api/trenutni-stanari", {
-              headers: {
-                Authorization: `Bearer ${token}`, // Include the token in the headers
-              },
-            })
-            .then((res) => setData(res.data))
-            .catch((err) => console.log(err));
+          
+          
+          setData(data.filter(student => student.oib !== oib));
+          alert("Stanar uspješno obrisan!");
         })
         .catch((err) => {
           console.log(err);
@@ -80,6 +76,7 @@ const PopisUnesenihStanaraPage = () => {
         });
     }
   };
+  
   return (
     <div className="container-fluid">
       <CollapsableNavbar />
@@ -126,7 +123,6 @@ const PopisUnesenihStanaraPage = () => {
                     <button className="btn btn-sm btn-danger" onClick={() => handleDelete(student.oib)}>
                       Izbriši
                     </button>
-                    <button className="btn btn-sm btn-secondary">Iseljenje </button>
                   </td>
                 </tr>
               ))}

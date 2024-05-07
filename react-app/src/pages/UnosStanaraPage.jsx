@@ -43,6 +43,10 @@ const UnosStanaraPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.oib.length !== 11) {
+      alert("OIB mora imati 11 znamenaka.");
+      return; 
+    }
     console.log(formData);
     try {
       await axios.post("http://localhost:3000/unos-stanara", formData, {

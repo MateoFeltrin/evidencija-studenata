@@ -47,7 +47,7 @@ const PopisKrevetaPage = () => {
   }, [navigate]);
 
   const handleDelete = (id_kreveta) => {
-    const isConfirmed = window.confirm("Želite li zaista obrisati objekt?");
+    const isConfirmed = window.confirm("Želite li zaista obrisati krevet?");
     if (isConfirmed) {
       console.log("Broj objekta to delete:", id_kreveta);
       axios
