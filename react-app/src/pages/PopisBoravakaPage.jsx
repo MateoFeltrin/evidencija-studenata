@@ -102,15 +102,15 @@ const PopisBoravakaPage = () => {
         )
         .then(() => {
           alert("Stanar uspješno iseljen!");
-           // Fetch data after successful move-out
-           axios
-           .get("http://localhost:3000/api/svi-boravci", {
-             headers: {
-               Authorization: `Bearer ${token}`, // Include the token in the headers
-             },
-           })
-           .then((res) => setData(res.data))
-           .catch((err) => console.log(err));
+          // Fetch data after successful move-out
+          axios
+            .get("http://localhost:3000/api/svi-boravci", {
+              headers: {
+                Authorization: `Bearer ${token}`, // Include the token in the headers
+              },
+            })
+            .then((res) => setData(res.data))
+            .catch((err) => console.log(err));
         })
         .catch((error) => {
           console.error("Error updating move-out date:", error);

@@ -80,6 +80,38 @@ const PopisSvihStanaraPage = () => {
         });
     }
   };
+  const handleIseljenje = (id_boravka) => {
+    const isConfirmed = window.confirm("Želite li zaista iseliti stanara?");
+    if (isConfirmed) {
+      axios
+        .put(
+          `http://localhost:3000/azuriranje-boravka/${id_boravka}`,
+          {
+            datum_iseljenja: new Date(), // Set move-out date to current date
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Include the token in the headers
+            },
+          }
+        )
+        .then(() => {
+          alert("Stanar uspješno iseljen!");
+          // Fetch data after successful move-out
+          axios
+            .get("http://localhost:3000/api/trenutni-stanari", {
+              headers: {
+                Authorization: `Bearer ${token}`, // Include the token in the headers
+              },
+            })
+            .then((res) => setData(res.data))
+            .catch((err) => console.log(err));
+        })
+        .catch((error) => {
+          console.error("Error updating move-out date:", error);
+        });
+    }
+  };
   return (
     <div className="container-fluid">
       <CollapsableNavbar />
@@ -130,7 +162,9 @@ const PopisSvihStanaraPage = () => {
                     <button className="btn btn-sm btn-danger" onClick={() => handleDelete(student.oib)}>
                       Izbriši
                     </button>
-                    <button className="btn btn-sm btn-secondary">Iseljenje</button>
+                    <button className="btn btn-sm btn-secondary" onClick={() => handleIseljenje(student.id_boravka)}>
+                      Iseljenje
+                    </button>
                   </td>
                 </tr>
               ))}
