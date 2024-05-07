@@ -33,13 +33,13 @@ const PopisVremenskogPerioda = () => {
             const formattedStartDate = moment(selectionRange.startDate).format("YYYY-MM-DDTHH:mm:ss.SSSZ");
             const formattedEndDate = moment(selectionRange.endDate).format("YYYY-MM-DDTHH:mm:ss.SSSZ");
             axios
-  .get(`http://localhost:3000/api/boravci-u-vremenskom-periodu/${formattedStartDate}/${formattedEndDate}`, {
-    headers: {
-      Authorization: `Bearer ${token}`, // Include the token in the headers
-    },
-  })
-  .then((res) => setData(res.data))
-  .catch((err) => console.log(err));
+              .get(`http://localhost:3000/api/boravci-u-vremenskom-periodu/${formattedStartDate}/${formattedEndDate}`, {
+                headers: {
+                  Authorization: `Bearer ${token}`, // Include the token in the headers
+                },
+              })
+              .then((res) => setData(res.data))
+              .catch((err) => console.log(err));
           } else {
             // If the user is not authorized, redirect to "/not-authorized" page
             navigate("/forbidden");
@@ -59,7 +59,6 @@ const PopisVremenskogPerioda = () => {
   const handleSelect = (ranges) => {
     setSelectionRange(ranges.selection);
   };
-
 
   return (
     <div>
@@ -87,8 +86,8 @@ const PopisVremenskogPerioda = () => {
                     {data.map((boravak) => (
                       <tr key={boravak.id_boravka}>
                         <td>{boravak.oib}</td>
-                        <td>{boravak.ime}</td>
-                        <td>{boravak.prezime}</td>
+                        <td>{boravak.stanar.ime}</td>
+                        <td>{boravak.stanar.prezime}</td>
                         <td>{new Date(boravak.datum_useljenja).toDateString()}</td>
                         <td>{boravak.datum_iseljenja ? new Date(boravak.datum_iseljenja).toDateString() : "/"}</td>
                       </tr>

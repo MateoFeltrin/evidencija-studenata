@@ -391,6 +391,12 @@ app.get("/api/boravci-u-vremenskom-periodu/:datum_useljenja/:datum_iseljenja", a
           [Op.lte]: datum_iseljenja,
         },
       },
+      include: [
+        {
+          model: Stanar,
+          attributes: ["ime", "prezime"],
+        },
+      ],
     });
     res.json(boravciPerioda);
   } catch (error) {
@@ -762,7 +768,7 @@ app.post("/unos-boravka", authJwt.verifyToken("recepcionar, admin"), async (req,
     };
 
     // If the uloga is 'admin' or 'recepcionar', assign id_korisnika
-    if (uloga === 'admin' || uloga === 'recepcionar') {
+    if (uloga === "admin" || uloga === "recepcionar") {
       newBoravakData.id_korisnika = id_korisnika;
     }
 
@@ -773,7 +779,6 @@ app.post("/unos-boravka", authJwt.verifyToken("recepcionar, admin"), async (req,
     res.status(500).send({ error: true, message: "Neuspjesno dodavanje boravka." });
   }
 });
-
 
 app.post("/unos-kvara", authJwt.verifyToken("domar, admin, stanar"), async (req, res) => {
   const { datum_prijave_kvara, opis_kvara, broj_sobe, broj_objekta } = req.body;
