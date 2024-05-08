@@ -131,6 +131,7 @@ const IzmjenaBoravkaPage = () => {
             <IoArrowBackSharp />
           </Link>
           <h2>Izmjena boravka</h2>
+          { oibOptions.length > 0 && id_korisnikaOptions.length > 0 && id_krevetaOptions.length > 0 && (
           <form onSubmit={handleSubmit}>
             <div className="row mb-3">
               <div className="col-md-6">
@@ -159,7 +160,7 @@ const IzmjenaBoravkaPage = () => {
                   Stanar:
                 </label>
                 <select className="form-select" id="oib" name="oib" value={boravakData.oib} onChange={handleChange}>
-                  <option value="">Odaberi OIB</option>
+                  <option value="">Odaberi Stanara</option>
                   {oibOptions.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
@@ -171,14 +172,15 @@ const IzmjenaBoravkaPage = () => {
                 <label htmlFor="id_korisnika" className="form-label">
                   Korisnik:
                 </label>
-                <select className="form-select" id="id_korisnika" name="id_korisnika" value={boravakData.id_korisnika} onChange={handleChange}>
-                  <option value="">Odaberi korisnika</option>
-                  {id_korisnikaOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
+                <select className="form-select" id="id_korisnika" name="id_korisnika" value={boravakData.id_korisnika} onChange={handleChange} disabled>
+               <option value="">Odaberi korisnika</option>
+                {id_korisnikaOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+            {option.label}
+              </option>
+                 ))}
                 </select>
+
               </div>
             </div>
             <div className="row mb-3">
@@ -199,6 +201,7 @@ const IzmjenaBoravkaPage = () => {
               Izmijeni
             </button>
           </form>
+          )}
         </div>
       </div>
     </div>

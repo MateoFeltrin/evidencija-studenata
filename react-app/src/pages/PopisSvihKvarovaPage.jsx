@@ -119,9 +119,10 @@ const PopisSvihKvarovaPage = () => {
                     <td className="table-data">{kvar.stanar ? kvar.stanar.prezime || "Neodređen" : "Neodređen"}</td>
                     <td className="table-data">{kvar.korisnik ? kvar.korisnik.email_korisnika || "Neodređen" : "Neodređen"}</td>
                     <td className="table-data">
-                      <button className="btn btn-sm btn-primary" onClick={() => handleChange(index)}>
+                    <Link to={`/izmjenaKvarova/${kvar.id_kvara}`} className="btn btn-sm btn-primary">
                         Izmijeni
-                      </button>
+                      </Link>
+                
                       <button className="btn btn-sm btn-danger" onClick={() => handleDelete(kvar.id_kvara)}>
                         Izbriši
                       </button>
