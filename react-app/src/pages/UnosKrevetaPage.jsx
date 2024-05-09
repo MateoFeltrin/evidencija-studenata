@@ -9,33 +9,49 @@ const UnosKrevetaPage = () => {
   const token = localStorage.getItem("token");
   const [formData, setFormData] = useState({
     broj_kreveta: "",
-    id_sobe: "",
+    broj_sobe: "",
+    broj_objekta: "",
   });
 
-  const [sobaOptions, setSobaOptions] = useState([]);
+  const [sobaOptions, setSobeOptions] = useState([]);
+  const [objektOptions, setObjektOptions] = useState([]);
 
   useEffect(() => {
-    // Fetch data for dropdown options
     axios
-      .get("http://localhost:3000/api/broj-sobe", {
+      .get("http://localhost:3000/api/broj-objekta", {
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the headers
         },
       })
       .then((response) => {
-        setSobaOptions(response.data);
+        setObjektOptions(response.data);
       })
       .catch((error) => {
         console.error("Error fetching sobe:", error);
       });
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
+    // If the field changed is "broj_objekta", fetch associated rooms
+    if (name === "broj_objekta") {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/broj-sobe?broj_objekta=${value}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Update the sobeOptions with the fetched room numbers
+        setSobeOptions(response.data);
+      } catch (error) {
+        console.error("Error fetching sobe:", error);
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -53,8 +69,8 @@ const UnosKrevetaPage = () => {
       // Clear form after successful submission
       setFormData({
         broj_kreveta: "",
-        id_sobe: "",
-        // Clear other form fields here
+        broj_sobe: "",
+        broj_objekta: "",
       });
     } catch (error) {
       console.error("Error submitting form data:", error);
@@ -81,16 +97,29 @@ const UnosKrevetaPage = () => {
                 </label>
                 <input type="number" className="form-control" id="broj_kreveta" name="broj_kreveta" value={formData.broj_kreveta} onChange={handleChange} required />
               </div>
-
               <div className="form-group">
-                <label htmlFor="id_sobe">
-                  Soba: <span className="text-danger">*</span>{" "}
+                <label htmlFor="broj_objekta">
+                  Objekt kreveta:<span className="text-danger">*</span>{" "}
                 </label>
-                <select className="form-control" id="id_sobe" name="id_sobe" value={formData.id_sobe} onChange={handleChange} required>
+                <select className="form-control" id="broj_objekta" name="broj_objekta" value={formData.broj_objekta} onChange={handleChange} required>
+                  <option value="">Odaberi</option>
+                  {objektOptions &&
+                    objektOptions.map((option) => (
+                      <option key={option.id} value={option.id}>
+                        {option.broj_objekta}
+                      </option>
+                    ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="broj_sobe">
+                  Soba kreveta: <span className="text-danger">*</span>{" "}
+                </label>
+                <select className="form-control" id="broj_sobe" name="broj_sobe" value={formData.broj_sobe} onChange={handleChange} required>
                   <option value="">Odaberi</option>
                   {sobaOptions &&
                     sobaOptions.map((option) => (
-                      <option key={option.id_sobe} value={option.id_sobe}>
+                      <option key={option.broj_sobe} value={option.broj_sobe}>
                         {option.broj_sobe}
                       </option>
                     ))}

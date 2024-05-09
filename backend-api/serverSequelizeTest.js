@@ -443,10 +443,26 @@ app.post("/unos-sobe", authJwt.verifyToken("admin"), async (req, res) => {
 });
 
 app.post("/unos-kreveta", authJwt.verifyToken("admin"), async (req, res) => {
-  const { broj_kreveta, id_sobe } = req.body;
+  const { broj_kreveta, broj_sobe, broj_objekta } = req.body;
 
-  if (!broj_kreveta || !id_sobe) {
+  if (!broj_kreveta || !broj_sobe || !broj_objekta) {
     return res.status(400).send({ error: true, message: "Broj kreveta i id sobe su obavezni." });
+  }
+  // Find `id_sobe` using `broj_sobe` and possibly `broj_objekta`
+  let id_sobe = null;
+  try {
+    const soba = await Soba.findOne({
+      where: { broj_sobe, broj_objekta },
+    });
+
+    if (soba) {
+      id_sobe = soba.id_sobe;
+    } else {
+      return res.status(400).send({ error: true, message: "Soba not found." });
+    }
+  } catch (error) {
+    console.error("Error fetching soba:", error);
+    return res.status(500).send({ error: true, message: "Error fetching soba." });
   }
 
   try {
@@ -544,7 +560,7 @@ app.get("/api/broj-sobe", authJwt.verifyToken("domar, admin, stanar"), async (re
     }
 
     const sobe = await Soba.findAll({
-      attributes: ["broj_sobe"],
+      attributes: ["broj_sobe", "id_sobe"],
       where: {
         broj_objekta: broj_objekta,
       },
@@ -573,13 +589,15 @@ app.get("/api/broj-objekta", authJwt.verifyToken("domar, admin, stanar"), async 
   }
 });
 
-app.get("/api/broj-kreveta", authJwt.verifyToken("admin"), async (req, res) => {
+app.get("/api/broj-kreveta", authJwt.verifyToken("admin, recepcionar"), async (req, res) => {
   try {
+    const { id_sobe } = req.query;
     // Fetch all bed numbers (broj_kreveta) from the Krevet table where zauzetost is false (available beds)
     const availableBeds = await Krevet.findAll({
       attributes: ["broj_kreveta"], // Specify the attributes to return
       where: {
-        zauzetost: false, // Filter to include only available beds
+        zauzetost: false,
+        id_sobe: id_sobe,
       },
     });
 

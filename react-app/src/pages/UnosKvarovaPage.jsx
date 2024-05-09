@@ -134,7 +134,7 @@ const UnosKvarovaPage = () => {
 
               <div className="form-group">
                 <label htmlFor="broj_objekta">
-                  Objekta sobe:<span className="text-danger">*</span>{" "}
+                  Objekt sobe:<span className="text-danger">*</span>{" "}
                 </label>
                 <select className="form-control" id="broj_objekta" name="broj_objekta" value={formData.broj_objekta} onChange={handleChange} required>
                   <option value="">Odaberi</option>
