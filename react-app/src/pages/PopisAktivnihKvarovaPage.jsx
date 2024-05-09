@@ -117,9 +117,9 @@ const PopisAktivnihKvarovaPage = () => {
                   <td className="table-data">{kvar.stanar ? kvar.stanar.ime || "Neodređen" : "Neodređen"}</td>
                   <td className="table-data">{kvar.stanar ? kvar.stanar.prezime || "Neodređen" : "Neodređen"}</td>
                   <td className="table-data">
-                    <button className="btn btn-sm btn-primary" onClick={() => handleChange(index)}>
-                      Izmijeni
-                    </button>
+                  <Link to={`/izmjenaKvarova/${kvar.id_kvara}`} className="btn btn-sm btn-primary">
+                        Izmijeni
+                      </Link>
                     <button className="btn btn-sm btn-danger" onClick={() => handleDelete(kvar.id_kvara)}>
                       Izbriši
                     </button>

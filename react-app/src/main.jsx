@@ -93,7 +93,7 @@ const router = createBrowserRouter([
     element: <UnosKvarovaPage />,
   },
   {
-    path: "/izmjenaKvarova",
+    path: "/izmjenaKvarova/:id_kvara",
     element: <IzmjenaKvarovaPage />,
   },
   {

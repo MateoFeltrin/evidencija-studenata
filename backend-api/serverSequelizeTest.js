@@ -115,7 +115,7 @@ app.get("/verify-token", async (req, res) => {
   });
 });
 
-app.get("/api/svi-radnici1/:id_korisnika", authJwt.verifyToken("admin"), async (req, res) => {
+app.get("/api/svi-radnici1/:id_korisnika", authJwt.verifyToken("admin, domar"), async (req, res) => {
   try {
     const id_korisnika = req.params.id_korisnika;
 
@@ -182,7 +182,7 @@ app.get("/api/trenutni-stanari", authJwt.verifyToken("recepcionar, admin"), asyn
   }
 });
 
-app.get("/api/sviupisani-stanari", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
+app.get("/api/sviupisani-stanari", authJwt.verifyToken("recepcionar, admin, domar"), async (req, res) => {
   try {
     // Fetching all residents and including an associated model if needed
     const allStanari = await Stanar.findAll({});
@@ -197,7 +197,7 @@ app.get("/api/sviupisani-stanari", authJwt.verifyToken("recepcionar, admin"), as
 
 app.get("/api/aktivni-kvarovi", authJwt.verifyToken("domar, admin"), async (req, res) => {
   try {
-    const aktivniKvarovi = await Kvar.findAll({
+    const sviKvarovi = await Kvar.findAll({
       where: {
         stanje_kvara: 0,
       },
@@ -212,7 +212,7 @@ app.get("/api/aktivni-kvarovi", authJwt.verifyToken("domar, admin"), async (req,
         },
       ],
     });
-    res.json(aktivniKvarovi);
+    res.json(sviKvarovi);
   } catch (error) {
     console.log("Error fetching Kvarovi: ", error);
     res.status(500).send({ error: true, message: "Failed to fetch trenutni kvarovi." });
@@ -246,7 +246,7 @@ app.get("/api/aktivni-kvarovi/:id", authJwt.verifyToken("domar, admin"), async (
   }
 });
 
-app.get("/api/svi-radnici", authJwt.verifyToken("admin"), async (req, res) => {
+app.get("/api/svi-radnici", authJwt.verifyToken("admin, domar"), async (req, res) => {
   try {
     const sviKorisnici = await Korisnik.findAll({
       where: {
@@ -294,9 +294,12 @@ app.get("/api/svi-boravci", authJwt.verifyToken("recepcionar, admin"), async (re
   }
 });
 
-app.get("/api/svi-kvarovi", authJwt.verifyToken("domar, admin"), async (req, res) => {
+
+
+app.get("/api/svi-kvarovi1/:id_kvara", authJwt.verifyToken("domar, admin"), async (req, res) => {
+  const { id_kvara } = req.params;
   try {
-    const aktivniKvarovi = await Kvar.findAll({
+    const sviKvarovi = await Kvar.findByPk(id_kvara, {
       include: [
         {
           model: Stanar,
@@ -312,7 +315,36 @@ app.get("/api/svi-kvarovi", authJwt.verifyToken("domar, admin"), async (req, res
         },
       ],
     });
-    res.json(aktivniKvarovi);
+    if (!sviKvarovi) {
+      return res.status(404).json({ error: true, message: "Kvar not found." });
+    }
+    res.json(sviKvarovi);
+  } catch (error) {
+    console.log("Error fetching Kvarovi: ", error);
+    res.status(500).send({ error: true, message: "Failed to fetch svi kvarovi." });
+  }
+});
+
+
+app.get("/api/svi-kvarovi", authJwt.verifyToken("domar, admin"), async (req, res) => {
+  try {
+    const sviKvarovi = await Kvar.findAll({
+      include: [
+        {
+          model: Stanar,
+          attributes: ["ime", "prezime"],
+        },
+        {
+          model: Soba,
+          attributes: ["broj_sobe", "broj_objekta"],
+        },
+        {
+          model: Korisnik,
+          attributes: ["email_korisnika"],
+        },
+      ],
+    });
+    res.json(sviKvarovi);
   } catch (error) {
     console.log("Error fetching Kvarovi: ", error);
     res.status(500).send({ error: true, message: "Failed to fetch svi kvarovi." });
@@ -371,7 +403,7 @@ app.get("/api/objekt/:broj_objekta", authJwt.verifyToken("recepcionar, admin"), 
   }
 });
 
-app.get("/api/sve-sobe", authJwt.verifyToken("admin"), async (req, res) => {
+app.get("/api/sve-sobe", authJwt.verifyToken("admin, domar"), async (req, res) => {
   try {
     const sveSobe = await Soba.findAll({});
     res.json(sveSobe);
@@ -530,7 +562,7 @@ app.get("/api/slobodni-stanari", authJwt.verifyToken("recepcionar, admin"), asyn
   }
 });
 
-app.get("/api/sve-sobe1/:id_sobe", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
+app.get("/api/sve-sobe1/:id_sobe", authJwt.verifyToken("recepcionar, domar, admin"), async (req, res) => {
   try {
     const id_sobe = req.params.id_sobe;
 
@@ -1075,7 +1107,7 @@ app.put("/azuriranje-kreveta/:id_kreveta", authJwt.verifyToken("recepcionar, adm
   }
 });
 
-app.put("/azuriranje-kvara/:id_kvara", authJwt.verifyToken("domar"), async (req, res) => {
+app.put("/azuriranje-kvara/:id_kvara", authJwt.verifyToken("domar, admin"), async (req, res) => {
   const { id_kvara } = req.params;
   const { stanje_kvara } = req.body;
 
