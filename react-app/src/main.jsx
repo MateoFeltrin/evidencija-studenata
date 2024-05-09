@@ -38,7 +38,7 @@ import ForbiddenPage from "./pages/ForbiddenPage";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <UnosStanaraPage />,
+    element: <PrijavaPage />,
   },
   {
     path: "/unosStanara",

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios"; // Import axios for API requests
 import CollapsableNavbar from "../components/CollapsableNavbar";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,24 @@ const PrijavaPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    if (localStorage.getItem("token") != null) {
+      const token = localStorage.getItem("token");
+      // Decode the token to get the user's role
+      const decodedToken = jwtDecode(token);
+      const userRole = decodedToken.uloga;
+
+      // Redirect the user based on their role
+      if (userRole === "stanar") {
+        navigate("/unosKvarova");
+      } else if (userRole === "admin" || userRole === "recepcionar") {
+        navigate("/popisSvihStanara");
+      } else if (userRole === "domar") {
+        navigate("/popisAktivnihKvarova");
+      }
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
