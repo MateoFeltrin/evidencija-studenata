@@ -46,6 +46,7 @@ const IzmjenaRadnikaPage = () => {
       // Redirect to the page where you display all users after successful update
       // Example: history.push("/popisKorisnika");
     } catch (error) {
+      alert("Greška pri izmjeni, pogledajte jesu li unesena sva polja!");
       console.error("Error updating data:", error);
     }
   };
@@ -95,9 +96,9 @@ const IzmjenaRadnikaPage = () => {
                 </label>
                 <select className="form-select" id="uloga" name="uloga" value={korisnikData.uloga} onChange={handleChange}>
                   <option value="">Odaberi ulogu</option>
-                  <option value="Recepcionar">Recepcionar</option>
-                  <option value="Domar">Domar</option>
-                  <option value="Admin">Admin</option>
+                  <option value="recepcionar">Recepcionar</option>
+                  <option value="domar">Domar</option>
+                  <option value="admin">Admin</option>
                 </select>
               </div>
             </div>

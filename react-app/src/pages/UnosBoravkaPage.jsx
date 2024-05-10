@@ -173,22 +173,7 @@ const UnosBoravakaPage = () => {
               ))}
             </select>
           </div>
-          {/* 
-<div className="form-group">
-    <label>
-      Korisnik: <span className="text-danger">*</span>
-    </label>
-    <select className="form-control" name="id_korisnika" value={formData.id_korisnika} onChange={handleChange}>
-      <option value="">Odaberi Korisnika</option>
-      {korisnikaOptions.map((option) => (
-        <option key={option.id_korisnika} value={option.id_korisnika}>
-          {" "}
-          {option.email_korisnika}
-        </option>
-      ))}
-    </select>
-  </div>
-  */}
+        
           <div className="form-group">
             <label>
               Datum Useljenja: <span className="text-danger">*</span>

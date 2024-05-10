@@ -98,7 +98,7 @@ const UnosKvarovaPage = () => {
           Authorization: `Bearer ${token}`, // Include the token in the headers
         },
       });
-      alert("Form data submitted successfully!");
+      alert("Kvar uspješno unesen!");
       // Clear form after successful submission
       setFormData({
         opis_kvara: "",
@@ -108,7 +108,7 @@ const UnosKvarovaPage = () => {
       });
     } catch (error) {
       console.error("Error submitting form data:", error);
-      alert("An error occurred while submitting form data.");
+      alert("Greška prilikom unosa kvara.");
     }
   };
 

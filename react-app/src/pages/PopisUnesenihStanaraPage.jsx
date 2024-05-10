@@ -8,6 +8,7 @@ import { format } from "date-fns";
 const PopisUnesenihStanaraPage = () => {
   const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
 
@@ -70,10 +71,22 @@ const PopisUnesenihStanaraPage = () => {
         })
         .catch((err) => {
           console.log(err);
-          alert("Došlo je do pogreške prilikom brisanja!", err.message);
+          alert("Došlo je do pogreške prilikom brisanja, provjerite nalazi li se stanar u tablici boravci! ", err.message);
         });
     }
   };
+  const filteredData = data.filter((student) =>
+    student.oib.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+     student.jmbag.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+     student.ime.toLowerCase().includes(searchTerm.toLowerCase()) ||
+     student.prezime.toLowerCase().includes(searchTerm.toLowerCase()) ||
+     student.adresa_prebivalista.toLowerCase().includes(searchTerm.toLowerCase()) ||
+     (student.subvencioniranost ? "Da" : "Ne").toLowerCase().includes(searchTerm.toLowerCase()) ||
+     (student.uplata_teretane ? "Da" : "Ne").toLowerCase().includes(searchTerm.toLowerCase()) ||
+     student.uciliste.toLowerCase().includes(searchTerm.toLowerCase()) ||
+     student.komentar.toLowerCase().includes(searchTerm.toLowerCase()) 
+     
+  );
 
   return (
     <div>
@@ -81,6 +94,15 @@ const PopisUnesenihStanaraPage = () => {
       <div className="container-fluid">
         <div className="mt-4">
           <h1>Tablica svih unesenih stanara</h1>
+          <div className="mb-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Pretraži"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
           <Link to="/UnosStanara" className="btn btn-sm btn-primary mb-3">
             Dodaj novog stanara
           </Link>
@@ -103,7 +125,7 @@ const PopisUnesenihStanaraPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((student) => (
+                {filteredData.map((student) => (
                   <tr key={student.oib}>
                     <td className="table-data">{student.oib}</td>
                     <td className="table-data">{student.jmbag}</td>

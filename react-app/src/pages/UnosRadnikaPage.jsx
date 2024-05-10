@@ -30,7 +30,7 @@ const UnosRadnikaPage = () => {
           Authorization: `Bearer ${token}`, // Include the token in the headers
         },
       });
-      alert("Form data submitted successfully!");
+      alert("Radnik uspješno unesen!");
       setFormData({
         email_korisnika: "",
         lozinka: "",
@@ -38,7 +38,7 @@ const UnosRadnikaPage = () => {
       });
     } catch (error) {
       console.error("Error submitting form data:", error);
-      alert("An error occurred while submitting form data.");
+      alert("Greška prilikom unosa radnika.");
     }
   };
 
@@ -75,10 +75,10 @@ const UnosRadnikaPage = () => {
                 </label>
                 <select className="form-control" id="uloga" name="uloga" value={formData.uloga} onChange={handleChange} required>
                   <option value="">Odaberi</option>
-                  <option value="Recepcionar">Recepcionar</option>
-                  <option value="Domar">Domar</option>
-                  <option value="Admin">Admin</option>
-                  <option value="Stanar">Stanar</option>
+                  <option value="recepcionar">Recepcionar</option>
+                  <option value="domar">Domar</option>
+                  <option value="admin">Admin</option>
+                  <option value="stanar">Stanar</option>
                 </select>
               </div>
 

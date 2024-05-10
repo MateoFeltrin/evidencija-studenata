@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const PopisKrevetaPage = () => {
   const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
-
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -68,10 +68,17 @@ const PopisKrevetaPage = () => {
         })
         .catch((err) => {
           console.log(err);
-          alert("Došlo je do pogreške prilikom brisanja!", err.message);
+          alert("Došlo je do pogreške prilikom brisanja, provjerite je li krevet vezan uz boravak trenutnog stanara!", err.message);
         });
     }
   };
+
+  const filteredData = data.filter((krevet) =>
+    krevet.broj_kreveta.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (krevet.zauzetost ? "Da" : "Ne").toLowerCase().includes(searchTerm.toLowerCase()) ||
+    krevet.soba.broj_sobe.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+    krevet.soba.broj_objekta.toString().toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
@@ -79,6 +86,15 @@ const PopisKrevetaPage = () => {
       <div className="container-fluid">
         <div className="container mt-4">
           <h1>Popis kreveta</h1>
+          <div className="mb-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Pretraži"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
           <Link to="/unosKreveta" className="btn btn-sm btn-primary mb-3">
             Dodaj krevet
           </Link>
@@ -95,7 +111,7 @@ const PopisKrevetaPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((krevet) => (
+              {filteredData.map((krevet) => (
                   <tr key={krevet.id_kreveta}>
                     <td className="table-data">{krevet.id_kreveta}</td>
                     <td className="table-data">{krevet.soba.broj_objekta}</td>

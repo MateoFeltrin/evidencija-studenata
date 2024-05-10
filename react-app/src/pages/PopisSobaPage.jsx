@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const PopisSobaPage = () => {
   const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
 
@@ -69,10 +70,15 @@ const PopisSobaPage = () => {
         })
         .catch((err) => {
           console.log(err);
-          alert("Došlo je do pogreške prilikom brisanja!", err.message);
+          alert("Došlo je do pogreške prilikom brisanja, uz sobu postoje vezani kreveti!", err.message);
         });
     }
   };
+  const filteredData = data.filter((soba) =>
+    soba.broj_sobe.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+    soba.kat_sobe.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+    soba.broj_objekta.toString().toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
@@ -80,6 +86,15 @@ const PopisSobaPage = () => {
       <div className="container-fluid">
         <div className="container mt-4">
           <h1>Popis soba</h1>
+          <div className="mb-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Pretraži"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
           <Link to="/unosSoba" className="btn btn-sm btn-primary mb-3">
             Dodaj sobu
           </Link>
@@ -95,7 +110,7 @@ const PopisSobaPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((soba) => (
+                {filteredData.map((soba) => (
                   <tr key={soba.id_sobe}>
                     <td className="table-data">{soba.id_sobe}</td>
                     <td className="table-data">{soba.broj_objekta}</td>

@@ -134,6 +134,7 @@ const IzmjenaBoravkaPage = () => {
       });
       alert("Podaci uspješno izmjenjeni!");
     } catch (error) {
+      alert("Greška pri izmjeni, pogledajte jesu li unesena sva polja!");
       console.error("Error updating data:", error);
     }
   };

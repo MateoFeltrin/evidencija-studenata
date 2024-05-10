@@ -39,6 +39,7 @@ const IzmjenaObjektaPage = () => {
       // Redirect to the page where you display all objects after successful update
       // Example: history.push("/popisSvihObjekata");
     } catch (error) {
+      alert("Greška pri izmjeni, pogledajte jesu li unesena sva polja!");
       console.error("Error updating data:", error);
     }
   };

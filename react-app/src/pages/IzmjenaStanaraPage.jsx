@@ -56,6 +56,7 @@ const IzmjenaStanaraPage = () => {
       //  Router.push("/popisSvihStanara");
     } catch (error) {
       console.error("Error updating data:", error);
+      alert("Greška pri izmjeni, pogledajte jesu li unesena sva obavezna polja!");
     }
   };
 

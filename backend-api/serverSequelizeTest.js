@@ -137,7 +137,7 @@ app.get("/api/svi-radnici1/:id_korisnika", authJwt.verifyToken("admin, domar"), 
   }
 });
 
-app.get("/api/trenutni-stanari1/:id", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
+app.get("/api/trenutni-stanari1/:id", authJwt.verifyToken("recepcionar, admin, domar"), async (req, res) => {
   try {
     const id = req.params.id;
 
@@ -1177,6 +1177,16 @@ app.put("/azuriranje-kvara/:id_kvara", authJwt.verifyToken("domar, admin"), asyn
     return res.status(400).json({ error: true, message: "id_kvara i stanje_kvara su obavezni." });
   }
 
+  // Decode the token to access `id_korisnika` and `uloga`
+  const token = req.headers.authorization.split(" ")[1]; // Assuming the token is passed as "Bearer <token>"
+  const decodedToken = jwt.decode(token);
+
+  if (!decodedToken) {
+    return res.status(401).send({ error: true, message: "Invalid token." });
+  }
+
+  const id_korisnika = decodedToken.id; // Retrieve `id_korisnika` from the decoded token
+
   try {
     // Find the Kvar record by id_kvara
     const kvar = await Kvar.findByPk(id_kvara);
@@ -1186,8 +1196,8 @@ app.put("/azuriranje-kvara/:id_kvara", authJwt.verifyToken("domar, admin"), asyn
       return res.status(404).json({ error: true, message: "Kvar not found." });
     }
 
-    // Update the Kvar record with the provided state
-    await kvar.update({ stanje_kvara });
+    // Update the Kvar record with the provided state and `id_korisnika`
+    await kvar.update({ stanje_kvara, id_korisnika });
 
     // Send a success response
     res.status(200).json({ error: false, message: "Uspjesno azuriranje." });
@@ -1196,6 +1206,7 @@ app.put("/azuriranje-kvara/:id_kvara", authJwt.verifyToken("domar, admin"), asyn
     return res.status(500).json({ error: true, message: "Neuspjesno azuriranje." });
   }
 });
+
 
 app.delete("/brisanje-korisnika/:id_korisnika", authJwt.verifyToken("admin"), async (req, res) => {
   const { id_korisnika } = req.params;

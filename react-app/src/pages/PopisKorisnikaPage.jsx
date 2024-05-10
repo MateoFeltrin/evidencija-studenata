@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 const PopisKorisnikaPage = () => {
   const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
 
@@ -68,16 +69,30 @@ const PopisKorisnikaPage = () => {
         })
         .catch((err) => {
           console.log(err);
-          alert("Došlo je do pogreške prilikom brisanja!", err.message);
+          alert("Došlo je do pogreške prilikom brisanja korisnika, Korisnik ima prijavljene ili popravljene kvarova!", err.message);
         });
     }
+    
   };
+
+  const filteredData = data.filter((radnik) =>
+    radnik.email_korisnika.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
       <CollapsableNavbar />
       <div className="container-fluid">
         <h1>Popis radnika</h1>
+        <div className="mb-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Pretraži po emailu"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
         <Link to="/unosRadnika" className="btn btn-sm btn-primary mb-3">
           Dodaj radnika
         </Link>
@@ -93,7 +108,7 @@ const PopisKorisnikaPage = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((radnik) => (
+            {filteredData.map((radnik) => (
                 <tr key={radnik.id_korisnika}>
                   <td className="table-data">{radnik.id_korisnika}</td>
                   <td className="table-data">{radnik.email_korisnika}</td>

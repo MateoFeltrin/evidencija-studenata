@@ -47,7 +47,7 @@ const UnosSobaPage = () => {
           Authorization: `Bearer ${token}`, // Include the token in the headers
         },
       });
-      alert("Form data submitted successfully!");
+      alert("Soba uspješno unesena!");
       setFormData({
         broj_objekta: "",
         kat_sobe: "",
@@ -55,7 +55,7 @@ const UnosSobaPage = () => {
       });
     } catch (error) {
       console.error("Error submitting form data:", error);
-      alert("An error occurred while submitting form data.");
+      alert("Greška prilikom unosa sobe.");
     }
   };
   return (
