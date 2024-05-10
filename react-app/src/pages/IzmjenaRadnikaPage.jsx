@@ -95,9 +95,9 @@ const IzmjenaRadnikaPage = () => {
                 </label>
                 <select className="form-select" id="uloga" name="uloga" value={korisnikData.uloga} onChange={handleChange}>
                   <option value="">Odaberi ulogu</option>
-                  <option value="Recepcionar">Recepcionar</option>
-                  <option value="Domar">Domar</option>
-                  <option value="Admin">Admin</option>
+                  <option value="recepcionar">Recepcionar</option>
+                  <option value="domar">Domar</option>
+                  <option value="admin">Admin</option>
                 </select>
               </div>
             </div>
