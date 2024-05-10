@@ -9,6 +9,7 @@ import { format } from "date-fns";
 const PopisSvihKvarovaPage = () => {
   const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
 
@@ -83,12 +84,29 @@ const PopisSvihKvarovaPage = () => {
     }
   };
 
+  const filteredData = data.filter((kvar) =>
+    (kvar.id_kvara.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (kvar.stanar && kvar.stanar.ime && kvar.stanar.ime.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (kvar.stanar && kvar.stanar.prezime && kvar.stanar.prezime.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    kvar.opis_kvara.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (kvar.korisnik && kvar.korisnik.email_korisnika && kvar.korisnik.email_korisnika.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
   return (
     <div>
       <CollapsableNavbar />
       <div className="container-fluid">
         <div className="container mt-4">
           <h1>Popis svih kvarova</h1>
+          <div className="mb-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Pretraži"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
           <Link to="/unosKvarova" className="btn btn-sm btn-primary mb-3">
             Dodaj kvar
           </Link>
@@ -108,7 +126,7 @@ const PopisSvihKvarovaPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((kvar) => (
+                {filteredData.map((kvar) => (
                   <tr key={kvar.id_kvara}>
                     <td className="table-data">{kvar.id_kvara}</td>
                     <td className="table-data">{formatDate(kvar.datum_prijave_kvara)}</td>

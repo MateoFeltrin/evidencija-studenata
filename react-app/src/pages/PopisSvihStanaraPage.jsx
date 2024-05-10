@@ -8,6 +8,7 @@ import { format } from "date-fns";
 const PopisSvihStanaraPage = () => {
   const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
 
@@ -112,12 +113,34 @@ const PopisSvihStanaraPage = () => {
         });
     }
   };
+
+  const filteredData = data.filter((student) =>
+    student.oib.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+     student.stanar.jmbag.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+     student.stanar.ime.toLowerCase().includes(searchTerm.toLowerCase()) ||
+     student.stanar.prezime.toLowerCase().includes(searchTerm.toLowerCase()) ||
+     student.stanar.adresa_prebivalista.toLowerCase().includes(searchTerm.toLowerCase()) ||
+     (student.stanar.subvencioniranost ? "Da" : "Ne").toLowerCase().includes(searchTerm.toLowerCase()) ||
+     (student.stanar.uplata_teretane ? "Da" : "Ne").toLowerCase().includes(searchTerm.toLowerCase()) ||
+     student.stanar.uciliste.toLowerCase().includes(searchTerm.toLowerCase()) ||
+     student.stanar.komentar.toLowerCase().includes(searchTerm.toLowerCase()) 
+     
+  );
   return (
     <div>
       <CollapsableNavbar />
       <div className="container-fluid">
         <div className="mt-4">
           <h1>Tablica trenutačnih stanara</h1>
+          <div className="mb-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Pretraži"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
           <Link to="/UnosStanara" className="btn btn-sm btn-primary mb-3">
             Dodaj novog stanara
           </Link>
@@ -141,7 +164,7 @@ const PopisSvihStanaraPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((student) => (
+                {filteredData.map((student) => (
                   <tr key={student.oib}>
                     <td className="table-data">{student.oib}</td>
                     <td className="table-data">{student.stanar.jmbag}</td>

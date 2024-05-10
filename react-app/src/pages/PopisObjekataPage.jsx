@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const PopisObjekataPage = () => {
   const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const navigate = useNavigate();
 
@@ -73,6 +74,9 @@ const PopisObjekataPage = () => {
         });
     }
   };
+  const filteredData = data.filter((objekt) =>
+    objekt.broj_objekta.toString().toLowerCase().includes(searchTerm.toLowerCase()) 
+  );
 
   return (
     <div>
@@ -80,6 +84,15 @@ const PopisObjekataPage = () => {
       <div className="container-fluid">
         <div className="container mt-4">
           <h1>Popis objekata</h1>
+          <div className="mb-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Pretraži po broju objekta"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
           <Link to="/unosObjekata" className="btn btn-sm btn-primary mb-3">
             Dodaj objekt
           </Link>
@@ -92,7 +105,7 @@ const PopisObjekataPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((objekt) => (
+                {filteredData.map((objekt) => (
                   <tr key={objekt.broj_objekta}>
                     <td className="table-data">{objekt.broj_objekta}</td>
                     <td className="table-data">

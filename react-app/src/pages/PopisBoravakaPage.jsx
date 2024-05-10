@@ -9,7 +9,7 @@ import { format } from "date-fns";
 const PopisBoravakaPage = () => {
   const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
-
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
   // Format the date using date-fns
@@ -118,11 +118,26 @@ const PopisBoravakaPage = () => {
     }
   };
 
+  const filteredData = data.filter((boravak) =>
+    boravak.korisnik.email_korisnika.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    boravak.stanar.ime.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    boravak.stanar.prezime.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div>
       <CollapsableNavbar />
       <div className="container-fluid">
         <h1>Popis boravaka</h1>
+        <div className="mb-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Pretraži"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
         <Link to="/unosBoravka" className="btn btn-sm btn-primary mb-3">
           Dodaj boravak
         </Link>
@@ -142,7 +157,7 @@ const PopisBoravakaPage = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((boravak) => (
+            {filteredData.map((boravak) => (
                 <tr key={boravak.id_boravka}>
                   <td className="table-data">{boravak.stanar.ime}</td>
                   <td className="table-data">{boravak.stanar.prezime}</td>
