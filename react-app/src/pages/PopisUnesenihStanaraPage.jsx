@@ -71,7 +71,7 @@ const PopisUnesenihStanaraPage = () => {
         })
         .catch((err) => {
           console.log(err);
-          alert("Došlo je do pogreške prilikom brisanja!", err.message);
+          alert("Došlo je do pogreške prilikom brisanja, provjerite nalazi li se stanar u tablici boravci! ", err.message);
         });
     }
   };

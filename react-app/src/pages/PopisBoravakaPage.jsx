@@ -61,7 +61,7 @@ const PopisBoravakaPage = () => {
   const handleDelete = (id_boravka) => {
     const isConfirmed = window.confirm("Želite li zaista obrisati boravak?");
     if (isConfirmed) {
-      console.log("Broj objekta to delete:", id_boravka);
+      console.log("Broj boravka to delete:", id_boravka);
       axios
         .delete(`http://localhost:3000/brisanje-boravka/${id_boravka}`, {
           headers: {

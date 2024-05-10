@@ -46,6 +46,7 @@ const IzmjenaRadnikaPage = () => {
       // Redirect to the page where you display all users after successful update
       // Example: history.push("/popisKorisnika");
     } catch (error) {
+      alert("Greška pri izmjeni, pogledajte jesu li unesena sva polja!");
       console.error("Error updating data:", error);
     }
   };

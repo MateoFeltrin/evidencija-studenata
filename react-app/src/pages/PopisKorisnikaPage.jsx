@@ -69,7 +69,7 @@ const PopisKorisnikaPage = () => {
         })
         .catch((err) => {
           console.log(err);
-          alert("Došlo je do pogreške prilikom brisanja!", err.message);
+          alert("Došlo je do pogreške prilikom brisanja korisnika, Korisnik ima prijavljene ili popravljene kvarova!", err.message);
         });
     }
     

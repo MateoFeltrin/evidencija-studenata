@@ -65,7 +65,7 @@ const UnosKrevetaPage = () => {
           Authorization: `Bearer ${token}`, // Include the token in the headers
         },
       });
-      alert("Form data submitted successfully!");
+      alert("Krevet uspješno dodan!");
       // Clear form after successful submission
       setFormData({
         broj_kreveta: "",
@@ -74,7 +74,7 @@ const UnosKrevetaPage = () => {
       });
     } catch (error) {
       console.error("Error submitting form data:", error);
-      alert("An error occurred while submitting form data.");
+      alert("Greška prilikom dodavanja kreveta.");
     }
   };
 

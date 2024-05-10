@@ -70,7 +70,7 @@ const PopisObjekataPage = () => {
         })
         .catch((err) => {
           console.log(err);
-          alert("Došlo je do pogreške prilikom brisanja!", err.message);
+          alert("Došlo je do pogreške prilikom brisanja, uz objekt su vezane sobe!", err.message);
         });
     }
   };

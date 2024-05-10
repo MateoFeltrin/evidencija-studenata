@@ -80,6 +80,7 @@ const PopisAktivnihKvarovaPage = () => {
         .catch((err) => {
           console.log(err);
           alert("Došlo je do pogreške prilikom brisanja!", err.message);
+          
         });
     }
   };

@@ -30,7 +30,7 @@ const UnosRadnikaPage = () => {
           Authorization: `Bearer ${token}`, // Include the token in the headers
         },
       });
-      alert("Form data submitted successfully!");
+      alert("Radnik uspješno unesen!");
       setFormData({
         email_korisnika: "",
         lozinka: "",
@@ -38,7 +38,7 @@ const UnosRadnikaPage = () => {
       });
     } catch (error) {
       console.error("Error submitting form data:", error);
-      alert("An error occurred while submitting form data.");
+      alert("Greška prilikom unosa radnika.");
     }
   };
 
