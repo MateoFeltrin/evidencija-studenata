@@ -90,7 +90,7 @@ const PopisBoravakaPage = () => {
     if (isConfirmed) {
       axios
         .put(
-          `http://localhost:3000/azuriranje-boravka/${id_boravka}`,
+          `http://localhost:3000/iseljenje/${id_boravka}`,
           {
             datum_iseljenja: new Date(), // Set move-out date to current date
           },
@@ -130,6 +130,7 @@ const PopisBoravakaPage = () => {
           <table className="table table-striped table-hover">
             <thead>
               <tr>
+                <th scope="col">OIB</th>
                 <th scope="col">Ime stanara</th>
                 <th scope="col">Prezime stanara</th>
                 <th scope="col">Datum Useljenja</th>
@@ -144,6 +145,7 @@ const PopisBoravakaPage = () => {
             <tbody>
               {data.map((boravak) => (
                 <tr key={boravak.id_boravka}>
+                  <td className="table-data">{boravak.stanar.oib}</td>
                   <td className="table-data">{boravak.stanar.ime}</td>
                   <td className="table-data">{boravak.stanar.prezime}</td>
                   <td className="table-data">{formatDate(boravak.datum_useljenja)}</td>
@@ -153,9 +155,10 @@ const PopisBoravakaPage = () => {
                   <td className="table-data">{boravak.krevet.broj_kreveta}</td>
                   <td className="table-data">{boravak.korisnik.email_korisnika}</td>
                   <td className="table-data">
-                    <Link to={`/izmjenaBoravka/${boravak.id_boravka}`} className="btn btn-sm btn-primary">
+                    <Link to={`/izmjenaBoravka/${boravak.id_boravka}?broj_objekta=${boravak.krevet.soba.broj_objekta}&broj_sobe=${boravak.krevet.soba.broj_sobe}&broj_kreveta=${boravak.krevet.broj_kreveta}&oib=${boravak.stanar.oib}`} className="btn btn-sm btn-primary">
                       Izmijeni
                     </Link>
+
                     <button className="btn btn-sm btn-danger" onClick={() => handleDelete(boravak.id_boravka)}>
                       Izbriši
                     </button>

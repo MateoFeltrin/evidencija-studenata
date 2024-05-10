@@ -268,7 +268,7 @@ app.get("/api/svi-boravci", authJwt.verifyToken("recepcionar, admin"), async (re
       include: [
         {
           model: Stanar,
-          attributes: ["ime", "prezime"],
+          attributes: ["ime", "prezime", "oib"],
         },
         {
           model: Krevet,
@@ -293,8 +293,6 @@ app.get("/api/svi-boravci", authJwt.verifyToken("recepcionar, admin"), async (re
     res.status(500).send({ error: true, message: "Failed to fetch svi boravci." });
   }
 });
-
-
 
 app.get("/api/svi-kvarovi1/:id_kvara", authJwt.verifyToken("domar, admin"), async (req, res) => {
   const { id_kvara } = req.params;
@@ -324,7 +322,6 @@ app.get("/api/svi-kvarovi1/:id_kvara", authJwt.verifyToken("domar, admin"), asyn
     res.status(500).send({ error: true, message: "Failed to fetch svi kvarovi." });
   }
 });
-
 
 app.get("/api/svi-kvarovi", authJwt.verifyToken("domar, admin"), async (req, res) => {
   try {
@@ -623,18 +620,31 @@ app.get("/api/broj-objekta", authJwt.verifyToken("domar, admin, stanar"), async 
 
 app.get("/api/broj-kreveta", authJwt.verifyToken("admin, recepcionar"), async (req, res) => {
   try {
-    const { id_sobe } = req.query;
-    // Fetch all bed numbers (broj_kreveta) from the Krevet table where zauzetost is false (available beds)
-    const availableBeds = await Krevet.findAll({
-      attributes: ["broj_kreveta"], // Specify the attributes to return
+    const { broj_objekta, broj_sobe, broj_kreveta } = req.query;
+
+    const soba = await Soba.findOne({
+      attributes: ["id_sobe"],
       where: {
-        zauzetost: false,
-        id_sobe: id_sobe,
+        broj_objekta: broj_objekta,
+        broj_sobe: broj_sobe,
       },
     });
 
-    // Send the list of available bed numbers as a JSON response
-    res.json(availableBeds);
+    if (soba) {
+      const slobodniKreveti = await Krevet.findAll({
+        attributes: ["broj_kreveta"],
+        where: {
+          id_sobe: soba.id_sobe,
+          [Op.or]: [{ zauzetost: false }, { [Op.and]: [{ broj_kreveta: broj_kreveta }, { zauzetost: true }] }],
+        },
+      });
+
+      // Send the list of available bed numbers as a JSON response
+      res.json(slobodniKreveti);
+    } else {
+      // Return a 404 error if the room is not found
+      res.status(404).json({ error: "Room not found" });
+    }
   } catch (error) {
     // Log any errors and return a 500 status with an error message
     console.error("Error fetching available beds:", error);
@@ -900,6 +910,57 @@ app.post("/unos-kvara", authJwt.verifyToken("domar, admin, stanar"), async (req,
 });
 
 app.put("/azuriranje-boravka/:id_boravka", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
+  const { id_boravka } = req.params;
+  const { datum_iseljenja, broj_kreveta, broj_objekta, broj_sobe, datum_useljenja, id_korisnika, oib } = req.body;
+  // Validate the input
+  if (!id_boravka || !datum_useljenja || !broj_kreveta || !broj_objekta || !broj_sobe || !id_korisnika || !oib) {
+    return res.status(400).json({ error: true, message: "id_boravka and datum_iseljenja are required." });
+  }
+
+  try {
+    const soba = await Soba.findOne({
+      where: {
+        broj_objekta: broj_objekta,
+        broj_sobe: broj_sobe,
+      },
+    });
+    if (soba) {
+      const krevet = await Krevet.findOne({
+        where: {
+          broj_kreveta: broj_kreveta,
+          id_sobe: soba.id_sobe,
+        },
+      });
+      console.log(krevet);
+      if (krevet) {
+        const updatedBoravak = await Boravak.update(
+          { datum_iseljenja: datum_iseljenja, datum_useljenja: datum_useljenja, id_kreveta: krevet.id_kreveta, oib: oib, id_korisnika: id_korisnika },
+          {
+            where: { id_boravka },
+            returning: true, // This option returns the updated rows
+          }
+        );
+        if (updatedBoravak[0] === 0) {
+          // No rows were updated
+          return res.status(404).json({ error: true, message: "Boravak not found." });
+        }
+
+        // Successful update
+        return res.status(200).json({
+          error: false,
+          data: updatedBoravak[1][0],
+          message: "Successfully updated boravak.",
+        });
+      }
+    }
+  } catch (error) {
+    console.error("Error updating boravak:", error);
+    // Return a 500 Internal Server Error response if there's an error
+    return res.status(500).json({ error: true, message: "Failed to update boravak." });
+  }
+});
+
+app.put("/iseljenje/:id_boravka", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   const { id_boravka } = req.params;
   const { datum_iseljenja } = req.body;
 
