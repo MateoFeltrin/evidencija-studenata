@@ -1,82 +1,74 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
 import CollapsableNavbar from "../components/CollapsableNavbar";
 import { useNavigate } from "react-router-dom";
 
 const PopisObjekataPage = () => {
   const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchInput, setSearchInput] = useState(""); // State to store input value
+  const [search, setSearch] = useState(""); // State to store search term
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const limit = 10; // Number of records per page
 
   const navigate = useNavigate();
 
+  const fetchData = async (page) => {
+    try {
+      const response = await axios.get("http://localhost:3000/api/svi-objekti", {
+        params: {
+          page,
+          limit,
+          search,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const { objekti, totalPages } = response.data;
+
+      setData(objekti);
+      setTotalPages(totalPages);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      navigate("/forbidden");
+    }
+  };
+
   useEffect(() => {
     if (token) {
-      // Send a request to the backend server to verify the token and check the user's role
-      axios
-        .get("http://localhost:3000/verify-token?roles=admin", {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the request headers
-          },
-        })
-        .then((response) => {
-          // If the response status is 200, proceed with fetching the data
-          if (response.status === 200) {
-            axios
-              .get("http://localhost:3000/api/svi-objekti", {
-                headers: {
-                  Authorization: `Bearer ${token}`, // Include the token in the headers
-                },
-              })
-              .then((res) => setData(res.data))
-              .catch((err) => console.log(err));
-          } else {
-            // If the user is not authorized, redirect to "/not-authorized" page
-            navigate("/forbidden");
-          }
-        })
-        .catch((error) => {
-          // If there's an error (e.g., invalid token), redirect the user to the login page
-          console.error("Error verifying token:", error);
-          navigate("/forbidden");
-        });
+      fetchData(currentPage);
     } else {
-      // If there's no token, redirect the user to the login page
       navigate("/prijava");
     }
-  }, [navigate]);
+  }, [currentPage, search, navigate]);
 
   const handleDelete = (broj_objekta) => {
     const isConfirmed = window.confirm("Želite li zaista obrisati objekt?");
     if (isConfirmed) {
-      console.log("Broj objekta to delete:", broj_objekta);
       axios
         .delete(`http://localhost:3000/brisanje-objekta/${broj_objekta}`, {
           headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the headers
+            Authorization: `Bearer ${token}`,
           },
         })
         .then(() => {
-          axios
-            .get("http://localhost:3000/api/svi-objekti", {
-              headers: {
-                Authorization: `Bearer ${token}`, // Include the token in the headers
-              },
-            })
-            .then((res) => setData(res.data))
-            .catch((err) => console.log(err));
+          fetchData(currentPage); // Refetch data after deletion
         })
         .catch((err) => {
-          console.log(err);
-          alert("Došlo je do pogreške prilikom brisanja, uz objekt su vezane sobe!", err.message);
+          console.error(err);
+          alert("Došlo je do pogreške prilikom brisanja, uz objekt su vezane sobe!");
         });
     }
   };
-  const filteredData = data.filter((objekt) =>
-    objekt.broj_objekta.toString().toLowerCase().includes(searchTerm.toLowerCase()) 
-  );
+
+  // Function to handle search when the button is clicked
+  const handleSearch = () => {
+    setSearch(searchInput); // Set search term from input value
+    setCurrentPage(1); // Reset current page to 1 when performing a new search
+  };
 
   return (
     <div>
@@ -84,15 +76,12 @@ const PopisObjekataPage = () => {
       <div className="container-fluid">
         <div className="container mt-4">
           <h1>Popis objekata</h1>
-          <div className="mb-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Pretraži po broju objekta"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+          <div class="input-group mb-3">
+            <input type="text" className="form-control" placeholder="Pretraži" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
+            <button className="btn btn-outline-secondary" type="button" id="button-addon1" onClick={handleSearch}>
+              Pretraži
+            </button>
+          </div>
           <Link to="/unosObjekata" className="btn btn-sm btn-primary mb-3">
             Dodaj objekt
           </Link>
@@ -105,7 +94,7 @@ const PopisObjekataPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredData.map((objekt) => (
+                {data.map((objekt) => (
                   <tr key={objekt.broj_objekta}>
                     <td className="table-data">{objekt.broj_objekta}</td>
                     <td className="table-data">
@@ -121,6 +110,27 @@ const PopisObjekataPage = () => {
               </tbody>
             </table>
           </div>
+          <nav aria-label="Page navigation">
+            <ul className="pagination">
+              <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                <button className="page-link" onClick={() => setCurrentPage((prev) => prev - 1)}>
+                  Previous
+                </button>
+              </li>
+              {[...Array(totalPages)].map((_, i) => (
+                <li key={i} className={`page-item ${currentPage === i + 1 ? "active" : ""}`}>
+                  <button className="page-link" onClick={() => setCurrentPage(i + 1)}>
+                    {i + 1}
+                  </button>
+                </li>
+              ))}
+              <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+                <button className="page-link" onClick={() => setCurrentPage((prev) => prev + 1)}>
+                  Next
+                </button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>

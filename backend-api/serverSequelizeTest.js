@@ -161,21 +161,41 @@ app.get("/api/trenutni-stanari1/:id", authJwt.verifyToken("recepcionar, admin, d
 
 app.get("/api/trenutni-stanari", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   try {
-    // Fetching the residents and their current stay details
-    const trenutniStanari = await Boravak.findAll({
-      where: {
-        datum_iseljenja: null, // Filter for current residents
-      },
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+    const searchQuery = req.query.search || "";
+
+    let whereClause = { datum_iseljenja: null }; // Default where clause
+
+    if (searchQuery) {
+      const { Op } = require("sequelize");
+      whereClause = {
+        datum_iseljenja: null,
+        [Op.or]: [Sequelize.literal(`stanar.uciliste LIKE '%${searchQuery}%'`), Sequelize.literal(`stanar.ime LIKE '%${searchQuery}%'`), Sequelize.literal(`stanar.prezime LIKE '%${searchQuery}%'`), Sequelize.literal(`stanar.oib LIKE '%${searchQuery}%'`), Sequelize.literal(`stanar.jmbag LIKE '%${searchQuery}%'`), Sequelize.literal(`stanar.adresa_prebivalista LIKE '%${searchQuery}%'`)],
+      };
+    }
+
+    const { rows: sviStanari, count: totalCount } = await Boravak.findAndCountAll({
+      where: whereClause,
       include: [
         {
           model: Stanar, // Include the associated Stanar model
           required: true,
         },
       ],
+      offset: offset,
+      limit: limit,
     });
 
-    // Sending the results as a JSON response
-    res.json(trenutniStanari);
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      stanari: sviStanari,
+      currentPage: page,
+      totalPages,
+      limit,
+    });
   } catch (error) {
     console.error("Error fetching trenutni stanari:", error);
     res.status(500).send({ error: true, message: "Failed to fetch trenutni stanari." });
@@ -184,11 +204,48 @@ app.get("/api/trenutni-stanari", authJwt.verifyToken("recepcionar, admin"), asyn
 
 app.get("/api/sviupisani-stanari", authJwt.verifyToken("recepcionar, admin, domar"), async (req, res) => {
   try {
-    // Fetching all residents and including an associated model if needed
-    const allStanari = await Stanar.findAll({});
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+    const searchQuery = req.query.search || "";
 
-    // Sending the results as a JSON response
-    res.json(allStanari);
+    let whereClause = {}; // Default where clause
+
+    if (searchQuery) {
+      const { Op } = require("sequelize");
+      whereClause = {
+        [Op.or]: [
+          Sequelize.literal(`korisnik.email_korisnika LIKE '%${searchQuery}%'`),
+          Sequelize.literal(`stanar.uciliste LIKE '%${searchQuery}%'`),
+          Sequelize.literal(`stanar.ime LIKE '%${searchQuery}%'`),
+          Sequelize.literal(`stanar.prezime LIKE '%${searchQuery}%'`),
+          Sequelize.literal(`stanar.oib LIKE '%${searchQuery}%'`),
+          Sequelize.literal(`stanar.jmbag LIKE '%${searchQuery}%'`),
+          Sequelize.literal(`stanar.adresa_prebivalista LIKE '%${searchQuery}%'`),
+        ],
+      };
+    }
+
+    const { rows: sviStanari, count: totalCount } = await Stanar.findAndCountAll({
+      where: whereClause,
+      include: [
+        {
+          model: Korisnik, // Include the associated Stanar model
+          required: true,
+        },
+      ],
+      offset: offset,
+      limit: limit,
+    });
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      stanari: sviStanari,
+      currentPage: page,
+      totalPages,
+      limit,
+    });
   } catch (error) {
     console.error("Error fetching all stanari:", error);
     res.status(500).send({ error: true, message: "Failed to fetch all stanari." });
@@ -197,10 +254,23 @@ app.get("/api/sviupisani-stanari", authJwt.verifyToken("recepcionar, admin, doma
 
 app.get("/api/aktivni-kvarovi", authJwt.verifyToken("domar, admin"), async (req, res) => {
   try {
-    const sviKvarovi = await Kvar.findAll({
-      where: {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+    const searchQuery = req.query.search || "";
+
+    let whereClause = { stanje_kvara: 0 }; // Default where clause
+
+    if (searchQuery) {
+      const { Op } = require("sequelize");
+      whereClause = {
         stanje_kvara: 0,
-      },
+        [Op.or]: [Sequelize.literal(`stanar.ime LIKE '%${searchQuery}%'`), Sequelize.literal(`stanar.prezime LIKE '%${searchQuery}%'`), Sequelize.literal(`kvar.opis_kvara LIKE '%${searchQuery}%'`), Sequelize.literal(`soba.broj_sobe LIKE '%${searchQuery}%'`), Sequelize.literal(`soba.broj_objekta LIKE '%${searchQuery}%'`)],
+      };
+    }
+
+    const { rows: sviKvarovi, count: totalCount } = await Kvar.findAndCountAll({
+      where: whereClause,
       include: [
         {
           model: Stanar,
@@ -210,12 +280,26 @@ app.get("/api/aktivni-kvarovi", authJwt.verifyToken("domar, admin"), async (req,
           model: Soba,
           attributes: ["broj_sobe", "broj_objekta"],
         },
+        {
+          model: Korisnik,
+          attributes: ["email_korisnika"],
+        },
       ],
+      offset: offset,
+      limit: limit,
     });
-    res.json(sviKvarovi);
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      kvarovi: sviKvarovi,
+      currentPage: page,
+      totalPages,
+      limit,
+    });
   } catch (error) {
     console.log("Error fetching Kvarovi: ", error);
-    res.status(500).send({ error: true, message: "Failed to fetch trenutni kvarovi." });
+    res.status(500).send({ error: true, message: "Failed to fetch svi kvarovi." });
   }
 });
 
@@ -248,14 +332,40 @@ app.get("/api/aktivni-kvarovi/:id", authJwt.verifyToken("domar, admin"), async (
 
 app.get("/api/svi-radnici", authJwt.verifyToken("admin, domar"), async (req, res) => {
   try {
-    const sviKorisnici = await Korisnik.findAll({
-      where: {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const searchQuery = req.query.search || "";
+    const offset = (page - 1) * limit;
+
+    let whereClause = {
+      uloga: {
+        [Sequelize.Op.in]: ["admin", "recepcionar", "domar"],
+      },
+    }; // Default where clause
+
+    if (searchQuery) {
+      const { Op } = require("sequelize");
+      whereClause = {
         uloga: {
           [Sequelize.Op.in]: ["admin", "recepcionar", "domar"],
         },
-      },
+        [Op.or]: [Sequelize.literal(`korisnik.email_korisnika LIKE '%${searchQuery}%'`), Sequelize.literal(`korisnik.uloga LIKE '%${searchQuery}%'`)],
+      };
+    }
+    const { rows: sviKorisnici, count: totalCount } = await Korisnik.findAndCountAll({
+      where: whereClause,
+      offset: offset,
+      limit: limit,
     });
-    res.json(sviKorisnici);
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      korisnici: sviKorisnici,
+      currentPage: page,
+      totalPages,
+      limit,
+    });
   } catch (error) {
     console.log("Error fetching Korisnici: ", error);
     res.status(500).send({ error: true, message: "Failed to fetch svi korisnici." });
@@ -264,7 +374,29 @@ app.get("/api/svi-radnici", authJwt.verifyToken("admin, domar"), async (req, res
 
 app.get("/api/svi-boravci", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   try {
-    const sviBoravci = await Boravak.findAll({
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const searchQuery = req.query.search || "";
+    const offset = (page - 1) * limit;
+
+    let whereClause = {}; // Default where clause
+
+    if (searchQuery) {
+      const { Op } = require("sequelize");
+      whereClause = {
+        [Op.or]: [
+          Sequelize.literal(`stanar.oib LIKE '%${searchQuery}%'`),
+          Sequelize.literal(`korisnik.email_korisnika LIKE '%${searchQuery}%'`),
+          Sequelize.literal(`stanar.ime LIKE '%${searchQuery}%'`),
+          Sequelize.literal(`stanar.prezime LIKE '%${searchQuery}%'`),
+          { "$krevet.soba.broj_sobe$": { [Op.like]: `%${searchQuery}%` } }, //Ovako kada se hvata preko vanjskog kljuca u trecu tablicu
+          { "$krevet.soba.broj_objekta$": { [Op.like]: `%${searchQuery}%` } },
+        ],
+      };
+    }
+
+    const { rows: sviBoravci, count: totalCount } = await Boravak.findAndCountAll({
+      where: whereClause,
       include: [
         {
           model: Stanar,
@@ -285,11 +417,20 @@ app.get("/api/svi-boravci", authJwt.verifyToken("recepcionar, admin"), async (re
           attributes: ["email_korisnika"],
         },
       ],
+      offset: offset,
+      limit: limit,
     });
 
-    res.json(sviBoravci);
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      boravci: sviBoravci,
+      currentPage: page,
+      totalPages,
+      limit,
+    });
   } catch (error) {
-    console.log("Error fetching boravci: ", error);
+    console.log("Error fetching Boravci: ", error);
     res.status(500).send({ error: true, message: "Failed to fetch svi boravci." });
   }
 });
@@ -325,7 +466,23 @@ app.get("/api/svi-kvarovi1/:id_kvara", authJwt.verifyToken("domar, admin"), asyn
 
 app.get("/api/svi-kvarovi", authJwt.verifyToken("domar, admin"), async (req, res) => {
   try {
-    const sviKvarovi = await Kvar.findAll({
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const searchQuery = req.query.search || "";
+
+    const offset = (page - 1) * limit;
+
+    let whereClause = ""; // Default where clause
+
+    if (searchQuery) {
+      const { Op } = require("sequelize");
+      whereClause = {
+        [Op.or]: [Sequelize.literal(`korisnik.email_korisnika LIKE '%${searchQuery}%'`), Sequelize.literal(`stanar.ime LIKE '%${searchQuery}%'`), Sequelize.literal(`stanar.prezime LIKE '%${searchQuery}%'`), Sequelize.literal(`kvar.opis_kvara LIKE '%${searchQuery}%'`), Sequelize.literal(`soba.broj_sobe LIKE '%${searchQuery}%'`), Sequelize.literal(`soba.broj_objekta LIKE '%${searchQuery}%'`)],
+      };
+    }
+
+    const { rows: sviKvarovi, count: totalCount } = await Kvar.findAndCountAll({
+      where: whereClause,
       include: [
         {
           model: Stanar,
@@ -340,8 +497,18 @@ app.get("/api/svi-kvarovi", authJwt.verifyToken("domar, admin"), async (req, res
           attributes: ["email_korisnika"],
         },
       ],
+      offset: offset,
+      limit: limit,
     });
-    res.json(sviKvarovi);
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      kvarovi: sviKvarovi,
+      currentPage: page,
+      totalPages,
+      limit,
+    });
   } catch (error) {
     console.log("Error fetching Kvarovi: ", error);
     res.status(500).send({ error: true, message: "Failed to fetch svi kvarovi." });
@@ -350,25 +517,79 @@ app.get("/api/svi-kvarovi", authJwt.verifyToken("domar, admin"), async (req, res
 
 app.get("/api/svi-kreveti", authJwt.verifyToken("admin, recepcionar"), async (req, res) => {
   try {
-    const sviKreveti = await Krevet.findAll({
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const searchQuery = req.query.search || "";
+
+    const offset = (page - 1) * limit;
+
+    let whereClause = ""; // Default where clause
+
+    if (searchQuery) {
+      const { Op } = require("sequelize");
+      whereClause = {
+        [Op.or]: [Sequelize.literal(`krevet.broj_kreveta LIKE '%${searchQuery}%'`), Sequelize.literal(`soba.broj_sobe LIKE '%${searchQuery}%'`), Sequelize.literal(`soba.broj_objekta LIKE '%${searchQuery}%'`), Sequelize.literal(`krevet.id_kreveta LIKE '%${searchQuery}%'`)],
+      };
+    }
+
+    const { rows: sviKreveti, count: totalCount } = await Krevet.findAndCountAll({
+      where: whereClause,
       include: [
         {
           model: Soba,
           attributes: ["broj_sobe", "broj_objekta"],
         },
       ],
+      offset: offset,
+      limit: limit,
     });
-    res.json(sviKreveti);
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      kreveti: sviKreveti,
+      currentPage: page,
+      totalPages,
+      limit,
+    });
   } catch (error) {
     console.log("Error fetching Kreveti: ", error);
     res.status(500).send({ error: true, message: "Failed to fetch svi kreveti." });
   }
 });
 
-app.get("/api/svi-objekti", authJwt.verifyToken("admin"), async (req, res) => {
+app.get("/api/svi-objekti", authJwt.verifyToken("admin, recepcionar"), async (req, res) => {
   try {
-    const sviObjekti = await Objekt.findAll({});
-    res.json(sviObjekti);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const searchQuery = req.query.search || "";
+
+    const offset = (page - 1) * limit;
+
+    let whereClause = ""; // Default where clause
+
+    if (searchQuery) {
+      const { Op } = require("sequelize");
+      whereClause = {
+        [Op.or]: [Sequelize.literal(`objekt.broj_objekta LIKE '%${searchQuery}%'`)],
+      };
+    }
+
+    const { rows: sviObjekti, count: totalCount } = await Objekt.findAndCountAll({
+      where: whereClause,
+      offset: offset,
+      limit: limit,
+    });
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      objekti: sviObjekti,
+      currentPage: page,
+      totalPages,
+      limit,
+    });
   } catch (error) {
     console.log("Error fetching Objekti: ", error);
     res.status(500).send({ error: true, message: "Failed to fetch svi objekti." });
@@ -402,8 +623,35 @@ app.get("/api/objekt/:broj_objekta", authJwt.verifyToken("recepcionar, admin"), 
 
 app.get("/api/sve-sobe", authJwt.verifyToken("admin, domar"), async (req, res) => {
   try {
-    const sveSobe = await Soba.findAll({});
-    res.json(sveSobe);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const searchQuery = req.query.search || "";
+
+    const offset = (page - 1) * limit;
+
+    let whereClause = ""; // Default where clause
+
+    if (searchQuery) {
+      const { Op } = require("sequelize");
+      whereClause = {
+        [Op.or]: [Sequelize.literal(`soba.id_sobe LIKE '%${searchQuery}%'`), Sequelize.literal(`soba.broj_sobe LIKE '%${searchQuery}%'`), Sequelize.literal(`soba.broj_objekta LIKE '%${searchQuery}%'`), Sequelize.literal(`soba.kat_sobe LIKE '%${searchQuery}%'`)],
+      };
+    }
+
+    const { rows: sveSobe, count: totalCount } = await Soba.findAndCountAll({
+      where: whereClause,
+      offset: offset,
+      limit: limit,
+    });
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      sveSobe,
+      currentPage: page,
+      totalPages,
+      limit,
+    });
   } catch (error) {
     console.log("Error fetching Sobe: ", error);
     res.status(500).send({ error: true, message: "Failed to fetch sve Sobe." });
@@ -1206,7 +1454,6 @@ app.put("/azuriranje-kvara/:id_kvara", authJwt.verifyToken("domar, admin"), asyn
     return res.status(500).json({ error: true, message: "Neuspjesno azuriranje." });
   }
 });
-
 
 app.delete("/brisanje-korisnika/:id_korisnika", authJwt.verifyToken("admin"), async (req, res) => {
   const { id_korisnika } = req.params;

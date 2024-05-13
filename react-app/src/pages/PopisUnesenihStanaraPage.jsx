@@ -8,7 +8,11 @@ import { format } from "date-fns";
 const PopisUnesenihStanaraPage = () => {
   const token = localStorage.getItem("token");
   const [data, setData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchInput, setSearchInput] = useState(""); // State to store input value
+  const [search, setSearch] = useState(""); // State to store search term
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const limit = 10; // Number of records per page
 
   const navigate = useNavigate();
 
@@ -20,41 +24,35 @@ const PopisUnesenihStanaraPage = () => {
     return null;
   };
 
+  const fetchData = async (page) => {
+    try {
+      const response = await axios.get("http://localhost:3000/api/sviupisani-stanari", {
+        params: {
+          page,
+          limit,
+          search,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const { stanari, totalPages } = response.data;
+
+      setData(stanari);
+      setTotalPages(totalPages);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      navigate("/forbidden");
+    }
+  };
+
   useEffect(() => {
     if (token) {
-      // Send a request to the backend server to verify the token and check the user's role
-      axios
-        .get("http://localhost:3000/verify-token?roles=admin,recepcionar", {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the request headers
-          },
-        })
-        .then((response) => {
-          // If the response status is 200, proceed with fetching the data
-          if (response.status === 200) {
-            axios
-              .get("http://localhost:3000/api/sviupisani-stanari", {
-                headers: {
-                  Authorization: `Bearer ${token}`, // Include the token in the headers
-                },
-              })
-              .then((res) => setData(res.data))
-              .catch((err) => console.log(err));
-          } else {
-            // If the user is not authorized, redirect to "/not-authorized" page
-            navigate("/not-authorized");
-          }
-        })
-        .catch((error) => {
-          // If there's an error (e.g., invalid token), redirect the user to the login page
-          console.error("Error verifying token:", error);
-          navigate("/prijava");
-        });
+      fetchData(currentPage);
     } else {
-      // If there's no token, redirect the user to the login page
       navigate("/prijava");
     }
-  }, [navigate]);
+  }, [currentPage, search, navigate]);
 
   const handleDelete = (oib) => {
     const isConfirmed = window.confirm("Želite li zaista obrisati stanara?");
@@ -75,18 +73,12 @@ const PopisUnesenihStanaraPage = () => {
         });
     }
   };
-  const filteredData = data.filter((student) =>
-    student.oib.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-     student.jmbag.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-     student.ime.toLowerCase().includes(searchTerm.toLowerCase()) ||
-     student.prezime.toLowerCase().includes(searchTerm.toLowerCase()) ||
-     student.adresa_prebivalista.toLowerCase().includes(searchTerm.toLowerCase()) ||
-     (student.subvencioniranost ? "Da" : "Ne").toLowerCase().includes(searchTerm.toLowerCase()) ||
-     (student.uplata_teretane ? "Da" : "Ne").toLowerCase().includes(searchTerm.toLowerCase()) ||
-     student.uciliste.toLowerCase().includes(searchTerm.toLowerCase()) ||
-     student.komentar.toLowerCase().includes(searchTerm.toLowerCase()) 
-     
-  );
+
+  // Function to handle search when the button is clicked
+  const handleSearch = () => {
+    setSearch(searchInput); // Set search term from input value
+    setCurrentPage(1); // Reset current page to 1 when performing a new search
+  };
 
   return (
     <div>
@@ -94,15 +86,12 @@ const PopisUnesenihStanaraPage = () => {
       <div className="container-fluid">
         <div className="mt-4">
           <h1>Tablica svih unesenih stanara</h1>
-          <div className="mb-3">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Pretraži"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+          <div class="input-group mb-3">
+            <input type="text" className="form-control" placeholder="Pretraži" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
+            <button className="btn btn-outline-secondary" type="button" id="button-addon1" onClick={handleSearch}>
+              Pretraži
+            </button>
+          </div>
           <Link to="/UnosStanara" className="btn btn-sm btn-primary mb-3">
             Dodaj novog stanara
           </Link>
@@ -121,11 +110,12 @@ const PopisUnesenihStanaraPage = () => {
                   <th scope="col">Učilište</th>
                   <th scope="col">Uplata teretane</th>
                   <th scope="col">Komentar</th>
+                  <th scope="col">Domski email</th>
                   <th scope="col">Akcije</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredData.map((student) => (
+                {data.map((student) => (
                   <tr key={student.oib}>
                     <td className="table-data">{student.oib}</td>
                     <td className="table-data">{student.jmbag}</td>
@@ -137,6 +127,7 @@ const PopisUnesenihStanaraPage = () => {
                     <td className="table-data">{student.uciliste}</td>
                     <td className="table-data">{student.uplata_teretane ? "Da" : "Ne"}</td>
                     <td className="table-data">{student.komentar}</td>
+                    <td className="table-data">{student.korisnik.email_korisnika}</td>
                     <td className="table-data">
                       <Link to={`/izmjenaStanara/${student.oib}`} className="btn btn-sm btn-primary">
                         Izmijeni
@@ -150,6 +141,27 @@ const PopisUnesenihStanaraPage = () => {
               </tbody>
             </table>
           </div>
+          <nav aria-label="Page navigation">
+            <ul className="pagination">
+              <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                <button className="page-link" onClick={() => setCurrentPage((prev) => prev - 1)}>
+                  Previous
+                </button>
+              </li>
+              {[...Array(totalPages)].map((_, i) => (
+                <li key={i} className={`page-item ${currentPage === i + 1 ? "active" : ""}`}>
+                  <button className="page-link" onClick={() => setCurrentPage(i + 1)}>
+                    {i + 1}
+                  </button>
+                </li>
+              ))}
+              <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+                <button className="page-link" onClick={() => setCurrentPage((prev) => prev + 1)}>
+                  Next
+                </button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
