@@ -659,23 +659,51 @@ app.get("/api/sve-sobe", authJwt.verifyToken("admin, domar"), async (req, res) =
 });
 
 app.get("/api/boravci-u-vremenskom-periodu/:datum_useljenja/:datum_iseljenja", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
-  const { datum_useljenja, datum_iseljenja } = req.params;
   try {
-    const boravciPerioda = await Boravak.findAll({
-      where: {
+    const { datum_useljenja, datum_iseljenja } = req.params;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+    const searchQuery = req.query.search || "";
+
+    let whereClause = {
+      datum_useljenja: {
+        [Op.gte]: datum_useljenja,
+        [Op.lte]: datum_iseljenja,
+      },
+    }; // Default where clause
+
+    if (searchQuery) {
+      const { Op } = require("sequelize");
+      whereClause = {
         datum_useljenja: {
           [Op.gte]: datum_useljenja,
           [Op.lte]: datum_iseljenja,
         },
-      },
+        [Op.or]: [Sequelize.literal(`stanar.ime LIKE '%${searchQuery}%'`), Sequelize.literal(`stanar.prezime LIKE '%${searchQuery}%'`), Sequelize.literal(`stanar.oib LIKE '%${searchQuery}%'`)],
+      };
+    }
+
+    const { rows: sviStanari, count: totalCount } = await Boravak.findAndCountAll({
+      where: whereClause,
       include: [
         {
           model: Stanar,
           attributes: ["ime", "prezime"],
         },
       ],
+      offset: offset,
+      limit: limit,
     });
-    res.json(boravciPerioda);
+
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      stanari: sviStanari,
+      currentPage: page,
+      totalPages,
+      limit,
+    });
   } catch (error) {
     console.log("Error fetching Boravci: ", error);
     res.status(500).send({ error: true, message: "Failed to fetch svi Boravci." });

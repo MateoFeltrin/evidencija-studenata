@@ -16,48 +16,53 @@ const PopisVremenskogPerioda = () => {
     key: "selection",
   });
   const [data, setData] = useState([]);
+  const [searchInput, setSearchInput] = useState(""); // State to store input value
+  const [search, setSearch] = useState(""); // State to store search term
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const limit = 10; // Number of records per page
   const navigate = useNavigate();
+
+  const fetchData = async (page) => {
+    try {
+      const formattedStartDate = moment(selectionRange.startDate).format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+      const formattedEndDate = moment(selectionRange.endDate).format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+      const response = await axios.get(`http://localhost:3000/api/boravci-u-vremenskom-periodu/${formattedStartDate}/${formattedEndDate}`, {
+        params: {
+          page,
+          limit,
+          search,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const { stanari, totalPages } = response.data;
+
+      setData(stanari);
+      setTotalPages(totalPages);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      navigate("/forbidden");
+    }
+  };
 
   useEffect(() => {
     if (token) {
-      // Send a request to the backend server to verify the token and check the user's role
-      axios
-        .get("http://localhost:3000/verify-token?roles=admin,recepcionar", {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the request headers
-          },
-        })
-        .then((response) => {
-          // If the response status is 200, proceed with fetching the data
-          if (response.status === 200) {
-            const formattedStartDate = moment(selectionRange.startDate).format("YYYY-MM-DDTHH:mm:ss.SSSZ");
-            const formattedEndDate = moment(selectionRange.endDate).format("YYYY-MM-DDTHH:mm:ss.SSSZ");
-            axios
-              .get(`http://localhost:3000/api/boravci-u-vremenskom-periodu/${formattedStartDate}/${formattedEndDate}`, {
-                headers: {
-                  Authorization: `Bearer ${token}`, // Include the token in the headers
-                },
-              })
-              .then((res) => setData(res.data))
-              .catch((err) => console.log(err));
-          } else {
-            // If the user is not authorized, redirect to "/not-authorized" page
-            navigate("/forbidden");
-          }
-        })
-        .catch((error) => {
-          // If there's an error (e.g., invalid token), redirect the user to the login page
-          console.error("Error verifying token:", error);
-          navigate("/forbidden");
-        });
+      fetchData(currentPage);
     } else {
-      // If there's no token, redirect the user to the login page
       navigate("/prijava");
     }
-  }, [token, navigate, selectionRange]);
+  }, [currentPage, search, navigate, selectionRange]);
 
   const handleSelect = (ranges) => {
     setSelectionRange(ranges.selection);
+  };
+
+  // Function to handle search when the button is clicked
+  const handleSearch = () => {
+    setSearch(searchInput); // Set search term from input value
+    setCurrentPage(1); // Reset current page to 1 when performing a new search
   };
 
   return (
@@ -70,6 +75,12 @@ const PopisVremenskogPerioda = () => {
             {/* Date range picker */}
             <DateRange editableDateInputs={true} onChange={handleSelect} moveRangeOnFirstSelection={false} ranges={[selectionRange]} />
             {/* Display boravci data */}
+            <div class="input-group mb-3">
+              <input type="text" className="form-control" placeholder="Pretraži" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
+              <button className="btn btn-outline-secondary" type="button" id="button-addon1" onClick={handleSearch}>
+                Pretraži
+              </button>
+            </div>
             <div className="mt-4">
               <div className="table-responsive">
                 <table className="table">
@@ -83,20 +94,42 @@ const PopisVremenskogPerioda = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data.map((boravak) => (
-                      <tr key={boravak.id_boravka}>
-                        <td>{boravak.oib}</td>
-                        <td>{boravak.stanar.ime}</td>
-                        <td>{boravak.stanar.prezime}</td>
-                        <td>{new Date(boravak.datum_useljenja).toDateString()}</td>
-                        <td>{boravak.datum_iseljenja ? new Date(boravak.datum_iseljenja).toDateString() : "/"}</td>
-                      </tr>
-                    ))}
+                    {data &&
+                      data.map((boravak) => (
+                        <tr key={boravak.id_boravka}>
+                          <td>{boravak.oib}</td>
+                          <td>{boravak.stanar.ime}</td>
+                          <td>{boravak.stanar.prezime}</td>
+                          <td>{new Date(boravak.datum_useljenja).toDateString()}</td>
+                          <td>{boravak.datum_iseljenja ? new Date(boravak.datum_iseljenja).toDateString() : "/"}</td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
+          <nav aria-label="Page navigation">
+            <ul className="pagination">
+              <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                <button className="page-link" onClick={() => setCurrentPage((prev) => prev - 1)}>
+                  Previous
+                </button>
+              </li>
+              {[...Array(totalPages)].map((_, i) => (
+                <li key={i} className={`page-item ${currentPage === i + 1 ? "active" : ""}`}>
+                  <button className="page-link" onClick={() => setCurrentPage(i + 1)}>
+                    {i + 1}
+                  </button>
+                </li>
+              ))}
+              <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+                <button className="page-link" onClick={() => setCurrentPage((prev) => prev + 1)}>
+                  Next
+                </button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
