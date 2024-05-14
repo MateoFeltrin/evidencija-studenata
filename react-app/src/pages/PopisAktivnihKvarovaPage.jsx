@@ -39,7 +39,7 @@ const PopisAktivnihKvarovaPage = () => {
 
       const { kvarovi, totalPages } = response.data;
 
-      setData(kvarovi);
+      setData(kvarovi || []);
       setTotalPages(totalPages);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -73,6 +73,38 @@ const PopisAktivnihKvarovaPage = () => {
         });
     }
   };
+
+  const handlePopravak = (id_kvara) => {
+    const isConfirmed = window.confirm("Želite li označiti kvar kao popravljen ?");
+    if (isConfirmed) {
+        axios
+            .put(
+                `http://localhost:3000/azuriranje-kvara/${id_kvara}`,
+                { stanje_kvara: 1 }, // Include the updated status in the request body
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            )
+            .then(() => {
+                alert("Kvar uspješno popravljen!");
+                fetchData(currentPage);
+                /*axios
+                    .get("http://localhost:3000/api/aktivni-kvarovi", {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    })
+                    .then((res) => setData(res.data))
+                    .catch((err) => console.log(err));*/
+            })
+            .catch((error) => {
+                console.error("Error updating status kvara", error);
+            });
+    }
+};
+
 
   // Function to handle search when the button is clicked
   const handleSearch = () => {
@@ -125,6 +157,9 @@ const PopisAktivnihKvarovaPage = () => {
                       </Link>
                       <button className="btn btn-sm btn-danger" onClick={() => handleDelete(kvar.id_kvara)}>
                         Izbriši
+                      </button>
+                      <button className="btn btn-sm btn-secondary" onClick={() => handlePopravak(kvar.id_kvara)}>
+                        Popravak
                       </button>
                     </td>
                   </tr>
