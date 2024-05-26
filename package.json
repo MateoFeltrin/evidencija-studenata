@@ -1,5 +1,12 @@
 {
   "dependencies": {
     "sequelize": "^6.37.3"
+  },
+  "devDependencies": {
+    "vitest": "^1.6.0"
+  },
+  "scripts": {
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   }
 }

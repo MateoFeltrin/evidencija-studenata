@@ -91,75 +91,75 @@ const UnosStanaraPage = () => {
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label htmlFor="oib" className="form-label">
-                  OIB <span className="text-danger">*</span>
+                  Unesite OIB <span className="text-danger">*</span>
                 </label>
                 <input type="text" className="form-control" id="oib" name="oib" value={formData.oib} onChange={handleChange} required />
                 {formData.oib.length !== 11 && <div className="text-danger">OIB mora imati 11 znamenki.</div>}
               </div>
               <div className="mb-3">
                 <label htmlFor="jmbag" className="form-label">
-                  JMBAG <span className="text-danger">*</span>
+                  Unesite JMBAG <span className="text-danger">*</span>
                 </label>
                 <input type="text" className="form-control" id="jmbag" name="jmbag" value={formData.jmbag} onChange={handleChange} required />
                 {formData.jmbag.length !== 10 && <div className="text-danger">JMBAG mora imati 10 znamenki.</div>}
               </div>
               <div className="mb-3">
                 <label htmlFor="ime" className="form-label">
-                  Ime <span className="text-danger">*</span>
+                  Unesite Ime <span className="text-danger">*</span>
                 </label>
                 <input type="text" className="form-control" id="ime" name="ime" value={formData.ime} onChange={handleChange} required />
               </div>
               <div className="mb-3">
                 <label htmlFor="prezime" className="form-label">
-                  Prezime <span className="text-danger">*</span>
+                  Unesite Prezime <span className="text-danger">*</span>
                 </label>
                 <input type="text" className="form-control" id="prezime" name="prezime" value={formData.prezime} onChange={handleChange} required />
               </div>
               <div className="mb-3">
                 <label htmlFor="datum_rodenja" className="form-label">
-                  Datum rođenja <span className="text-danger">*</span>
+                  Unesite Datum rođenja <span className="text-danger">*</span>
                 </label>
                 <input type="date" className="form-control" id="datum_rodenja" name="datum_rodenja" value={formData.datum_rodenja} onChange={handleChange} required />
               </div>
               <div className="mb-3">
                 <label htmlFor="adresa_prebivalista" className="form-label">
-                  Adresa prebivališta <span className="text-danger">*</span>
+                  Unesite Adresa prebivališta <span className="text-danger">*</span>
                 </label>
                 <input type="text" className="form-control" id="adresa_prebivalista" name="adresa_prebivalista" value={formData.adresa_prebivalista} onChange={handleChange} required />
               </div>
               <div className="mb-3 form-check">
                 <input type="checkbox" className="form-check-input" id="subvencioniranost" name="subvencioniranost" checked={formData.subvencioniranost} onChange={handleChange} />
                 <label className="form-check-label" htmlFor="subvencioniranost">
-                  Subvencioniranost
+                  Unesite Subvencioniranost
                 </label>
               </div>
               <div className="mb-3">
                 <label htmlFor="uciliste" className="form-label">
-                  Učilište <span className="text-danger">*</span>
+                  Unesite Učilište <span className="text-danger">*</span>
                 </label>
                 <input type="text" className="form-control" id="uciliste" name="uciliste" value={formData.uciliste} onChange={handleChange} required />
               </div>
               <div className="mb-3 form-check">
                 <input type="checkbox" className="form-check-input" id="uplata_teretane" name="uplata_teretane" checked={formData.uplata_teretane} onChange={handleChange} />
                 <label className="form-check-label" htmlFor="uplata_teretane">
-                  Uplata teretane
+                  Unesite Uplata teretane
                 </label>
               </div>
               <div className="mb-3">
                 <label htmlFor="komentar" className="form-label">
-                  Komentar <span className="text-danger">*</span>
+                  Unesite Komentar <span className="text-danger">*</span>
                 </label>
                 <textarea className="form-control" id="komentar" name="komentar" value={formData.komentar} onChange={handleChange}></textarea>
               </div>
               <div className="mb-3">
                 <label htmlFor="email_korisnika" className="form-label">
-                  Email korisnika <span className="text-danger">*</span>
+                  Unesite Email korisnika <span className="text-danger">*</span>
                 </label>
                 <input type="email" className="form-control" id="email_korisnika" name="email_korisnika" value={formData.email_korisnika} onChange={handleChange} required />
               </div>
               <div className="mb-3">
                 <label htmlFor="lozinka" className="form-label">
-                  Lozinka <span className="text-danger">*</span>
+                  Unesite Lozinka <span className="text-danger">*</span>
                 </label>
                 <input type="password" className="form-control" id="lozinka" name="lozinka" value={formData.lozinka} onChange={handleChange} required />
               </div>

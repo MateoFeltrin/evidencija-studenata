@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, Router, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { IoArrowBackSharp } from "react-icons/io5";
 import axios from "axios";
 
@@ -22,6 +22,7 @@ const IzmjenaStanaraPage = () => {
     komentar: "",
     id_korisnika: "",
   });
+  const [error, setError] = useState(null); // State to hold error message
 
   useEffect(() => {
     axios
@@ -34,8 +35,11 @@ const IzmjenaStanaraPage = () => {
         const data = res.data;
         setStudentData(data);
       })
-      .catch((error) => console.error("Error fetching data:", error));
-  }, [id]);
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setError("Error fetching data. Please try again."); // Set error state
+      });
+  }, [id, token]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -66,7 +70,7 @@ const IzmjenaStanaraPage = () => {
 
     setStudentData((prevState) => ({
       ...prevState,
-      [name]: type === "checkbox" ? checked : newValue,
+      [name]: newValue,
     }));
   };
 
@@ -79,6 +83,7 @@ const IzmjenaStanaraPage = () => {
             <IoArrowBackSharp />
           </Link>
           <h2>Izmjena stanara</h2>
+          {error && <div className="text-danger">{error}</div>}
           <form onSubmit={handleSubmit}>
             <div className="row">
               <div className="col-md-6 mb-3">
@@ -141,7 +146,7 @@ const IzmjenaStanaraPage = () => {
             <div className="row">
               <div className="col-md-6 mb-3 form-check">
                 <input type="checkbox" className="form-check-input" id="uplata_teretane" name="uplata_teretane" checked={studentData.uplata_teretane} onChange={handleChange} />
-                <label className="form-check-label" htmlFor="uplataTeretane">
+                <label className="form-check-label" htmlFor="uplata_teretane">
                   Uplata Teretane
                 </label>
               </div>

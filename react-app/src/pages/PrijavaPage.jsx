@@ -5,6 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { Link } from "react-router-dom";
 
+const saveTokenToLocalStorage = (token) => {
+  localStorage.setItem("token", token);
+};
+
 const PrijavaPage = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -41,8 +45,7 @@ const PrijavaPage = () => {
       if (response.data.success) {
         // If login is successful, save the token in local storage
         const token = response.data.token;
-        localStorage.setItem("token", token);
-        console.log("Login successful");
+        saveTokenToLocalStorage(token);
 
         // Decode the token to get the user's role
         const decodedToken = jwtDecode(token);

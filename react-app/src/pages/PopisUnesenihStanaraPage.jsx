@@ -127,7 +127,8 @@ const PopisUnesenihStanaraPage = () => {
                     <td className="table-data">{student.uciliste}</td>
                     <td className="table-data">{student.uplata_teretane ? "Da" : "Ne"}</td>
                     <td className="table-data">{student.komentar}</td>
-                    <td className="table-data">{student.korisnik.email_korisnika}</td>
+                    <td className="table-data">{student.korisnik ? student.korisnik.email_korisnika : "N/A"}</td>
+                    {/*Dodani radi testa, da se handla ako je undefined */}
                     <td className="table-data">
                       <Link to={`/izmjenaStanara/${student.oib}`} className="btn btn-sm btn-primary">
                         Izmijeni

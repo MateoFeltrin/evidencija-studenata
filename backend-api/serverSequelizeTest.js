@@ -596,6 +596,17 @@ app.get("/api/svi-objekti", authJwt.verifyToken("admin, recepcionar"), async (re
   }
 });
 
+app.get("/api/svi-objekti-dropdown", authJwt.verifyToken("admin, recepcionar"), async (req, res) => {
+  try {
+    const sviObjekti = await Objekt.findAll({});
+
+    res.json(sviObjekti);
+  } catch (error) {
+    console.log("Error fetching Objekti: ", error);
+    res.status(500).send({ error: true, message: "Failed to fetch svi objekti." });
+  }
+});
+
 app.get("/api/objekt/:broj_objekta", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
   const { broj_objekta } = req.params;
 
