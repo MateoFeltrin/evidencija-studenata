@@ -22,23 +22,24 @@ const IzmjenaStanaraPage = () => {
     komentar: "",
     id_korisnika: "",
   });
-  const [error, setError] = useState(null); // State to hold error message
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/api/trenutni-stanari1/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the headers
-        },
-      })
-      .then((res) => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3000/api/trenutni-stanari1/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the headers
+          },
+        });
         const data = res.data;
         setStudentData(data);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching data:", error);
-        setError("Error fetching data. Please try again."); // Set error state
-      });
+        alert("Error fetching data. Please try again.");
+      }
+    };
+
+    fetchData();
   }, [id, token]);
 
   const handleSubmit = async (event) => {
@@ -83,7 +84,6 @@ const IzmjenaStanaraPage = () => {
             <IoArrowBackSharp />
           </Link>
           <h2>Izmjena stanara</h2>
-          {error && <div className="text-danger">{error}</div>}
           <form onSubmit={handleSubmit}>
             <div className="row">
               <div className="col-md-6 mb-3">
