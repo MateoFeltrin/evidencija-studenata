@@ -51,7 +51,7 @@ describe("PopisUnesenihStanaraPage", () => {
       },
       {
         oib: "1233",
-        ime: "John1",
+        ime: "Jane",
         prezime: "Doe1",
         datum_rodenja: "2000-01-01",
         adresa_prebivalista: "Some Address",
@@ -62,7 +62,11 @@ describe("PopisUnesenihStanaraPage", () => {
         korisnik: { email_korisnika: "john.doe1@example.com" },
       },
     ];
-    axios.get.mockResolvedValue({ data: { stanari: mockData, totalPages: 1 } });
+    axios.get.mockImplementation((url, { params }) => {
+      const { search } = params;
+      const filteredData = search ? mockData.filter((item) => item.ime.includes(search) || item.prezime.includes(search)) : mockData;
+      return Promise.resolve({ data: { stanari: filteredData, totalPages: 1 } });
+    });
 
     // Render the component
     render(
@@ -71,17 +75,24 @@ describe("PopisUnesenihStanaraPage", () => {
       </Router>
     );
 
-    // Simulate user input for search
     fireEvent.change(screen.getByPlaceholderText("Pretraži"), { target: { value: "John" } });
+    fireEvent.click(screen.getByText("Pretraži"));
 
-    // Wait for data fetching
     await waitFor(() => {
-      expect(axios.get).toHaveBeenCalledWith("http://localhost:3000/api/sviupisani-stanari", expect.any(Object));
+      expect(axios.get).toHaveBeenCalledWith("http://localhost:3000/api/sviupisani-stanari", {
+        params: {
+          page: 1,
+          limit: 10,
+          search: "John",
+        },
+        headers: {
+          Authorization: `Bearer ${validToken}`,
+        },
+      });
     });
 
-    // Check if data is correctly filtered
     expect(screen.getByText("John")).toBeInTheDocument();
-    expect(screen.queryByText("Jane")).not.toBeInTheDocument(); // Ensure Jane is not present
+    expect(screen.queryByText("Jane")).not.toBeInTheDocument();
   });
 
   test("pagination changes pages correctly", async () => {
