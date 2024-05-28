@@ -32,7 +32,7 @@ const IzmjenaKrevetaPage = () => {
       .catch((error) => console.error("Error fetching krevet data:", error));
 
     axios
-      .get("http://localhost:3000/api/sve-sobe", {
+      .get("http://localhost:3000/api/sve-sobe-dropdown", {
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the headers
         },

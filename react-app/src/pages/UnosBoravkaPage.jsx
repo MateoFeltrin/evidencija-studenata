@@ -9,7 +9,6 @@ const UnosBoravakaPage = () => {
   const [formData, setFormData] = useState({
     id_kreveta: "",
     oib: "",
-    //id_korisnika: "",
     datum_useljenja: "",
     datum_iseljenja: "",
   });
@@ -18,13 +17,12 @@ const UnosBoravakaPage = () => {
   const [objektOptions, setObjektOptions] = useState([]);
   const [krevetaOptions, setKrevetaOptions] = useState([]);
   const [oibOptions, setOibOptions] = useState([]);
-  //const [korisnikaOptions, setKorisnikaOptions] = useState([]);
 
   useEffect(() => {
     axios
       .get("http://localhost:3000/api/broj-objekta", {
         headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the headers
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
@@ -36,11 +34,11 @@ const UnosBoravakaPage = () => {
     axios
       .get("http://localhost:3000/api/slobodni-stanari", {
         headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the headers
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
-        console.log("stanari Data:", res.data); // Log the data received from the API
+        console.log("stanari Data:", res.data);
         setOibOptions(res.data);
       })
       .catch((err) => console.error("Error fetching oib data:", err));
@@ -52,7 +50,7 @@ const UnosBoravakaPage = () => {
       ...formData,
       [name]: value,
     });
-    // If the field changed is "broj_objekta", fetch associated rooms
+
     if (name === "broj_objekta") {
       try {
         const response = await axios.get(`http://localhost:3000/api/broj-sobe?broj_objekta=${value}`, {
@@ -61,20 +59,22 @@ const UnosBoravakaPage = () => {
           },
         });
 
-        // Update the sobeOptions with the fetched room numbers
         setSobeOptions(response.data);
+        setKrevetaOptions([]); // Clear kreveta options when changing objekt
       } catch (error) {
         console.error("Error fetching sobe:", error);
       }
     }
-    // If the field changed is "broj_objekta", fetch associated rooms
+
     if (name === "broj_sobe") {
       try {
-        const response = await axios.get(`http://localhost:3000/api/broj-kreveta?id_sobe=${value}`, {
+        let query = `http://localhost:3000/api/broj-kreveta?broj_objekta=${formData.broj_objekta}&broj_sobe=${value}`;
+        const response = await axios.get(query, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+
         setKrevetaOptions(response.data);
       } catch (error) {
         console.error("Error fetching kreveti:", error);
@@ -87,25 +87,21 @@ const UnosBoravakaPage = () => {
     axios
       .post("http://localhost:3000/unos-boravka", formData, {
         headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the headers
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
         console.log("Boravak added successfully:", res.data);
-        // Show window alert
         window.alert("Boravak je uspješno dodan!");
-        // Clear form data
         setFormData({
           id_kreveta: "",
           oib: "",
-          // id_korisnika: "",
           datum_useljenja: "",
           datum_iseljenja: "",
         });
       })
       .catch((err) => {
         console.error("Error adding boravak:", err);
-        // Handle error
       });
   };
 
@@ -128,7 +124,7 @@ const UnosBoravakaPage = () => {
               <option value="">Odaberi</option>
               {objektOptions &&
                 objektOptions.map((option) => (
-                  <option key={option.id} value={option.id}>
+                  <option key={option.id} value={option.broj_objekta}>
                     {option.broj_objekta}
                   </option>
                 ))}
@@ -141,7 +137,7 @@ const UnosBoravakaPage = () => {
             <select className="form-control" id="broj_sobe" name="broj_sobe" value={formData.broj_sobe} onChange={handleChange} required>
               <option value="">Odaberi</option>
               {sobaOptions.map((option) => (
-                <option key={option.id_sobe} value={option.id_sobe}>
+                <option key={option.id_sobe} value={option.broj_sobe}>
                   {option.broj_sobe}
                 </option>
               ))}
@@ -173,23 +169,13 @@ const UnosBoravakaPage = () => {
               ))}
             </select>
           </div>
-        
+
           <div className="form-group">
             <label>
               Datum Useljenja: <span className="text-danger">*</span>
             </label>
             <input type="date" className="form-control" name="datum_useljenja" value={formData.datum_useljenja} onChange={handleChange} />
           </div>
-          {/*<div className="form-group">
-            <label>Datum Iseljenja:</label>
-            <input
-            type="date"
-            className="form-control"
-            name="datum_iseljenja"
-            value={formData.datum_iseljenja}
-            onChange={handleChange}
-            />
-</div>*/}
           <button type="submit" className="btn btn-primary">
             Dodaj Boravak
           </button>

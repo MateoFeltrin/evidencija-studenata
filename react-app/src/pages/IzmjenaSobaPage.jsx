@@ -32,7 +32,7 @@ const IzmjenaSobaPage = () => {
       .catch((error) => console.error("Error fetching soba data:", error));
 
     axios
-      .get("http://localhost:3000/api/svi-objekti", {
+      .get("http://localhost:3000/api/svi-objekti-dropdown", {
         headers: {
           Authorization: `Bearer ${token}`, // Include the token in the headers
         },

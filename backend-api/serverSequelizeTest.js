@@ -558,6 +558,17 @@ app.get("/api/svi-kreveti", authJwt.verifyToken("admin, recepcionar"), async (re
   }
 });
 
+app.get("/api/svi-kreveti-dropdown", authJwt.verifyToken("admin, recepcionar"), async (req, res) => {
+  try {
+    const sviKreveti = await Krevet.findAll({});
+
+    res.json(sviKreveti);
+  } catch (error) {
+    console.log("Error fetching Kreveti: ", error);
+    res.status(500).send({ error: true, message: "Failed to fetch svi kreveti." });
+  }
+});
+
 app.get("/api/svi-objekti", authJwt.verifyToken("admin, recepcionar"), async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -666,6 +677,17 @@ app.get("/api/sve-sobe", authJwt.verifyToken("admin, domar"), async (req, res) =
   } catch (error) {
     console.log("Error fetching Sobe: ", error);
     res.status(500).send({ error: true, message: "Failed to fetch sve Sobe." });
+  }
+});
+
+app.get("/api/sve-sobe-dropdown", authJwt.verifyToken("admin, recepcionar"), async (req, res) => {
+  try {
+    const sveSobe = await Soba.findAll({});
+
+    res.json(sveSobe);
+  } catch (error) {
+    console.log("Error fetching Sobe: ", error);
+    res.status(500).send({ error: true, message: "Failed to fetch sve sobe." });
   }
 });
 
@@ -908,6 +930,7 @@ app.get("/api/broj-objekta", authJwt.verifyToken("domar, admin, stanar"), async 
 app.get("/api/broj-kreveta", authJwt.verifyToken("admin, recepcionar"), async (req, res) => {
   try {
     const { broj_objekta, broj_sobe, broj_kreveta } = req.query;
+    let whereClause = "";
 
     const soba = await Soba.findOne({
       attributes: ["id_sobe"],
@@ -918,12 +941,20 @@ app.get("/api/broj-kreveta", authJwt.verifyToken("admin, recepcionar"), async (r
     });
 
     if (soba) {
-      const slobodniKreveti = await Krevet.findAll({
-        attributes: ["broj_kreveta"],
-        where: {
+      if (broj_kreveta == null) {
+        whereClause = {
+          id_sobe: soba.id_sobe,
+          zauzetost: false,
+        };
+      } else {
+        whereClause = {
           id_sobe: soba.id_sobe,
           [Op.or]: [{ zauzetost: false }, { [Op.and]: [{ broj_kreveta: broj_kreveta }, { zauzetost: true }] }],
-        },
+        };
+      }
+      const slobodniKreveti = await Krevet.findAll({
+        attributes: ["broj_kreveta"],
+        where: whereClause,
       });
 
       // Send the list of available bed numbers as a JSON response
