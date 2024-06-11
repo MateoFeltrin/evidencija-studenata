@@ -78,8 +78,8 @@ const UnosRadnikaPage = () => {
                   <option value="recepcionar">Recepcionar</option>
                   <option value="domar">Domar</option>
                   <option value="admin">Admin</option>
-                  <option value="stanar">Stanar</option>
-                </select>
+                {/* <option value="stanar">Stanar</option> */}
+                 </select>
               </div>
 
               <button type="submit" className="btn btn-primary">
