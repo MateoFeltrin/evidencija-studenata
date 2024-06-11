@@ -17,7 +17,7 @@ const PopisKorisnikaPage = () => {
 
   const fetchData = async (page) => {
     try {
-      const response = await axios.get("http://localhost:3000/api/svi-radnici", {
+      const response = await axios.get("http://localhost:3000/api/svi-korisnici", {
         params: {
           page,
           limit,
@@ -82,7 +82,7 @@ const PopisKorisnikaPage = () => {
     <div>
       <CollapsableNavbar />
       <div className="container-fluid">
-        <h1>Popis radnika</h1>
+        <h1>Popis korisnika</h1>
         <div class="input-group mb-3">
           <input type="text" className="form-control" placeholder="Pretraži" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
           <button className="btn btn-outline-secondary" type="button" id="button-addon1" onClick={handleSearch}>

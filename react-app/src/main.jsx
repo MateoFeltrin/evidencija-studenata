@@ -8,6 +8,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 // Bootstrap Bundle JS
 import "bootstrap/dist/js/bootstrap.bundle.min";
+import "../src/index.css";
 import UnosStanaraPage from "./pages/UnosStanaraPage";
 import PopisKorisnikaPage from "./pages/PopisKorisnikaPage";
 import PopisSvihStanaraPage from "./pages/PopisSvihStanaraPage";

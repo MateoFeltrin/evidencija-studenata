@@ -10,6 +10,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { TbDoor } from "react-icons/tb";
 import { IoIosLogOut } from "react-icons/io";
 import { jwtDecode } from "jwt-decode";
+import { MdQuestionMark } from "react-icons/md";
 
 const CollapsableNavbar = () => {
   // Function to check if the user is authenticated (if a token exists in local storage)
@@ -90,35 +91,59 @@ const CollapsableNavbar = () => {
                     Popisi studenata
                   </button>
                   <ul className="dropdown-menu">
-                    <li>
+                    <li className="nav-item-normal">
+                      <div className="round-button btn btn-dark btn-floating">
+                        <MdQuestionMark />
+                        <div className="info-box">U ovoj tablici možete pregledati popis svih stanara koji trenutačno borave u domu, unjeti novog stanara u sustav, izmijeniti podatke stanara, izbrisati stanara i iseliti stanara</div>
+                      </div>
                       <Link className="icon-link dropdown-item" aria-current="page" to="/popisSvihStanara">
                         <FaList />
                         Popis svih trenutačnih stanara
                       </Link>
                     </li>
-                    <li>
+                    <li className="nav-item-normal">
+                      <div className="round-button btn btn-dark btn-floating">
+                        <MdQuestionMark />
+                        <div className="info-box">U ovoj tablici možete pregledati popis svih stanara koji koji su uneseni u sustav, unjeti novog stanara u sustav, izmijeniti podatke stanara i izbrisati stanara</div>
+                      </div>
                       <Link className="icon-link dropdown-item" aria-current="page" to="/popisUnesenihStanara">
                         <FaList />
                         Popis unesenih stanara
                       </Link>
                     </li>
-                    <li>
+                    <li className="nav-item-normal">
+                      <div className="round-button btn btn-dark btn-floating">
+                        <MdQuestionMark />
+                        <div className="info-box">U ovoj tablici možete pregledati popis stanara koji su boravili u vremenskom periodu vašeg izbora</div>
+                      </div>
                       <Link className="icon-link dropdown-item" aria-current="page" to="/popisVremenskogPeroida">
                         <FaList />
-                        Popis stanara u vremenskom periodu
+                        Popis stanara vremenskog perioda
                       </Link>
                     </li>
                   </ul>
                 </li>
               )}
               {isAdmin() && (
-                <Link className={`nav-link icon-link ${location.pathname === "/PopisKorisnika" ? "active" : ""}`} aria-current="page" to="/PopisKorisnika">
-                  <FaRegUser />
-                  Popis korisnika
-                </Link>
+                <li className="nav-item-normal">
+                  <div className="round-button btn btn-dark btn-floating">
+                    <MdQuestionMark />
+                    <div className="info-box">
+                      U ovoj tablici možete pregledati popis svih korisnika i njihovih korisničkih podataka (email, lozinka i uloga) u sustavu. Korisnici su i djelatnici i stanari. Možete unjeti novog radnika, izmijeniti podatke korisnika i izbrisati korisnika. Imajte na umu da se korisnik ne može izbrisati ako je radio neke akcije u sustavu kao na primjer useljenje stanara .
+                    </div>
+                  </div>
+                  <Link className={`nav-link icon-link ${location.pathname === "/PopisKorisnika" ? "active" : ""}`} aria-current="page" to="/PopisKorisnika">
+                    <FaRegUser />
+                    Popis korisnika
+                  </Link>
+                </li>
               )}
               {(isAdmin() || isRecepcionar()) && (
-                <li>
+                <li className="nav-item-normal">
+                  <div className="round-button btn btn-dark btn-floating">
+                    <MdQuestionMark />
+                    <div className="info-box">U ovoj tablici možete pregledati popis svih stanara, useliti stanara (kojeg ste već unjeli u sustav), promijeniti podatke boravka, izbrisati stanara i iseliti stanara koji trenutačno boravi u domu.</div>
+                  </div>
                   <Link className={`nav-link icon-link ${location.pathname === "/PopisBoravaka" ? "active" : ""}`} aria-current="page" to="/PopisBoravaka">
                     <FaBookReader />
                     Popis Boravaka
@@ -132,13 +157,21 @@ const CollapsableNavbar = () => {
                     Popis kvarova
                   </button>
                   <ul className="dropdown-menu">
-                    <li>
+                    <li className="nav-item-normal">
+                      <div className="round-button btn btn-dark btn-floating">
+                        <MdQuestionMark />
+                        <div className="info-box">U ovoj tablici možete pregledati popis svih kvarova koji su zapisani u sustavu, dodati novi kvar, izmijneiti podatke kvara i izbrisati kvar.</div>
+                      </div>
                       <Link className="icon-link dropdown-item" aria-current="page" to="/popisSvihKvarova">
                         <FaList />
                         Popis svih kvarova
                       </Link>
                     </li>
-                    <li>
+                    <li className="nav-item-normal">
+                      <div className="round-button btn btn-dark btn-floating">
+                        <MdQuestionMark />
+                        <div className="info-box">U ovoj tablici možete pregledati popis svih kvarova koji još nisu popravljeni, dodati novi kvar, izmijneiti podatke kvara, izbrisati kvar i zabilježiti da je kvar popravljen.</div>
+                      </div>
                       <Link className="icon-link dropdown-item" aria-current="page" to="/popisAktivnihKvarova">
                         <FaList />
                         Aktivni kvarovi
@@ -148,7 +181,11 @@ const CollapsableNavbar = () => {
                 </li>
               )}
               {isAdmin() && (
-                <li>
+                <li className="nav-item-normal">
+                  <div className="round-button btn btn-dark btn-floating">
+                    <MdQuestionMark />
+                    <div className="info-box">U ovoj tablici možete pregledati popis svih objekata u sustavu, te dodati novi objekt, promijeniti podatke objekta i izbrisati postojeći objet u sustavu. Imajte na umu da ne možete izbrisati objekt ako postoji soba u sustavu koja je u tom objektu.</div>
+                  </div>
                   <Link className={`nav-link icon-link ${location.pathname === "/popisObjekata" ? "active" : ""}`} aria-current="page" to="/popisObjekata">
                     <FaRegBuilding />
                     Popis objekata
@@ -156,7 +193,11 @@ const CollapsableNavbar = () => {
                 </li>
               )}
               {isAdmin() && (
-                <li>
+                <li className="nav-item-normal">
+                  <div className="round-button btn btn-dark btn-floating">
+                    <MdQuestionMark />
+                    <div className="info-box">U ovoj tablici možete pregledati popis svih soba u sustavu, te dodati novu sobu, promijeniti podatke sobe i izbrisati postojeći sobu u sustavu. Imajte na umu da ne možete izbrisati sobu ako postoji krevet u sustavu koji je u toj sobi.</div>
+                  </div>
                   <Link className={`nav-link icon-link ${location.pathname === "/popisSoba" ? "active" : ""}`} aria-current="page" to="/popisSoba">
                     <TbDoor />
                     Popis soba
@@ -164,7 +205,11 @@ const CollapsableNavbar = () => {
                 </li>
               )}
               {isAdmin() && (
-                <li>
+                <li className="nav-item-normal">
+                  <div className="round-button btn btn-dark btn-floating">
+                    <MdQuestionMark />
+                    <div className="info-box">U ovoj tablici možete pregledati popis svih kreveta u sustavu, te dodati novi krevet u pojedinoj sobi, promijeniti podatke kreveta i izbrisati postojeći krevet u sustavu. Imajte na umu da ne možete izbrisati kevet ako postoji boravak zabilježen u njemu.</div>
+                  </div>
                   <Link className={`nav-link icon-link ${location.pathname === "/popisKreveta" ? "active" : ""}`} aria-current="page" to="/popisKreveta">
                     <FaBed />
                     Popis kreveta

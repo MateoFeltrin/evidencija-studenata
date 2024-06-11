@@ -330,25 +330,18 @@ app.get("/api/aktivni-kvarovi/:id", authJwt.verifyToken("domar, admin"), async (
   }
 });
 
-app.get("/api/svi-radnici", authJwt.verifyToken("admin, domar"), async (req, res) => {
+app.get("/api/svi-korisnici", authJwt.verifyToken("admin"), async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const searchQuery = req.query.search || "";
     const offset = (page - 1) * limit;
 
-    let whereClause = {
-      uloga: {
-        [Sequelize.Op.in]: ["admin", "recepcionar", "domar"],
-      },
-    }; // Default where clause
+    let whereClause = {}; // Default where clause
 
     if (searchQuery) {
       const { Op } = require("sequelize");
       whereClause = {
-        uloga: {
-          [Sequelize.Op.in]: ["admin", "recepcionar", "domar"],
-        },
         [Op.or]: [Sequelize.literal(`korisnik.email_korisnika LIKE '%${searchQuery}%'`), Sequelize.literal(`korisnik.uloga LIKE '%${searchQuery}%'`)],
       };
     }
