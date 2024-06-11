@@ -1519,6 +1519,35 @@ app.put("/azuriranje-kvara/:id_kvara", authJwt.verifyToken("domar, admin"), asyn
   }
 });
 
+app.put("/azuriranje-podataka-kvara/:id_kvara", authJwt.verifyToken("domar, admin"), async (req, res) => {
+  const { id_kvara } = req.params;
+  const updatedKvar = req.body; // The updated object data from the request body
+
+  // Validate input
+  if (!id_kvara === undefined) {
+    return res.status(400).json({ error: true, message: "id_kvara i stanje_kvara su obavezni." });
+  }
+
+  try {
+    const [affectedRows] = await Kvar.update(updatedKvar, {
+      where: {
+        id_kvara: id_kvara, // Filter the objekt by `broj_objekta`
+      },
+    });
+
+    // Check if any rows were updated
+    if (affectedRows === 0) {
+      return res.status(404).send({ error: true, message: "Objekt not found." });
+    }
+
+    // Send a success response
+    res.status(200).json({ error: false, message: "Uspjesno azuriranje." });
+  } catch (error) {
+    console.error("Error updating kvar:", error);
+    return res.status(500).json({ error: true, message: "Neuspjesno azuriranje." });
+  }
+});
+
 app.delete("/brisanje-korisnika/:id_korisnika", authJwt.verifyToken("admin"), async (req, res) => {
   const { id_korisnika } = req.params;
 

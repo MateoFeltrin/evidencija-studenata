@@ -102,6 +102,7 @@ const PopisSvihKvarovaPage = () => {
               <thead>
                 <tr>
                   <th scope="col">ID kvara</th>
+                  <th scope="col">Stanje kvara</th>
                   <th scope="col">Datum prijave</th>
                   <th scope="col">Opis</th>
                   <th scope="col">Soba</th>
@@ -116,6 +117,7 @@ const PopisSvihKvarovaPage = () => {
                 {data.map((kvar) => (
                   <tr key={kvar.id_kvara}>
                     <td className="table-data">{kvar.id_kvara}</td>
+                    <td className="table-data">{kvar.stanje_kvara ? "Popravljen" : "Nije popravljen"}</td>
                     <td className="table-data">{formatDate(kvar.datum_prijave_kvara)}</td>
                     <td className="table-data">{kvar.opis_kvara}</td>
                     <td className="table-data">{kvar.soba.broj_sobe}</td>
