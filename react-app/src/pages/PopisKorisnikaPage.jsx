@@ -56,14 +56,8 @@ const PopisKorisnikaPage = () => {
           },
         })
         .then(() => {
-          axios
-            .get("http://localhost:3000/api/svi-radnici", {
-              headers: {
-                Authorization: `Bearer ${token}`, // Include the token in the headers
-              },
-            })
-            .then((res) => setData(res.data))
-            .catch((err) => console.log(err));
+          alert("Korisnik izbrisan!");
+          fetchData(currentPage);
         })
         .catch((err) => {
           console.log(err);

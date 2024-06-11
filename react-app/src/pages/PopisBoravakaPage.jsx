@@ -65,14 +65,8 @@ const PopisBoravakaPage = () => {
           },
         })
         .then(() => {
-          axios
-            .get("http://localhost:3000/api/svi-boravci", {
-              headers: {
-                Authorization: `Bearer ${token}`, // Include the token in the headers
-              },
-            })
-            .then((res) => setData(res.data))
-            .catch((err) => console.log(err));
+          alert("Boravak izbrisan!");
+          fetchData(currentPage);
         })
         .catch((err) => {
           console.log(err);
@@ -98,8 +92,7 @@ const PopisBoravakaPage = () => {
         )
         .then(() => {
           alert("Stanar uspješno iseljen!");
-          // Fetch data after successful move-out
-          fetchData(currentPage); // Fetch data using the existing function
+          fetchData(currentPage);
         })
         .catch((error) => {
           console.error("Error updating move-out date:", error);
