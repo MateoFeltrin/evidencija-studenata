@@ -66,7 +66,7 @@ const PrijavaPage = () => {
     } catch (error) {
       // Handle any other errors (e.g., network errors)
       console.error("Error during login:", error);
-      setErrorMessage("Internal server error");
+      setErrorMessage("Pogrešno korisničko ime ili lozinka!");
     }
   };
 
