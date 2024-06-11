@@ -54,37 +54,12 @@ const PopisSvihStanaraPage = () => {
     }
   }, [currentPage, search, navigate]);
 
-  const handleDelete = (oib) => {
-    const isConfirmed = window.confirm("Želite li zaista obrisati stanara?");
-    if (isConfirmed) {
-      axios
-        .delete(`http://localhost:3000/brisanje-stanara/${oib}`, {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the headers
-          },
-        })
-        .then(() => {
-          axios
-            .get("http://localhost:3000/api/trenutni-stanari", {
-              headers: {
-                Authorization: `Bearer ${token}`, // Include the token in the headers
-              },
-            })
-            .then((res) => setData(res.data))
-            .catch((err) => console.log(err));
-        })
-        .catch((err) => {
-          console.log(err);
-          alert("Došlo je do pogreške prilikom brisanja, provjerite nalazi li se stanar u tablici boravci! ", err.message);
-        });
-    }
-  };
   const handleIseljenje = (id_boravka) => {
     const isConfirmed = window.confirm("Želite li zaista iseliti stanara?");
     if (isConfirmed) {
       axios
         .put(
-          `http://localhost:3000/azuriranje-boravka/${id_boravka}`,
+          `http://localhost:3000/iseljenje/${id_boravka}`,
           {
             datum_iseljenja: new Date(), // Set move-out date to current date
           },
@@ -97,14 +72,7 @@ const PopisSvihStanaraPage = () => {
         .then(() => {
           alert("Stanar uspješno iseljen!");
           // Fetch data after successful move-out
-          axios
-            .get("http://localhost:3000/api/trenutni-stanari", {
-              headers: {
-                Authorization: `Bearer ${token}`, // Include the token in the headers
-              },
-            })
-            .then((res) => setData(res.data))
-            .catch((err) => console.log(err));
+          fetchData(currentPage); // Fetch data using the existing function
         })
         .catch((error) => {
           console.error("Error updating move-out date:", error);
@@ -153,34 +121,32 @@ const PopisSvihStanaraPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.map((student) => (
-                  <tr key={student.oib}>
-                    <td className="table-data">{student.oib}</td>
-                    <td className="table-data">{student.stanar.jmbag}</td>
-                    <td className="table-data">{student.stanar.ime}</td>
-                    <td className="table-data">{student.stanar.prezime}</td>
-                    <td className="table-data">{formatDate(student.stanar.datum_rodenja)}</td>
-                    <td className="table-data">{student.stanar.adresa_prebivalista}</td>
-                    {/* Display 'Da' for true and 'Ne' for false for subvencioniranost */}
-                    <td className="table-data">{student.stanar.subvencioniranost ? "Da" : "Ne"}</td>
-                    <td className="table-data">{student.stanar.uciliste}</td>
-                    {/* Display 'Da' for true and 'Ne' for false for uplata_teretane */}
-                    <td className="table-data">{student.stanar.uplata_teretane ? "Da" : "Ne"}</td>
-                    <td className="table-data">{student.stanar.komentar}</td>
-                    <td className="table-data">{formatDate(student.datum_useljenja)}</td>
-                    <td className="table-data">
-                      <Link to={`/izmjenaStanara/${student.oib}`} className="btn btn-sm btn-primary">
-                        Izmijeni
-                      </Link>
-                      <button className="btn btn-sm btn-danger" onClick={() => handleDelete(student.oib)}>
-                        Izbriši
-                      </button>
-                      <button className="btn btn-sm btn-secondary" onClick={() => handleIseljenje(student.id_boravka)}>
-                        Iseljenje
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {Array.isArray(data) &&
+                  data.map((student) => (
+                    <tr key={student.oib}>
+                      <td className="table-data">{student.oib}</td>
+                      <td className="table-data">{student.stanar.jmbag}</td>
+                      <td className="table-data">{student.stanar.ime}</td>
+                      <td className="table-data">{student.stanar.prezime}</td>
+                      <td className="table-data">{formatDate(student.stanar.datum_rodenja)}</td>
+                      <td className="table-data">{student.stanar.adresa_prebivalista}</td>
+                      {/* Display 'Da' for true and 'Ne' for false for subvencioniranost */}
+                      <td className="table-data">{student.stanar.subvencioniranost ? "Da" : "Ne"}</td>
+                      <td className="table-data">{student.stanar.uciliste}</td>
+                      {/* Display 'Da' for true and 'Ne' for false for uplata_teretane */}
+                      <td className="table-data">{student.stanar.uplata_teretane ? "Da" : "Ne"}</td>
+                      <td className="table-data">{student.stanar.komentar}</td>
+                      <td className="table-data">{formatDate(student.datum_useljenja)}</td>
+                      <td className="table-data">
+                        <Link to={`/izmjenaStanara/${student.oib}`} className="btn btn-sm btn-primary">
+                          Izmijeni
+                        </Link>
+                        <button className="btn btn-sm btn-secondary" onClick={() => handleIseljenje(student.id_boravka)}>
+                          Iseljenje
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

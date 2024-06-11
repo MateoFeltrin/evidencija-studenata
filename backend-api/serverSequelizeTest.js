@@ -1308,12 +1308,12 @@ app.put("/iseljenje/:id_boravka", authJwt.verifyToken("recepcionar, admin"), asy
   }
 });
 
-app.put("/azuriranje-stanara/:oib", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
-  const { oib } = req.params;
-  const { jmbag, ime, prezime, datum_rodenja, adresa_prebivalista, subvencioniranost, uciliste, uplata_teretane, komentar, id_korisnika } = req.body;
+app.put("/azuriranje-stanara/:id", authJwt.verifyToken("recepcionar, admin"), async (req, res) => {
+  const { id } = req.params;
+  const { oib, jmbag, ime, prezime, datum_rodenja, adresa_prebivalista, subvencioniranost, uciliste, uplata_teretane, komentar, id_korisnika } = req.body;
 
   // Validate the input
-  if (!oib) {
+  if (!id) {
     return res.status(400).json({ error: true, message: "OIB je obavezan podatak." });
   }
 
@@ -1321,6 +1321,7 @@ app.put("/azuriranje-stanara/:oib", authJwt.verifyToken("recepcionar, admin"), a
     // Update the stanar record using the OIB as the identifier
     const [updatedRowsCount, updatedRows] = await Stanar.update(
       {
+        oib,
         jmbag,
         ime,
         prezime,
@@ -1333,7 +1334,7 @@ app.put("/azuriranje-stanara/:oib", authJwt.verifyToken("recepcionar, admin"), a
         id_korisnika,
       },
       {
-        where: { oib },
+        where: { oib: id },
         returning: true, // This option returns the updated rows
       }
     );

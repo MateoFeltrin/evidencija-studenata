@@ -163,12 +163,6 @@ const UnosStanaraPage = () => {
                 </label>
                 <input type="password" className="form-control" id="lozinka" name="lozinka" value={formData.lozinka} onChange={handleChange} required />
               </div>
-              {/*<div className="mb-3">
-                <label htmlFor="uloga" className="form-label">Uloga</label>
-                <select className="form-control" id="uloga" name="uloga" value={formData.uloga} onChange={handleChange} required>
-                  <option value="Stanar">Stanar</option>
-                </select>
-  </div>*/}
               <button type="submit" className="btn btn-primary mb-3 mr-2">
                 Unesi
               </button>

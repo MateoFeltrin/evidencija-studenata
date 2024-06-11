@@ -99,14 +99,7 @@ const PopisBoravakaPage = () => {
         .then(() => {
           alert("Stanar uspješno iseljen!");
           // Fetch data after successful move-out
-          axios
-            .get("http://localhost:3000/api/svi-boravci", {
-              headers: {
-                Authorization: `Bearer ${token}`, // Include the token in the headers
-              },
-            })
-            .then((res) => setData(res.data))
-            .catch((err) => console.log(err));
+          fetchData(currentPage); // Fetch data using the existing function
         })
         .catch((error) => {
           console.error("Error updating move-out date:", error);
@@ -151,31 +144,34 @@ const PopisBoravakaPage = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((boravak) => (
-                <tr key={boravak.id_boravka}>
-                  <td className="table-data">{boravak.stanar.oib}</td>
-                  <td className="table-data">{boravak.stanar.ime}</td>
-                  <td className="table-data">{boravak.stanar.prezime}</td>
-                  <td className="table-data">{formatDate(boravak.datum_useljenja)}</td>
-                  <td className="table-data">{formatDate(boravak.datum_iseljenja)}</td>
-                  <td className="table-data">{boravak.krevet.soba.broj_objekta}</td>
-                  <td className="table-data">{boravak.krevet.soba.broj_sobe}</td>
-                  <td className="table-data">{boravak.krevet.broj_kreveta}</td>
-                  <td className="table-data">{boravak.korisnik.email_korisnika}</td>
-                  <td className="table-data">
-                    <Link to={`/izmjenaBoravka/${boravak.id_boravka}?broj_objekta=${boravak.krevet.soba.broj_objekta}&broj_sobe=${boravak.krevet.soba.broj_sobe}&broj_kreveta=${boravak.krevet.broj_kreveta}&oib=${boravak.stanar.oib}`} className="btn btn-sm btn-primary">
-                      Izmijeni
-                    </Link>
+              {Array.isArray(data) &&
+                data.map((boravak) => (
+                  <tr key={boravak.id_boravka}>
+                    <td className="table-data">{boravak.stanar.oib}</td>
+                    <td className="table-data">{boravak.stanar.ime}</td>
+                    <td className="table-data">{boravak.stanar.prezime}</td>
+                    <td className="table-data">{formatDate(boravak.datum_useljenja)}</td>
+                    <td className="table-data">{formatDate(boravak.datum_iseljenja)}</td>
+                    <td className="table-data">{boravak.krevet.soba.broj_objekta}</td>
+                    <td className="table-data">{boravak.krevet.soba.broj_sobe}</td>
+                    <td className="table-data">{boravak.krevet.broj_kreveta}</td>
+                    <td className="table-data">{boravak.korisnik.email_korisnika}</td>
+                    <td className="table-data">
+                      <Link to={`/izmjenaBoravka/${boravak.id_boravka}?broj_objekta=${boravak.krevet.soba.broj_objekta}&broj_sobe=${boravak.krevet.soba.broj_sobe}&broj_kreveta=${boravak.krevet.broj_kreveta}&oib=${boravak.stanar.oib}`} className="btn btn-sm btn-primary">
+                        Izmijeni
+                      </Link>
 
-                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(boravak.id_boravka)}>
-                      Izbriši
-                    </button>
-                    <button className="btn btn-sm btn-secondary" onClick={() => handleIseljenje(boravak.id_boravka)}>
-                      Iseljenje
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                      <button className="btn btn-sm btn-danger" onClick={() => handleDelete(boravak.id_boravka)}>
+                        Izbriši
+                      </button>
+                      {boravak.datum_iseljenja === null && (
+                        <button className="btn btn-sm btn-secondary" onClick={() => handleIseljenje(boravak.id_boravka)}>
+                          Iseljenje
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
           <nav aria-label="Page navigation">
