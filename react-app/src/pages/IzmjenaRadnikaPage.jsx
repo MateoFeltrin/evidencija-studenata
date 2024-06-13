@@ -99,6 +99,7 @@ const IzmjenaRadnikaPage = () => {
                   <option value="recepcionar">Recepcionar</option>
                   <option value="domar">Domar</option>
                   <option value="admin">Admin</option>
+                  <option value="admin">Stanar</option>
                 </select>
               </div>
             </div>
