@@ -1,76 +1,111 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { IoArrowBackSharp } from "react-icons/io5";
 import axios from "axios";
-
 import CollapsableNavbar from "../components/CollapsableNavbar";
 
 const IzmjenaKrevetaPage = () => {
   const token = localStorage.getItem("token");
   const { id_kreveta } = useParams();
+  const navigate = useNavigate();
 
   const [krevetData, setKrevetData] = useState({
     id_kreveta: "",
     broj_kreveta: "",
     id_sobe: "",
     zauzetost: false,
+    broj_objekta: "",
   });
 
   const [brojSobeOptions, setBrojSobeOptions] = useState([]);
+  const [objektOptions, setObjektOptions] = useState([]);
 
   useEffect(() => {
     axios
       .get(`http://localhost:3000/api/svi-kreveti1/${id_kreveta}`, {
         headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the headers
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
         const data = res.data;
-        setKrevetData(data);
+        setKrevetData({
+          ...data,
+          broj_objekta: data.soba.broj_objekta,
+        });
+        fetchObjektOptions(data.soba.broj_objekta);
+        fetchSobeOptions(data.soba.broj_objekta);
       })
       .catch((error) => console.error("Error fetching krevet data:", error));
+  }, [id_kreveta, token]);
 
+  const fetchObjektOptions = (selectedObjekt) => {
     axios
-      .get("http://localhost:3000/api/sve-sobe-dropdown", {
+      .get("http://localhost:3000/api/broj-objekta", {
         headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the headers
+          Authorization: `Bearer ${token}`,
         },
       })
-      .then((res) => {
-        const options = res.data.map((soba) => ({
+      .then((response) => {
+        const options = response.data.map((obj) => ({
+          value: obj.id,
+          label: obj.broj_objekta,
+        }));
+        setObjektOptions(options);
+        if (selectedObjekt) {
+          fetchSobeOptions(selectedObjekt);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching objekt options:", error);
+      });
+  };
+
+  const fetchSobeOptions = (broj_objekta) => {
+    axios
+      .get(`http://localhost:3000/api/broj-sobe?broj_objekta=${broj_objekta}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const options = response.data.map((soba) => ({
           value: soba.id_sobe,
           label: soba.broj_sobe,
         }));
         setBrojSobeOptions(options);
-        console.log("Broj sobe options:", options);
       })
-      .catch((error) => console.error("Error fetching broj sobe options:", error));
-  }, [id_kreveta]);
+      .catch((error) => {
+        console.error("Error fetching sobe:", error);
+      });
+  };
+
+  const handleChange = async (e) => {
+    const { name, value } = e.target;
+    setKrevetData({
+      ...krevetData,
+      [name]: value,
+    });
+
+    if (name === "broj_objekta") {
+      fetchSobeOptions(value);
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       await axios.put(`http://localhost:3000/azuriranje-kreveta/${id_kreveta}`, krevetData, {
         headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the headers
+          Authorization: `Bearer ${token}`,
         },
       });
       alert("Podaci uspješno izmjenjeni!");
+      navigate("/popisKreveta");
     } catch (error) {
       alert("Greška pri izmjeni, pogledajte jesu li unesena sva polja!");
       console.error("Error updating data:", error);
     }
-  };
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    const newValue = type === "checkbox" ? checked : value;
-
-    setKrevetData((prevState) => ({
-      ...prevState,
-      [name]: type === "checkbox" ? checked : newValue,
-    }));
   };
 
   return (
@@ -88,7 +123,7 @@ const IzmjenaKrevetaPage = () => {
                 <label htmlFor="id_kreveta" className="form-label">
                   ID Kreveta:
                 </label>
-                <input type="text" className="form-control" id="id_kreveta" name="id_kreveta" value={krevetData.id_kreveta} onChange={handleChange} />
+                <input type="text" className="form-control" id="id_kreveta" name="id_kreveta" value={krevetData.id_kreveta} onChange={handleChange} readOnly />
               </div>
               <div className="col-md-6">
                 <label htmlFor="broj_kreveta" className="form-label">
@@ -98,6 +133,19 @@ const IzmjenaKrevetaPage = () => {
               </div>
             </div>
             <div className="row mb-3">
+              <div className="col-md-6">
+                <label htmlFor="broj_objekta" className="form-label">
+                  Broj Objekta:
+                </label>
+                <select className="form-select" id="broj_objekta" name="broj_objekta" value={krevetData.broj_objekta} onChange={handleChange}>
+                  <option value="">Odaberi broj objekta</option>
+                  {objektOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <div className="col-md-6">
                 <label htmlFor="id_sobe" className="form-label">
                   Broj Sobe:

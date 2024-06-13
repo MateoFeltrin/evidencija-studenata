@@ -967,9 +967,13 @@ app.get("/api/svi-kreveti1/:id_kreveta", authJwt.verifyToken("admin"), async (re
   try {
     const id_kreveta = req.params.id_kreveta;
 
-    // Fetch the krevet record using Sequelize's findOne method
+    // Fetch the krevet record along with associated soba using Sequelize's findOne method
     const krevet = await Krevet.findOne({
       where: { id_kreveta },
+      include: {
+        model: Soba,
+        attributes: ["broj_objekta"],
+      },
     });
 
     // Check if the krevet record is found
