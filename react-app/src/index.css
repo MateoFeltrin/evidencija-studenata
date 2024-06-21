@@ -1,0 +1,41 @@
+.nav-item-normal {
+  display: flex;
+  align-items: center;
+}
+.dropdown-item {
+  padding-left: 5px;
+  margin-left: 0px;
+}
+.round-button {
+  border-radius: 50%;
+  width: 37px;
+  height: 37px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-right: 0px;
+}
+
+.info-box {
+  display: none;
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px;
+  margin-left: 120px;
+  background-color: rgba(0, 0, 0, 0.83);
+  color: #fff;
+  border-radius: 5px;
+  white-space: normal;
+  word-wrap: break-word;
+  max-width: 300px;
+  min-width: 300px;
+  z-index: 10;
+  overflow-wrap: break-word;
+}
+
+.round-button:hover .info-box {
+  display: block;
+}

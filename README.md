@@ -1,8 +1,9 @@
 # Evidencija Studenata
 
-Ako sta ne radi *npm install* \
-U backendu ce mozda trebat *npm install express* \
-Instalirati *Prettier - Code formatter* ekstenziju za VS code tako da kod bude konzistentan i promijeniti u extension settings postavku *Print Width* na 600 (cisto da linije budu duze nego sta je defaultno). Takoder ukljuciti format on save postavku VS code-u
+Kako je sad JSX umjesto TSX mozda ce trebat neke stvari dodatno izmjeniti \
+Ako sta ne radi _npm install_ \
+U backendu ce mozda trebat _npm install express_ \
+Instalirati _Prettier - Code formatter_ ekstenziju za VS code tako da kod bude konzistentan i promijeniti u extension settings postavku _Print Width_ na 600 (cisto da linije budu duze nego sta je defaultno). Takoder ukljuciti format on save postavku VS code-u
 
 ## Backend API
 
@@ -12,4 +13,16 @@ test.json je JSON file za testiranje _(ne bitno)_
 ## Frontend
 
 Za pokretanje frontenda pokrenuti naredbu _npm run dev_ dok se nalazis u folderu _react-app_ \
-Tamo trenutacno _main.tsx_ zove _App.tsx_ koji iz komponenta vuce _react-app\src\components\Navbar.tsx_ \
+
+### Logika fronte je slijedeca:
+
+- [main.jsx](react-app\src\main.jsx) (ovi linkovi bas ne rade trenutacno) se pokrece prilikom pokretanja app, tu postoji router array koji ima putanju u url-u i element koji se otvara (elementi su iznad importani). \
+  Taj router array se koristi ispod u render funkciji
+- U [pages](react-app\src\pages) se nalaze stranice (ovo su cisto neke pocetne koje ce vjj trebat)
+- U [components](react-app\src\components) se nalaze komponente koje stranice koriste \
+  Na primjer [Navbar.jsx](react-app\src\components\Navbar.jsx) koji koristi svaka stranica za navigaciju
+- U [Navbar.jsx](react-app\src\components\Navbar.jsx) se u _link_ elementu linka na path deklariran u [main.tsx](react-app\src\main.tsx) u router array-u
+- Postoje 2 navigacijska bara sada, [CollapsableNavbar.jsx](react-app\src\components\CollapsableNavbar.jsx) collapsa navigaciju u desni sidebar koji je sakriven
+- U [PopisSvihStanaraPage.jsx](react-app\src\pages\PopisSvihStanaraPage.jsx) slozeno je slanje requesta za podatke pomocu axios-a s kojima se puni tablica, ovo je cisto testno da se vidi da radi
+
+-Dodan range picker za stanare u određenom periodu pa je potrebno napravit npm install
